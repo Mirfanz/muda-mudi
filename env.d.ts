@@ -2,6 +2,7 @@ declare namespace NodeJS {
   interface ProcessEnv {
     NODE_ENV: "development" | "production" | "test";
     JWT_SECRET: string;
+    SALT_ROUNDS: string;
     // Add other environment variables here
   }
 }

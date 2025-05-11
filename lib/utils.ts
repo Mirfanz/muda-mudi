@@ -1,5 +1,6 @@
 import { UserType } from "@/types";
 import * as jose from "jose";
+import * as bcrypt from "bcryptjs";
 
 export const generateToken = async (payload: { user: UserType }) => {
   const secret = new TextEncoder().encode(process.env.JWT_SECRET);
@@ -21,4 +22,13 @@ export const verifyToken = async (token: string) => {
   } catch (error) {
     return null;
   }
+};
+
+export const hashPassword = (password: string) => {
+  const saltRounds: number = parseInt(process.env.SALT_ROUNDS);
+  return bcrypt.hash(password, saltRounds);
+};
+
+export const comparePassword = (password: string, hashedPassword: string) => {
+  return bcrypt.compare(password, hashedPassword);
 };

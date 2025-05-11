@@ -3,7 +3,7 @@
 import prisma from "@/prisma";
 import { UserType } from "@/types";
 import { cookies } from "next/headers";
-import { generateToken, verifyToken } from "./utils";
+import { generateToken, verifyToken, comparePassword } from "./utils";
 
 export const Login = async (phone: string, password: string) => {
   try {
@@ -11,9 +11,11 @@ export const Login = async (phone: string, password: string) => {
     const result = await prisma.user.findUniqueOrThrow({
       where: {
         phone,
-        password,
       },
     });
+
+    if (!(await comparePassword(password, result.password)))
+      throw new Error("Wrong password");
 
     const data: UserType = {
       id: result.id,

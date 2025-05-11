@@ -4,3 +4,4 @@ DIRECT_URL = ""
 
 # Auth Configuration
 JWT_SECRET = ""
+SALT_ROUNDS = 10
