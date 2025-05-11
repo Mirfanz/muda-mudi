@@ -27,15 +27,19 @@
     "@heroui/theme": "2.4.15",
     "@heroui/toast": "^2.0.9",
     "@heroui/tooltip": "^2.2.16",
+    "@prisma/client": "^6.7.0",
     "@react-aria/ssr": "3.9.8",
     "@react-aria/visually-hidden": "3.8.22",
+    "bcrypt": "^5.1.1",
     "clsx": "2.1.1",
     "framer-motion": "11.13.1",
     "intl-messageformat": "10.7.16",
+    "jose": "^6.0.11",
     "next": "15.3.1",
     "next-themes": "0.4.6",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "zod": "^3.24.4"
   },
   "devDependencies": {
     "@eslint/compat": "1.2.8",
@@ -62,6 +66,7 @@
     "globals": "16.0.0",
     "postcss": "8.5.3",
     "prettier": "3.5.3",
+    "prisma": "^6.7.0",
     "tailwind-variants": "0.3.0",
     "tailwindcss": "3.4.16",
     "typescript": "5.6.3"
