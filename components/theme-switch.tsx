@@ -4,7 +4,6 @@ import { FC } from "react";
 import { useTheme } from "next-themes";
 import { useIsSSR } from "@react-aria/ssr";
 import clsx from "clsx";
-
 import { MoonIcon, SunIcon } from "@heroicons/react/24/solid";
 import { Button } from "@heroui/button";
 
@@ -22,10 +21,10 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({ className }) => {
 
   return (
     <Button
-      className={clsx(className)}
       isIconOnly
-      variant="flat"
+      className={clsx(className)}
       size="sm"
+      variant="flat"
       onPress={onChange}
     >
       {theme === "dark" || isSSR ? (

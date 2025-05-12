@@ -189,12 +189,12 @@ export const SearchIcon = (props: IconSvgProps) => (
 export const XIcon = (props: IconSvgProps) => (
   <svg
     aria-hidden="true"
+    className="w-4 h-4 fill-foreground"
     focusable="false"
     role="presentation"
-    className="w-4 h-4 fill-foreground"
     {...props}
-    xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 448 512"
+    xmlns="http://www.w3.org/2000/svg"
   >
     <path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm297.1 84L257.3 234.6 379.4 396H283.8L209 298.1 123.3 396H75.8l111-126.9L69.7 116h98l67.7 89.5L313.6 116h47.5zM323.3 367.6L153.4 142.9H125.1L296.9 367.6h26.3z" />
   </svg>
@@ -203,12 +203,12 @@ export const XIcon = (props: IconSvgProps) => (
 export const InstagramIcon = (props: IconSvgProps) => (
   <svg
     aria-hidden="true"
+    className="w-4 h-4 fill-foreground"
     focusable="false"
     role="presentation"
-    className="w-4 h-4 fill-foreground"
     {...props}
-    xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 448 512"
+    xmlns="http://www.w3.org/2000/svg"
   >
     <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
   </svg>
@@ -217,12 +217,12 @@ export const InstagramIcon = (props: IconSvgProps) => (
 export const DonateIcon = (props: IconSvgProps) => (
   <svg
     aria-hidden="true"
+    className="w-4 h-4 fill-foreground"
     focusable="false"
     role="presentation"
-    className="w-4 h-4 fill-foreground"
     {...props}
-    xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 576 512"
+    xmlns="http://www.w3.org/2000/svg"
   >
     <path d="M163.9 136.9c-29.4-29.8-29.4-78.2 0-108s77-29.8 106.4 0l17.7 18 17.7-18c29.4-29.8 77-29.8 106.4 0s29.4 78.2 0 108L310.5 240.1c-6.2 6.3-14.3 9.4-22.5 9.4s-16.3-3.1-22.5-9.4L163.9 136.9zM568.2 336.3c13.1 17.8 9.3 42.8-8.5 55.9L433.1 485.5c-23.4 17.2-51.6 26.5-80.7 26.5L192 512 32 512c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l36.8 0 44.9-36c22.7-18.2 50.9-28 80-28l78.3 0 16 0 64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0-16 0c-8.8 0-16 7.2-16 16s7.2 16 16 16l120.6 0 119.7-88.2c17.8-13.1 42.8-9.3 55.9 8.5zM193.6 384c0 0 0 0 0 0l-.9 0c.3 0 .6 0 .9 0z" />
   </svg>

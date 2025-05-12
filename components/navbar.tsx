@@ -1,23 +1,21 @@
 "use client";
 
 import NextLink from "next/link";
-import { siteConfig } from "@/config/site";
-import { ThemeSwitch } from "@/components/theme-switch";
 import { Button } from "@heroui/button";
 import { Tooltip } from "@heroui/tooltip";
-import {
-  ChevronDoubleLeftIcon,
-  ChevronDoubleRightIcon,
-  FireIcon,
-  HeartIcon,
-} from "@heroicons/react/24/solid";
+import { ChevronDoubleLeftIcon, FireIcon } from "@heroicons/react/24/solid";
 import { Fragment, useState } from "react";
 import clsx from "clsx";
-import { DonateIcon, InstagramIcon, XIcon } from "./icons";
 import Link from "next/link";
+
+import { DonateIcon, InstagramIcon, XIcon } from "./icons";
+
+import { ThemeSwitch } from "@/components/theme-switch";
+import { siteConfig } from "@/config/site";
 
 export const Navbar = () => {
   const [showLink, setShowLink] = useState(false);
+
   return (
     <nav className="container !text-primary-foreground px-2 bg-primary-500">
       <div className="flex justify-between py-2 items-center">
@@ -33,15 +31,15 @@ export const Navbar = () => {
           {/* <div className="flex"> */}
           <Button
             isIconOnly
-            variant="light"
             className="text-primary-foreground"
             size="sm"
+            variant="light"
             onPress={() => setShowLink((prev) => !prev)}
           >
             <ChevronDoubleLeftIcon
               className={clsx(
                 "w-4 h-4 duration-300",
-                showLink ? "-rotate-180" : "rotate-0"
+                showLink ? "-rotate-180" : "rotate-0",
               )}
             />
           </Button>
@@ -51,11 +49,11 @@ export const Navbar = () => {
                 <Link href={siteConfig.links.instagram} target="_blank">
                   <Button
                     isIconOnly
-                    variant="light"
                     className="text-primary-foreground animate-appearance-in me-1"
-                    size="sm"
                     radius="full"
+                    size="sm"
                     title="Instagram"
+                    variant="light"
                   >
                     <InstagramIcon className="w-5 h-5 fill-primary-foreground" />
                   </Button>
@@ -65,11 +63,11 @@ export const Navbar = () => {
                 <Link href={siteConfig.links.github} target="_blank">
                   <Button
                     isIconOnly
-                    variant="light"
                     className="text-primary-foreground animate-appearance-in me-1"
-                    size="sm"
                     radius="full"
+                    size="sm"
                     title="X Twitter"
+                    variant="light"
                   >
                     <XIcon className="w-5 h-5 fill-primary-foreground" />
                   </Button>
@@ -79,11 +77,11 @@ export const Navbar = () => {
                 <Link href={"/finance/donation"} target="_blank">
                   <Button
                     isIconOnly
-                    variant="light"
                     className="text-primary-foreground animate-appearance-in"
-                    size="sm"
                     radius="full"
+                    size="sm"
                     title="Donate"
+                    variant="light"
                   >
                     <DonateIcon className="w-5 h-5 fill-primary-foreground" />
                   </Button>
@@ -91,8 +89,9 @@ export const Navbar = () => {
               </Tooltip>
             </Fragment>
           )}
-
-          <ThemeSwitch className="text-primary-foreground" />
+          <Tooltip content="Theme">
+            <ThemeSwitch className="text-primary-foreground" />
+          </Tooltip>
         </div>
       </div>
       {/* </div> */}

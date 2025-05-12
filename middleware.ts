@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import { verifyToken } from "./lib/utils";
-import { redirect } from "next/navigation";
-import { match } from "assert";
 
 export default async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;

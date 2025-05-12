@@ -6,8 +6,11 @@ import * as React from "react";
 import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { AuthProvider } from "@/components/auth-provider";
 import { ToastProvider } from "@heroui/toast";
+import { QueryClientProvider } from "@tanstack/react-query";
+
+import { AuthProvider } from "@/components/auth-provider";
+import queryClient from "@/lib/query-client";
 
 export interface ProvidersProps {
   children: React.ReactNode;
@@ -29,7 +32,9 @@ export function Providers({ children, themeProps }: ProvidersProps) {
     <HeroUIProvider navigate={router.push}>
       <NextThemesProvider {...themeProps}>
         <ToastProvider placement="top-right" />
-        <AuthProvider>{children}</AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>{children}</AuthProvider>
+        </QueryClientProvider>
       </NextThemesProvider>
     </HeroUIProvider>
   );

@@ -1,7 +1,5 @@
 import {
   HomeIcon,
-  CurrencyDollarIcon,
-  CalendarIcon,
   UserIcon,
   BanknotesIcon,
   CalendarDateRangeIcon,

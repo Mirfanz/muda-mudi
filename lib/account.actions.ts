@@ -1,9 +1,11 @@
 "use server";
 
+import { cookies } from "next/headers";
+
+import { generateToken, verifyToken, comparePassword } from "./utils";
+
 import prisma from "@/prisma";
 import { UserType } from "@/types";
-import { cookies } from "next/headers";
-import { generateToken, verifyToken, comparePassword } from "./utils";
 
 export const Login = async (phone: string, password: string) => {
   try {
@@ -28,6 +30,7 @@ export const Login = async (phone: string, password: string) => {
     };
 
     const token = await generateToken({ user: data });
+
     cookie.set("_session", token);
 
     return {
@@ -47,7 +50,9 @@ export const Login = async (phone: string, password: string) => {
 export const Logout = async () => {
   try {
     const cookie = await cookies();
+
     cookie.delete("_session");
+
     return {
       success: true,
       message: "Logout Successfull",
@@ -64,11 +69,14 @@ export const GetUser = async () => {
   try {
     const cookie = await cookies();
     const token = cookie.get("_session")?.value;
+
     if (!token) throw new Error();
     const payload = await verifyToken(token);
+
     if (!payload) throw new Error();
     if (!payload.user) throw new Error();
     const data: UserType = payload.user as UserType;
+
     return {
       success: true,
       message: "User has been logged in",

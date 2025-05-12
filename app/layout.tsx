@@ -1,12 +1,11 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
-import { Link } from "@heroui/link";
 import clsx from "clsx";
 
 import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
-import { fontPoppins, fontSans } from "@/config/fonts";
+import { fontPoppins } from "@/config/fonts";
 import { Navbar } from "@/components/navbar";
 import Tabbar from "@/components/tabbar";
 
@@ -39,7 +38,7 @@ export default function RootLayout({
       <body
         className={clsx(
           "h-screen bg-background font-poppins antialiased",
-          fontPoppins.variable
+          fontPoppins.variable,
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>

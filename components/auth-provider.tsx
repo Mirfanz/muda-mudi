@@ -1,10 +1,11 @@
 "use client";
 
-import { GetUser, Login, Logout } from "@/lib/account.actions";
-import { UserType } from "@/types";
 import { addToast } from "@heroui/toast";
 import { useRouter } from "next/navigation";
 import React, { createContext, useEffect } from "react";
+
+import { UserType } from "@/types";
+import { GetUser, Login, Logout } from "@/lib/account.actions";
 
 const AuthContext = createContext<{
   user?: UserType;
@@ -28,13 +29,16 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
 
   const login = async (phone: string, password: string) => {
     const result = await Login(phone, password);
+
     setUser(result.user);
     if (result.success) {
       router.replace("/account");
       addToast({ title: "Login Berhasil", color: "success" });
+
       return true;
     } else {
       addToast({ title: "Login Gagal", color: "danger" });
+
       return false;
     }
   };
@@ -42,13 +46,16 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
   const logout = async () => {
     if (!confirm("Serius mau logout?")) return;
     const result = await Logout();
+
     if (result.success) {
       setUser(undefined);
       addToast({ title: "Keluar dari akun" });
       router.refresh();
+
       return true;
     } else {
       addToast({ title: "Logout Gagal", color: "danger" });
+
       return false;
     }
   };
@@ -70,8 +77,10 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
 
 export const useAuth = () => {
   const context = React.useContext(AuthContext);
+
   if (!context) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
+
   return context;
 };
