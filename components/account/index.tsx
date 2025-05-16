@@ -21,6 +21,7 @@ import {
 import { useDisclosure } from "@heroui/modal";
 import { Switch } from "@heroui/switch";
 import { Checkbox } from "@heroui/checkbox";
+import Link from "next/link";
 
 import { useAuth } from "../auth-provider";
 
@@ -148,9 +149,11 @@ const Account = (props: Props) => {
         <div className="flex justify-between items-center mt-3 mb-2 gap-1">
           <h4 className="text-lg font-medium me-auto">Anggota Lainnya</h4>
           <Tooltip content="Kelola Anggota">
-            <Button isIconOnly size="sm">
-              <UserGroupIcon className="w-4 h-4" />
-            </Button>
+            <Link href={"/admin/users"}>
+              <Button isIconOnly size="sm">
+                <UserGroupIcon className="w-4 h-4" />
+              </Button>
+            </Link>
           </Tooltip>
           <Button
             color="default"

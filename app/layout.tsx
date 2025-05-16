@@ -6,8 +6,6 @@ import { Providers } from "./providers";
 
 import { siteConfig } from "@/config/site";
 import { fontPoppins } from "@/config/fonts";
-import { Navbar } from "@/components/navbar";
-import Tabbar from "@/components/tabbar";
 
 export const metadata: Metadata = {
   title: {
@@ -37,18 +35,12 @@ export default function RootLayout({
       <head />
       <body
         className={clsx(
-          "h-screen bg-background font-poppins antialiased",
+          "h-screen font-poppins antialiased dark:bg-foreground-50 bg-foreground-100",
           fontPoppins.variable,
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div className="relative flex flex-col h-dvh">
-            <Navbar />
-            <main className="container flex-grow overflow-y-auto p-2">
-              {children}
-            </main>
-            <Tabbar />
-          </div>
+          {children}
         </Providers>
       </body>
     </html>

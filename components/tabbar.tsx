@@ -11,8 +11,6 @@ type Props = {};
 const Tabbar = (props: Props) => {
   const pathname = usePathname();
 
-  if (pathname.startsWith("/auth")) return;
-
   return (
     <section className="container">
       <div className="flex items-center bg-foreground-200">
