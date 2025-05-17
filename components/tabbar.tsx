@@ -17,7 +17,10 @@ const Tabbar = (props: Props) => {
         {siteConfig.navItems.map((item) => (
           <Link
             key={item.label}
-            className="flex flex-col text-foreground-600 items-center justify-center w-full p-2 text-center"
+            className={
+              "flex flex-col duration-250 items-center justify-center w-full p-2 text-center text-foreground-600 data-[active=true]:text-primary"
+            }
+            data-active={item.isActive(pathname)}
             href={item.href}
           >
             <item.icon className="w-6 h-6" />
