@@ -31,7 +31,9 @@ export const Login = async (phone: string, password: string) => {
 
     const token = await generateToken({ user: data });
 
-    cookie.set("_session", token);
+    cookie.set("_session", token, {
+      expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    });
 
     return {
       success: true,
