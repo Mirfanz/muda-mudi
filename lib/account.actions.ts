@@ -2,10 +2,15 @@
 
 import { cookies } from "next/headers";
 
-import { generateToken, verifyToken, comparePassword } from "./utils";
+import {
+  generateToken,
+  verifyToken,
+  comparePassword,
+  hashPassword,
+} from "./utils";
 
 import prisma from "@/prisma";
-import { UserType } from "@/types";
+import { UserRoleType, UserType } from "@/types";
 
 export const Login = async (phone: string, password: string) => {
   try {
@@ -88,6 +93,42 @@ export const GetUser = async () => {
     return {
       success: false,
       message: "Error not logged in yet",
+    };
+  }
+};
+
+export const RegisterUser = async ({
+  name,
+  birth,
+  phone,
+  role,
+}: {
+  name: string;
+  birth: Date;
+  phone: string;
+  role?: UserRoleType;
+}) => {
+  try {
+    const result = await prisma.user.create({
+      data: {
+        name,
+        birth,
+        password: await hashPassword("remajaklumpit"),
+        phone,
+        role: role ?? "ANGGOTA",
+      },
+    });
+    const data = result;
+
+    return {
+      success: true,
+      message: "",
+      data,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      message: "",
     };
   }
 };

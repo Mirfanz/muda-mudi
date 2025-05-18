@@ -1,17 +1,11 @@
+import { Role } from "@prisma/client";
 import { SVGProps } from "react";
 
 export type IconSvgProps = SVGProps<SVGSVGElement> & {
   size?: number;
 };
 
-export type UserRoleType =
-  | "ADMIN"
-  | "PEMBINA"
-  | "KETUA"
-  | "SEKRETARIS"
-  | "BENDAHARA"
-  | "ANGGOTA"
-  | "ALUMNI";
+export type UserRoleType = Role;
 
 export type UserType = {
   id: string;
