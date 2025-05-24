@@ -30,15 +30,13 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
   const login = async (phone: string, password: string) => {
     const result = await Login(phone, password);
 
-    setUser(result.user);
     if (result.success) {
+      setUser(result.data.user);
       router.replace("/account");
       addToast({ title: "Login Berhasil", color: "success" });
-
       return true;
     } else {
       addToast({ title: "Login Gagal", color: "danger" });
-
       return false;
     }
   };
@@ -49,21 +47,19 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
 
     if (result.success) {
       setUser(undefined);
-      addToast({ title: "Keluar dari akun" });
+      addToast({ description: "Logout" });
       router.refresh();
-
       return true;
     } else {
-      addToast({ title: "Logout Gagal", color: "danger" });
-
+      addToast({ description: "Logout Gagal", color: "danger" });
       return false;
     }
   };
 
   useEffect(() => {
     GetUser()
-      .then((res) => {
-        if (res.user) setUser(res.user);
+      .then((resp) => {
+        if (resp.success) setUser(resp.data.user);
       })
       .finally(() => setIsLoading(false));
   }, []);

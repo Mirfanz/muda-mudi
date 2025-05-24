@@ -21,7 +21,6 @@ enum Role {
   SEKRETARIS
   BENDAHARA
   ANGGOTA
-  ALUMNI
 }
 
 model User {
@@ -29,11 +28,14 @@ model User {
   name      String
   phone     String   @unique
   password  String
+  isMale    Boolean
+  avatar    String?
   role      Role
   birth     DateTime @db.Date()
-  image_url String?
-  active    Boolean  @default(true)
+  active    Boolean  @default(false)
+  inStudy   Boolean  @default(false)
 
+  deletedAt DateTime? @db.Timestamptz()
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

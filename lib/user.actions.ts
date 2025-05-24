@@ -1,30 +1,139 @@
 "use server";
 
-import prisma from "@/prisma";
-import { UserType } from "@/types";
+import { Role } from "@prisma/client";
+import { cookies } from "next/headers";
 
-export const FindUsers = async () => {
+import {
+  getErrorMessage,
+  hashPassword,
+  isAuthorized,
+  verifyToken,
+} from "./utils";
+
+import prisma from "@/prisma";
+import { RespType, UserType } from "@/types";
+
+export const FindUsers = async (): Promise<RespType<{ users: UserType[] }>> => {
   try {
-    const result = await prisma.user.findMany({});
+    const result = await prisma.user.findMany({
+      where: {
+        deletedAt: null,
+      },
+    });
     const data: UserType[] = result.map((i) => ({
       id: i.id,
       name: i.name,
       role: i.role,
       phone: i.phone,
-      image_url: i.image_url,
+      avatar: i.avatar,
       active: i.active,
       birth: i.birth,
+      inStudy: i.inStudy,
+      isMale: i.isMale,
     }));
 
     return {
       success: true,
-      message: "Get users success",
-      data,
+      message: "Data anggota ditemukan",
+      data: { users: data },
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       success: false,
-      message: "Get users failed",
+      message: getErrorMessage(error.code, "Gagal memuat data anggota"),
+    };
+  }
+};
+
+export const RegisterUser = async ({
+  name,
+  birth,
+  phone,
+  role = Role.ANGGOTA,
+  isMale,
+  inStudy = false,
+}: {
+  name: string;
+  birth: Date;
+  phone: string;
+  isMale: boolean;
+  inStudy?: boolean;
+  role?: Role;
+}): Promise<RespType<{ user: UserType }>> => {
+  try {
+    const payload = await verifyToken((await cookies()).get("_session")?.value);
+
+    if (!payload) throw new Error("Invalid Token");
+    if (!isAuthorized(payload.user.role as Role, [Role.ADMIN, Role.KETUA]))
+      throw new Error("Unauthorized");
+
+    const result = await prisma.user.create({
+      data: {
+        name,
+        birth,
+        password: await hashPassword("remajaklumpit"),
+        phone,
+        role: role,
+        active: true,
+        isMale,
+        inStudy,
+      },
+    });
+    const data: UserType = {
+      active: result.active,
+      avatar: result.avatar,
+      birth: result.birth,
+      id: result.id,
+      inStudy: result.inStudy,
+      isMale: result.isMale,
+      name: result.name,
+      phone: result.phone,
+      role: result.role,
+    };
+
+    return {
+      success: true,
+      message: "Menambahkan anggota baru",
+      data: { user: data },
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: getErrorMessage(error.code, error.message),
+    };
+  }
+};
+
+export const DeleteUser = async ({
+  userId,
+}: {
+  userId: string;
+}): Promise<RespType> => {
+  try {
+    const payload = await verifyToken((await cookies()).get("_session")?.value);
+
+    if (!payload) throw new Error("Invalid Token");
+    if (!isAuthorized(payload.user.role as Role, [Role.ADMIN, Role.KETUA]))
+      throw new Error("Unauthorized");
+
+    const result = await prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+
+    return {
+      success: true,
+      message: "Delete user success",
+      data: {},
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: getErrorMessage(error.code, error.message),
     };
   }
 };

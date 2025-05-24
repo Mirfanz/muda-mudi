@@ -59,7 +59,9 @@ const Account = (props: Props) => {
     queryFn: async () => {
       const resp = await FindUsers();
 
-      return resp.data;
+      if (!resp.success) throw new Error();
+
+      return resp.data.users;
     },
   });
 
@@ -93,7 +95,7 @@ const Account = (props: Props) => {
               Keluar
             </Button>
             <div className="relative flex justify-center rounded-full">
-              <Avatar className="w-32 h-32" src={auth.user?.image_url || ""} />
+              <Avatar className="w-32 h-32" src={auth.user?.avatar || ""} />
               <Button
                 isIconOnly
                 radius="full"
@@ -130,18 +132,6 @@ const Account = (props: Props) => {
                 </div>
               </CardBody>
             </Card>
-            {/* <div className="flex gap-3 w-full">
-              <Button className="flex-grow">Edit Profil</Button>
-              <Button
-                className=""
-                color="danger"
-                variant="faded"
-                onPress={auth.logout}
-              >
-                <ArrowLeftStartOnRectangleIcon className="w-4 h-4" />
-                Logout
-              </Button>
-            </div> */}
           </CardBody>
         </Card>
       </section>

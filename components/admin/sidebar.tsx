@@ -20,7 +20,7 @@ const Sidebar = (props: Props) => {
           className={clsx(
             "flex items-center gap-3 text-sm hover:gap-4 duration-300 p-3 border-primary-500",
             item.isActive(pathname)
-              ? "text-foreground-800 bg-default-300 border-e-4"
+              ? "text-foreground-800 bg-default-300 border-e-1.5"
               : "text-foreground-600 hover:text-foreground-800",
           )}
           href={item.href}
