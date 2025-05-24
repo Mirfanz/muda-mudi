@@ -13,6 +13,11 @@ import DeleteUserModal from "./delete-user";
 
 import { UserType } from "@/types";
 import { FindUsers } from "@/lib/user.actions";
+import EditUserModal from "./edit-user";
+import {
+  MagnifyingGlassCircleIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/solid";
 
 const Users = () => {
   const addUserDisclosure = useDisclosure();
@@ -30,10 +35,6 @@ const Users = () => {
     },
   });
 
-  const handleDeleteUser = (user: UserType) => {
-    setDeleteUser(user);
-  };
-
   return (
     <div className="flex flex-col px-1 lg:px-4">
       <section className="flex gap-2 items-center py-3 mb-2 justify-between">
@@ -43,7 +44,7 @@ const Users = () => {
           className="w-full sm:max-w-72"
           color="primary"
           placeholder="Search by name..."
-          startContent={<MagnifyingGlassMinusIcon className="w-4 h-4" />}
+          startContent={<MagnifyingGlassIcon className="w-4 h-4" />}
         />
         <Button color="primary" onPress={addUserDisclosure.onOpen}>
           Tambah Anggota
@@ -51,8 +52,8 @@ const Users = () => {
       </section>
 
       <TableUser
-        deleteUser={handleDeleteUser}
-        isLoading={isLoading}
+        deleteUser={(user: UserType) => setDeleteUser(user)}
+        editUser={(user: UserType) => setEditUser(user)}
         users={data || []}
       />
       <AddUser
@@ -63,6 +64,11 @@ const Users = () => {
       <DeleteUserModal
         user={deleteUser}
         onClose={() => setDeleteUser(null)}
+        onSuccess={() => refetch()}
+      />
+      <EditUserModal
+        user={editUser}
+        onClose={() => setEditUser(null)}
         onSuccess={() => refetch()}
       />
     </div>

@@ -25,12 +25,11 @@ import { UserType } from "@/types";
 
 type Props = {
   users: UserType[];
-  isLoading?: boolean;
-  refetch?: () => void;
   deleteUser?: (user: UserType) => void;
+  editUser?: (user: UserType) => void;
 };
 
-const TableUser = ({ users, isLoading, refetch, deleteUser }: Props) => {
+const TableUser = ({ users, deleteUser, editUser }: Props) => {
   return (
     <section>
       <Table aria-label="Example static collection table" selectionMode="none">
@@ -109,6 +108,7 @@ const TableUser = ({ users, isLoading, refetch, deleteUser }: Props) => {
                       radius="full"
                       size="sm"
                       variant="light"
+                      onPress={() => editUser?.(item)}
                     >
                       <PencilSquareIcon className="w-4 h-4" />
                     </Button>

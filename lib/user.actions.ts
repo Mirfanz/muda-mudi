@@ -19,6 +19,9 @@ export const FindUsers = async (): Promise<RespType<{ users: UserType[] }>> => {
       where: {
         deletedAt: null,
       },
+      orderBy: {
+        role: "asc",
+      },
     });
     const data: UserType[] = result.map((i) => ({
       id: i.id,
@@ -38,6 +41,7 @@ export const FindUsers = async (): Promise<RespType<{ users: UserType[] }>> => {
       data: { users: data },
     };
   } catch (error: any) {
+    console.log("error", error);
     return {
       success: false,
       message: getErrorMessage(error.code, "Gagal memuat data anggota"),
@@ -94,6 +98,71 @@ export const RegisterUser = async ({
     return {
       success: true,
       message: "Menambahkan anggota baru",
+      data: { user: data },
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: getErrorMessage(error.code, error.message),
+    };
+  }
+};
+
+export const UpdateUser = async ({
+  id,
+  active,
+  name,
+  birth,
+  phone,
+  role = Role.ANGGOTA,
+  isMale,
+  inStudy = false,
+}: {
+  id: string;
+  name?: string;
+  birth?: Date;
+  phone?: string;
+  isMale?: boolean;
+  inStudy?: boolean;
+  role?: Role;
+  active?: boolean;
+}): Promise<RespType<{ user: UserType }>> => {
+  try {
+    const payload = await verifyToken((await cookies()).get("_session")?.value);
+
+    if (!payload) throw new Error("Invalid Token");
+    if (!isAuthorized(payload.user.role as Role, [Role.ADMIN, Role.KETUA]))
+      throw new Error("Unauthorized");
+
+    const result = await prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        birth,
+        phone,
+        role,
+        active,
+        isMale,
+        inStudy,
+      },
+    });
+    const data: UserType = {
+      active: result.active,
+      avatar: result.avatar,
+      birth: result.birth,
+      id: result.id,
+      inStudy: result.inStudy,
+      isMale: result.isMale,
+      name: result.name,
+      phone: result.phone,
+      role: result.role,
+    };
+
+    return {
+      success: true,
+      message: "Anggota berhasil diperbarui",
       data: { user: data },
     };
   } catch (error: any) {
