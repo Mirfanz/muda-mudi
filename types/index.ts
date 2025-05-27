@@ -25,3 +25,16 @@ export type RespType<T = {}> =
 export type SessionPayload = JWTPayload & {
   user: UserType;
 };
+
+export type FinanceHistory = {
+  id: string;
+  income: boolean;
+  title: string;
+  description?: string;
+  amount: number;
+  images: string[];
+  date: Date;
+  createdAt: Date;
+  authorId: string;
+  author: UserType;
+};

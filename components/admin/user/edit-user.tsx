@@ -1,9 +1,7 @@
 "use client";
 
-import { UserType } from "@/types";
 import { Role } from "@prisma/client";
 import React from "react";
-
 import {
   CakeIcon,
   PhoneXMarkIcon,
@@ -22,7 +20,9 @@ import {
 import { Select, SelectItem } from "@heroui/select";
 import { addToast } from "@heroui/toast";
 import { z } from "zod";
-import { RegisterUser, UpdateUser } from "@/lib/user.actions";
+
+import { UserType } from "@/types";
+import { UpdateUser } from "@/lib/user.actions";
 
 type Props = {
   user: UserType | null;
@@ -70,6 +70,7 @@ const EditUserModal = ({ user, onSuccess, onError, onClose }: Props) => {
     if (!user) return;
     const validation = schema.safeParse(fields);
     const error = validation.error?.format();
+
     setErrors(error);
     if (error) return;
 
@@ -116,6 +117,7 @@ const EditUserModal = ({ user, onSuccess, onError, onClose }: Props) => {
       });
     }
   }, [user]);
+
   return (
     <Modal hideCloseButton isOpen={!!user}>
       <form noValidate autoComplete="off" onSubmit={handleSubmit}>
@@ -167,6 +169,7 @@ const EditUserModal = ({ user, onSuccess, onError, onClose }: Props) => {
                 classNames={{
                   helperWrapper: "pb-0",
                 }}
+                defaultSelectedKeys={user?.role ? [user.role] : []}
                 errorMessage={errors?.role?._errors[0]}
                 inputMode="text"
                 isInvalid={!!errors?.role}
@@ -176,7 +179,6 @@ const EditUserModal = ({ user, onSuccess, onError, onClose }: Props) => {
                 onSelectionChange={(keys) =>
                   setFields({ ...fields, role: keys.currentKey ?? "" })
                 }
-                defaultSelectedKeys={user?.role ? [user.role] : []}
               >
                 {Object.values(Role).map((item) => (
                   <SelectItem key={item}>{item}</SelectItem>
@@ -187,13 +189,13 @@ const EditUserModal = ({ user, onSuccess, onError, onClose }: Props) => {
                   mainWrapper: "w-36 ms-auto",
                   helperWrapper: "pb-0",
                 }}
+                defaultSelectedKeys={[user?.isMale ? "male" : "female"]}
                 inputMode="text"
                 isInvalid={!!errors?.gender}
                 label="Jenis Kelamin"
                 labelPlacement="outside-left"
                 name="gender"
                 placeholder=""
-                defaultSelectedKeys={[user?.isMale ? "male" : "female"]}
                 selectedKeys={[fields.gender || ""]}
                 onSelectionChange={(keys) =>
                   setFields({
@@ -211,12 +213,12 @@ const EditUserModal = ({ user, onSuccess, onError, onClose }: Props) => {
                   mainWrapper: "w-40 ms-auto",
                   helperWrapper: "pb-0",
                 }}
+                defaultSelectedKeys={[user?.active ? "ya" : "tidak"]}
                 inputMode="text"
                 isInvalid={!!errors?.active}
                 label="Status Keanggotaan"
                 labelPlacement="outside-left"
                 name="active"
-                defaultSelectedKeys={[user?.active ? "ya" : "tidak"]}
                 selectedKeys={fields.active ? ["ya"] : ["tidak"]}
                 onSelectionChange={(keys) =>
                   setFields({
@@ -234,13 +236,13 @@ const EditUserModal = ({ user, onSuccess, onError, onClose }: Props) => {
                   mainWrapper: "w-24 ms-auto",
                   helperWrapper: "pb-0",
                 }}
+                defaultSelectedKeys={[user?.inStudy ? "ya" : "tidak"]}
                 inputMode="text"
                 isInvalid={!!errors?.inStudy}
                 label="Apakah masih aktif belajar?"
                 labelPlacement="outside-left"
                 name="study"
                 placeholder=""
-                defaultSelectedKeys={[user?.inStudy ? "ya" : "tidak"]}
                 selectedKeys={fields.inStudy ? ["ya"] : ["tidak"]}
                 onSelectionChange={(keys) =>
                   setFields({

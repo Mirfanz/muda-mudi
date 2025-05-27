@@ -34,9 +34,11 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
       setUser(result.data.user);
       router.replace("/account");
       addToast({ title: "Login Berhasil", color: "success" });
+
       return true;
     } else {
       addToast({ title: "Login Gagal", color: "danger" });
+
       return false;
     }
   };
@@ -49,9 +51,11 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
       setUser(undefined);
       addToast({ description: "Logout" });
       router.refresh();
+
       return true;
     } else {
       addToast({ description: "Logout Gagal", color: "danger" });
+
       return false;
     }
   };

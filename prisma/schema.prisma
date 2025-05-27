@@ -24,18 +24,36 @@ enum Role {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  phone     String   @unique
-  password  String
-  isMale    Boolean
-  avatar    String?
-  role      Role
-  birth     DateTime @db.Date()
-  active    Boolean  @default(false)
-  inStudy   Boolean  @default(false)
+  id       String   @id @default(cuid())
+  name     String
+  phone    String   @unique
+  password String
+  isMale   Boolean
+  avatar   String?
+  role     Role
+  birth    DateTime @db.Date()
+  active   Boolean  @default(true)
+  inStudy  Boolean  @default(false)
 
   deletedAt DateTime? @db.Timestamptz()
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  financialeports FinancialHistories[] @relation("AuthorFinancialHistory")
+}
+
+model FinancialHistories {
+  id          String   @id @default(cuid())
+  income      Boolean
+  title       String
+  description String?
+  amount      Int
+  images      String[]
+  date        DateTime @db.Date
+  createdAt   DateTime @default(now())
+
+  authorId String
+  author   User   @relation("AuthorFinancialHistory", fields: [authorId], references: [id])
+
+  @@map("financial_histories")
 }

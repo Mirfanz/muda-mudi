@@ -42,6 +42,7 @@ export const FindUsers = async (): Promise<RespType<{ users: UserType[] }>> => {
     };
   } catch (error: any) {
     console.log("error", error);
+
     return {
       success: false,
       message: getErrorMessage(error.code, "Gagal memuat data anggota"),

@@ -4,20 +4,16 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { useDisclosure } from "@heroui/modal";
-import { MagnifyingGlassMinusIcon } from "@heroicons/react/24/outline";
 import React from "react";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
 
 import AddUser from "./add-user";
 import TableUser from "./table-user";
 import DeleteUserModal from "./delete-user";
+import EditUserModal from "./edit-user";
 
 import { UserType } from "@/types";
 import { FindUsers } from "@/lib/user.actions";
-import EditUserModal from "./edit-user";
-import {
-  MagnifyingGlassCircleIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/solid";
 
 const Users = () => {
   const addUserDisclosure = useDisclosure();

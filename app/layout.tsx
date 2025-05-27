@@ -7,6 +7,10 @@ import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
 import { fontPoppins } from "@/config/fonts";
 
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -36,7 +40,7 @@ export default function RootLayout({
       <body
         className={clsx(
           "h-screen font-poppins antialiased dark:bg-foreground-50 bg-foreground-100",
-          fontPoppins.variable,
+          fontPoppins.variable
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>

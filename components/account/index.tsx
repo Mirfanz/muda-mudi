@@ -81,7 +81,7 @@ const Account = (props: Props) => {
 
   return (
     <>
-      <section className="">
+      <section className="p-2">
         <Card>
           <CardBody className="flex-col items-center gap-3">
             <Button
