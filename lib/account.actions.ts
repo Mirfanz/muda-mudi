@@ -2,14 +2,19 @@
 
 import { cookies } from "next/headers";
 
-import { generateToken, verifyToken, comparePassword } from "./utils";
+import {
+  generateToken,
+  verifyToken,
+  comparePassword,
+  getErrorMessage,
+} from "./utils";
 
 import prisma from "@/prisma";
 import { RespType, UserType } from "@/types";
 
 export const Login = async (
   phone: string,
-  password: string,
+  password: string
 ): Promise<RespType<{ user: UserType; authToken: string }>> => {
   try {
     const cookie = await cookies();
@@ -49,10 +54,10 @@ export const Login = async (
         user: data,
       },
     };
-  } catch (error) {
+  } catch (error: any) {
     return {
       success: false,
-      message: "Invalid Credentials",
+      message: getErrorMessage(error.code, error.message),
     };
   }
 };
@@ -60,7 +65,6 @@ export const Login = async (
 export const Logout = async (): Promise<RespType> => {
   try {
     const cookie = await cookies();
-
     cookie.delete("_session");
 
     return {
@@ -78,18 +82,20 @@ export const Logout = async (): Promise<RespType> => {
 
 export const GetUser = async (): Promise<RespType<{ user: UserType }>> => {
   try {
-    const cookie = await cookies();
-    const token = cookie.get("_session")?.value;
-
+    const token = (await cookies()).get("_session")?.value;
     if (!token) throw new Error("Token not found");
     const payload = await verifyToken(token);
-
     if (!payload) throw new Error("Invalid token");
 
     return {
       success: true,
       message: "User has been logged in",
-      data: { user: payload.user },
+      data: {
+        user: {
+          ...payload.user,
+          birth: new Date(payload.user.birth),
+        },
+      },
     };
   } catch (error) {
     return {

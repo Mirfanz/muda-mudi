@@ -2,12 +2,12 @@
 
 import { addToast } from "@heroui/toast";
 import { useRouter } from "next/navigation";
-import React, { createContext, useEffect } from "react";
+import React from "react";
 
 import { UserType } from "@/types";
 import { GetUser, Login, Logout } from "@/lib/account.actions";
 
-const AuthContext = createContext<{
+const AuthContext = React.createContext<{
   user?: UserType;
   logout: () => void;
   login: (email: string, password: string) => Promise<boolean>;
@@ -60,9 +60,10 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
     }
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     GetUser()
       .then((resp) => {
+        console.log("resp", resp);
         if (resp.success) setUser(resp.data.user);
       })
       .finally(() => setIsLoading(false));

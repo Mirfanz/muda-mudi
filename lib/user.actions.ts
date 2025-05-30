@@ -7,6 +7,7 @@ import {
   getErrorMessage,
   hashPassword,
   isAuthorized,
+  isAuthorizedOrThrow,
   verifyToken,
 } from "./utils";
 
@@ -69,8 +70,7 @@ export const RegisterUser = async ({
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
     if (!payload) throw new Error("Invalid Token");
-    if (!isAuthorized(payload.user.role as Role, [Role.ADMIN, Role.KETUA]))
-      throw new Error("Unauthorized");
+    isAuthorizedOrThrow(payload.user.role, [Role.ADMIN, Role.KETUA]);
 
     const result = await prisma.user.create({
       data: {
@@ -132,8 +132,7 @@ export const UpdateUser = async ({
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
     if (!payload) throw new Error("Invalid Token");
-    if (!isAuthorized(payload.user.role as Role, [Role.ADMIN, Role.KETUA]))
-      throw new Error("Unauthorized");
+    isAuthorizedOrThrow(payload.user.role, [Role.ADMIN, Role.KETUA]);
 
     const result = await prisma.user.update({
       where: {
@@ -183,8 +182,7 @@ export const DeleteUser = async ({
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
     if (!payload) throw new Error("Invalid Token");
-    if (!isAuthorized(payload.user.role as Role, [Role.ADMIN, Role.KETUA]))
-      throw new Error("Unauthorized");
+    isAuthorizedOrThrow(payload.user.role, [Role.ADMIN, Role.KETUA]);
 
     const result = await prisma.user.update({
       where: {

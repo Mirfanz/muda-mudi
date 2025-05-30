@@ -5,15 +5,13 @@ import {
   BanknotesIcon,
   CalendarDateRangeIcon,
   UserGroupIcon,
-  Cog6ToothIcon,
-  ArrowLeftStartOnRectangleIcon,
   HeartIcon,
-} from "@heroicons/react/24/outline";
+} from "@heroicons/react/24/solid";
 
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "MudaMudi",
+  name: "PEMOEDA",
   description:
     "Website resmi karang taruna dukuh Klumpit Kulon. Satukan Pemuda Majukan Desa.",
   navItems: [
@@ -50,13 +48,19 @@ export const siteConfig = {
       isActive: (path: string) => /^\/admin$/.test(path),
     },
     {
-      label: "Anggota",
+      label: "Keanggotaan",
       href: "/admin/users",
       icon: UserGroupIcon,
       isActive: (path: string) => /^\/admin\/users/.test(path),
     },
     {
-      label: "Keungan",
+      label: "Schedule Acara",
+      href: "/admin/events",
+      icon: CalendarDateRangeIcon,
+      isActive: (path: string) => /^\/admin\/events/.test(path),
+    },
+    {
+      label: "Kelola Keungan",
       href: "/admin/finance",
       icon: BanknotesIcon,
       isActive: (path: string) => /^\/admin\/finance/.test(path),
@@ -66,18 +70,6 @@ export const siteConfig = {
       href: "/admin/donation",
       icon: HeartIcon,
       isActive: (path: string) => /^\/admin\/donation/.test(path),
-    },
-    {
-      label: "Settings",
-      href: "/admin/setting",
-      icon: Cog6ToothIcon,
-      isActive: (path: string) => /^\/admin\/setting/.test(path),
-    },
-    {
-      label: "Keluar",
-      href: "#",
-      icon: ArrowLeftStartOnRectangleIcon,
-      isActive: (path: string) => false,
     },
   ],
   links: {

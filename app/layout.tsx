@@ -40,7 +40,7 @@ export default function RootLayout({
       <body
         className={clsx(
           "h-screen font-poppins antialiased dark:bg-foreground-50 bg-foreground-100",
-          fontPoppins.variable
+          fontPoppins.variable,
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>

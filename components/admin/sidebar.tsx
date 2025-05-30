@@ -4,31 +4,78 @@ import React from "react";
 import { usePathname } from "next/navigation";
 import clsx from "clsx";
 import Link from "next/link";
+import { Button, ButtonProps } from "@heroui/button";
+import {
+  ArrowLeftStartOnRectangleIcon,
+  Cog6ToothIcon,
+} from "@heroicons/react/24/solid";
+
+import { useAuth } from "../auth-provider";
 
 import { siteConfig } from "@/config/site";
 
-type Props = {};
+const SidebarItem = (
+  props: {
+    href?: string;
+    active?: boolean;
+    icon: React.ForwardRefExoticComponent<
+      Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
+        title?: string;
+        titleId?: string;
+      } & React.RefAttributes<SVGSVGElement>
+    >;
+  } & ButtonProps
+) => {
+  return (
+    <Button
+      fullWidth
+      {...props}
+      className={clsx(
+        "justify-start text-sm px-3",
+        props.active
+          ? "border-1.5 text-primary-500 bg-primary-50 font-medium border-primary-500"
+          : "text-foreground-600"
+      )}
+      color={props.active ? "primary" : "default"}
+      startContent={
+        <props.icon className="w-4 h-4" strokeWidth={props.active ? 2 : 1.5} />
+      }
+      variant={props.active ? "flat" : "light"}
+    >
+      {props.children}
+    </Button>
+  );
+};
 
-const Sidebar = (props: Props) => {
+const Sidebar = () => {
   const pathname = usePathname();
+  const auth = useAuth();
 
   return (
-    <div className="flex-grow flex flex-col bg-default-200 pt-2">
-      {siteConfig.sidebarItems.map((item, i) => (
-        <Link
-          key={item.href}
-          className={clsx(
-            "flex items-center gap-3 text-sm hover:gap-4 duration-300 p-3 border-primary-500",
-            item.isActive(pathname)
-              ? "text-foreground-800 bg-default-300 border-e-1.5"
-              : "text-foreground-600 hover:text-foreground-800",
-          )}
-          href={item.href}
-        >
-          <item.icon className="w-4 h-4" />
-          <span className="">{item.label}</span>
-        </Link>
-      ))}
+    <div className="flex-grow bg-white overflow-y-auto shadow-sm dark:bg-black p-3">
+      <p className="text-sm text-foreground-600 uppercase mb-1 mt-2">
+        Menu Utama
+      </p>
+      <div className="flex flex-col gap-1">
+        {siteConfig.sidebarItems.map((item, i) => (
+          <SidebarItem
+            key={item.href}
+            active={item.isActive(pathname)}
+            as={Link}
+            href={item.href}
+            icon={item.icon}
+          >
+            {item.label}
+          </SidebarItem>
+        ))}
+      </div>
+      <p className="text-sm text-foreground-600 uppercase mb-1 mt-3">Lainnya</p>
+      <div className="flex flex-col gap-1">
+        <SidebarItem icon={Cog6ToothIcon}>Setting</SidebarItem>
+        <SidebarItem icon={ArrowLeftStartOnRectangleIcon} onPress={auth.logout}>
+          Logout
+        </SidebarItem>
+      </div>
     </div>
   );
 };

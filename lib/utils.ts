@@ -2,6 +2,7 @@ import * as jose from "jose";
 import * as bcrypt from "bcryptjs";
 
 import { SessionPayload, UserType } from "@/types";
+import { Role } from "@prisma/client";
 
 export const generateToken = async (payload: { user: UserType }) => {
   const secret = new TextEncoder().encode(process.env.JWT_SECRET);
@@ -21,7 +22,6 @@ export const verifyToken = async (token?: string) => {
     const { payload } = await jose.jwtVerify(token, secret, {
       algorithms: ["HS256"],
     });
-
     return payload as SessionPayload;
   } catch (error) {
     return null;
@@ -30,13 +30,11 @@ export const verifyToken = async (token?: string) => {
 
 export const hashPassword = (password: string) => {
   const saltRounds: number = parseInt(process.env.SALT_ROUNDS);
-
   return bcrypt.hash(password, saltRounds);
 };
 
-export const comparePassword = (password: string, hashedPassword: string) => {
-  return bcrypt.compare(password, hashedPassword);
-};
+export const comparePassword = (password: string, hashedPassword: string) =>
+  bcrypt.compare(password, hashedPassword);
 
 const ErrorCodes: any = {
   P1000: "Unauhenticated",
@@ -105,12 +103,15 @@ const ErrorCodes: any = {
   P3013: "Datasource provider arrays are no longer supported in migrate",
 };
 
-export const getErrorMessage = (code: string, defaultMessage?: string) => {
-  console.log("error code", code);
+export const getErrorMessage = (code: string, defaultMessage?: string) =>
+  ErrorCodes[code] || defaultMessage || "Unknown error";
 
-  return ErrorCodes[code] || defaultMessage || "Unknown error";
-};
+export const isAuthorized = (userRole: string, authorizedRoles: string[]) =>
+  authorizedRoles.includes(userRole);
 
-export const isAuthorized = (userRole: string, allowedRoles: string[]) => {
-  return allowedRoles.includes(userRole);
+export const isAuthorizedOrThrow = (
+  userRole: Role,
+  authorizedRoles: Role[]
+) => {
+  if (!authorizedRoles.includes(userRole)) throw new Error("unauthorized");
 };

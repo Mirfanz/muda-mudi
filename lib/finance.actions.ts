@@ -1,9 +1,11 @@
 "use server";
 
-import { getErrorMessage } from "./utils";
+import { getErrorMessage, isAuthorizedOrThrow, verifyToken } from "./utils";
 
 import prisma from "@/prisma";
 import { FinanceHistory, RespType } from "@/types";
+import { Role } from "@prisma/client";
+import { cookies } from "next/headers";
 
 export const FindFinanceHistory = async (): Promise<
   RespType<{
@@ -51,8 +53,54 @@ export const FindFinanceHistory = async (): Promise<
   } catch (error: any) {
     return {
       success: false,
+      message: getErrorMessage(error.code, "Failed to fetch finance history"),
+    };
+  }
+};
+
+export const AddFinanceHistory = async ({
+  title,
+  income,
+  amount,
+  date,
+  description,
+}: {
+  title: string;
+  description?: string;
+  amount: number;
+  date: Date;
+  income: boolean;
+}): Promise<RespType<{}>> => {
+  try {
+    const payload = await verifyToken((await cookies()).get("_session")?.value);
+    if (!payload) throw new Error("Invalid Token");
+    isAuthorizedOrThrow(payload.user.role, [Role.BENDAHARA, Role.ADMIN]);
+
+    const result = await prisma.financialHistories.create({
+      data: {
+        title,
+        date,
+        amount,
+        description,
+        income,
+        author: {
+          connect: {
+            id: payload.user.id,
+          },
+        },
+      },
+    });
+    return {
+      success: true,
+      message: "Add history success",
+      data: result,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
       message: getErrorMessage(
-        error.message ?? "Failed to fetch finance history",
+        error.code,
+        error.message ?? "Failed add history"
       ),
     };
   }

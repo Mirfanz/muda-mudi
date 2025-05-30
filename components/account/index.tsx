@@ -51,7 +51,7 @@ const Account = (props: Props) => {
 
   const [filter, setFilter] = useState({
     activeOnly: false,
-    hideRoles: [] as string[],
+    hideRoles: ["ADMIN"] as string[],
   });
 
   const { data, isLoading } = useQuery({
@@ -80,71 +80,61 @@ const Account = (props: Props) => {
   };
 
   return (
-    <>
-      <section className="p-2">
-        <Card>
-          <CardBody className="flex-col items-center gap-3">
+    <main>
+      <section className="p-3">
+        <div className="flex-col relative flex items-center gap-3">
+          <Button
+            className="absolute top-0 right-0"
+            color="danger"
+            size="sm"
+            variant="flat"
+            onPress={auth.logout}
+          >
+            <ArrowRightStartOnRectangleIcon className="w-4 h-4" />
+            Keluar
+          </Button>
+          <div className="relative flex justify-center rounded-full mt-3">
+            <Avatar className="w-32 h-32" src={auth.user?.avatar || ""} />
             <Button
-              className="absolute top-2 right-2"
-              color="danger"
+              isIconOnly
+              radius="full"
               size="sm"
-              variant="flat"
-              onPress={auth.logout}
+              className="absolute bottom-1 right-1"
+              variant="faded"
             >
-              <ArrowRightStartOnRectangleIcon className="w-4 h-4" />
-              Keluar
+              <PencilSquareIcon className="w-4 h-4" />
             </Button>
-            <div className="relative flex justify-center rounded-full">
-              <Avatar className="w-32 h-32" src={auth.user?.avatar || ""} />
-              <Button
-                isIconOnly
-                radius="full"
-                size="sm"
-                className="absolute bottom-1 right-1"
-                // color="primary"
-                variant="faded"
-              >
-                <PencilSquareIcon className="w-4 h-4" />
-              </Button>
-            </div>
-            <h6 className="font-semibold text-lg">{auth.user?.name}</h6>
-            <Card className="w-full" shadow={"sm"}>
-              <CardBody className="gap-1 text-xs">
-                <div className="flex justify-between">
-                  <p>Role</p>
-                  <p className="capitalize">{auth.user?.role.toLowerCase()}</p>
-                </div>
-                <div className="flex justify-between">
-                  <p>Umur</p>
-                  <p>21 Tahun</p>
-                </div>
-                <div className="flex justify-between">
-                  <p>Status Aktif</p>
-                  <p>{auth.user?.active ? "Aktif" : "Purna Tugas"}</p>
-                </div>
-                <div className="flex justify-between">
-                  <p>Whatsapp</p>
-                  <p>{auth.user?.phone}</p>
-                </div>
-                <div className="flex justify-between">
-                  <p>Tanggal Lahir</p>
-                  <p>{auth.user?.birth.toLocaleString().slice(0, 10)}</p>
-                </div>
-              </CardBody>
-            </Card>
-          </CardBody>
-        </Card>
+          </div>
+          <h6 className="font-semibold text-lg">{auth.user?.name}</h6>
+          <Card className="w-full" shadow={"sm"}>
+            <CardBody className="gap-1 text-xs">
+              <div className="flex justify-between">
+                <p>Role</p>
+                <p className="capitalize">{auth.user?.role.toLowerCase()}</p>
+              </div>
+              <div className="flex justify-between">
+                <p>Umur</p>
+                <p>21 Tahun</p>
+              </div>
+              <div className="flex justify-between">
+                <p>Status Aktif</p>
+                <p>{auth.user?.active ? "Aktif" : "Purna Tugas"}</p>
+              </div>
+              <div className="flex justify-between">
+                <p>Whatsapp</p>
+                <p>{auth.user?.phone}</p>
+              </div>
+              <div className="flex justify-between">
+                <p>Tanggal Lahir</p>
+                <p>{auth.user?.birth.toLocaleDateString("id-ID")}</p>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
       </section>
-      <section>
-        <div className="flex justify-between items-center mt-3 mb-2 gap-1">
+      <section className="p-3 pt-0">
+        <div className="flex mb-3 justify-between items-center mt-3 gap-1">
           <h4 className="text-lg font-medium me-auto">Anggota Lainnya</h4>
-          <Tooltip content="Kelola Anggota">
-            <Link href={"/admin/users"}>
-              <Button isIconOnly size="sm">
-                <UserGroupIcon className="w-4 h-4" />
-              </Button>
-            </Link>
-          </Tooltip>
           <Button
             color="default"
             size="sm"
@@ -155,8 +145,6 @@ const Account = (props: Props) => {
             Filter
           </Button>
         </div>
-      </section>
-      <section>
         <div className="flex flex-col gap-2">
           {data?.map((user) => (
             <UserCard
@@ -202,7 +190,7 @@ const Account = (props: Props) => {
           </DrawerBody>
         </DrawerContent>
       </Drawer>
-    </>
+    </main>
   );
 };
 

@@ -6,10 +6,10 @@ import { User } from "@heroui/user";
 import clsx from "clsx";
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import { Pagination } from "swiper/modules";
+import Image from "next/image";
 
 import { FinanceHistory } from "@/types";
-import Image from "next/image";
 
 type Props = {
   data: FinanceHistory | null;
@@ -29,10 +29,9 @@ const DetailHistoryModal = ({ data, onClose }: Props) => {
             })}
           </p>
           <h2 className="text-xl font-semibold mb-1">{data?.title}</h2>
-          <p className="text-sm text-foreground-600">
+          <p className="text-sm mb-4">
             {data?.description || "Tidak ada deskripsi."}
           </p>
-          <p className="text-sm mb-4">{data?.description}</p>
           <div className="flex justify-between items-center mb-4">
             <Chip color={data?.income ? "success" : "danger"} variant="flat">
               {data?.income ? "PEMASUKAN" : "PENGELUARAN"}
@@ -49,19 +48,19 @@ const DetailHistoryModal = ({ data, onClose }: Props) => {
           </div>
           {data?.images.length !== 0 && (
             <Swiper
+              className="w-full aspect-video rounded-lg"
               modules={[Pagination]}
               pagination={{ clickable: true }}
               spaceBetween={5}
-              className="w-full aspect-video rounded-lg"
             >
               {data?.images.map((image, index) => (
                 <SwiperSlide key={index} className="bg-foreground-100">
                   <Image
-                    src={image}
+                    fill
                     alt={`Image ${index + 1}`}
                     className="w-full h-full rounded-lg "
-                    fill
                     objectFit="cover"
+                    src={image}
                   />
                 </SwiperSlide>
               ))}
