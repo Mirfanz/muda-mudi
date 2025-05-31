@@ -4,14 +4,9 @@ import { Button } from "@heroui/button";
 import React, { useState } from "react";
 import { Card, CardBody } from "@heroui/card";
 import { Avatar } from "@heroui/avatar";
-import {
-  FunnelIcon,
-  PencilSquareIcon,
-  UserGroupIcon,
-} from "@heroicons/react/24/outline";
+import { FunnelIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRightStartOnRectangleIcon } from "@heroicons/react/24/solid";
-import { Tooltip } from "@heroui/tooltip";
 import {
   Drawer,
   DrawerBody,
@@ -21,7 +16,6 @@ import {
 import { useDisclosure } from "@heroui/modal";
 import { Switch } from "@heroui/switch";
 import { Checkbox } from "@heroui/checkbox";
-import Link from "next/link";
 
 import { useAuth } from "../auth-provider";
 
@@ -67,15 +61,11 @@ const Account = (props: Props) => {
 
   const handleHideRoleChange = (val: boolean, role: string) => {
     const newHideRoles = [...filter.hideRoles];
-
-    console.log("newHideRoles", newHideRoles);
     const index = newHideRoles.indexOf(role);
 
-    console.log("index", index, val);
     if (!val && index < 0) newHideRoles.push(role);
     else if (val && index >= 0) newHideRoles.splice(index, 1);
     else return;
-    console.log("newHideRoles", newHideRoles);
     setFilter({ ...filter, hideRoles: newHideRoles });
   };
 
@@ -97,9 +87,9 @@ const Account = (props: Props) => {
             <Avatar className="w-32 h-32" src={auth.user?.avatar || ""} />
             <Button
               isIconOnly
+              className="absolute bottom-1 right-1"
               radius="full"
               size="sm"
-              className="absolute bottom-1 right-1"
               variant="faded"
             >
               <PencilSquareIcon className="w-4 h-4" />

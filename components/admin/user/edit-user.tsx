@@ -20,6 +20,7 @@ import {
 import { Select, SelectItem } from "@heroui/select";
 import { addToast } from "@heroui/toast";
 import { z } from "zod";
+import Swal from "sweetalert2";
 
 import { UserType } from "@/types";
 import { UpdateUser } from "@/lib/user.actions";
@@ -88,6 +89,7 @@ const EditUserModal = ({ user, onSuccess, onError, onClose }: Props) => {
       .then((resp) => {
         if (!resp.success) throw new Error(resp.message);
         addToast({
+          title: "Successfully",
           description: resp.message,
           color: "success",
         });
@@ -95,9 +97,11 @@ const EditUserModal = ({ user, onSuccess, onError, onClose }: Props) => {
         onClose?.();
       })
       .catch((err) => {
-        addToast({
-          description: err.message,
-          color: "danger",
+        Swal.fire({
+          icon: "error",
+          titleText: "Process Failed",
+          text: err.message,
+          draggable: true,
         });
         onError?.(err.message);
       })

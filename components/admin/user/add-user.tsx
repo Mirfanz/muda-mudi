@@ -21,6 +21,7 @@ import { addToast } from "@heroui/toast";
 import { Role } from "@prisma/client";
 import React, { ChangeEvent, FormEvent, useState } from "react";
 import { z } from "zod";
+import Swal from "sweetalert2";
 
 import { UserType } from "@/types";
 import { RegisterUser } from "@/lib/user.actions";
@@ -95,7 +96,8 @@ const AddUser = (props: Props) => {
       .then((resp) => {
         if (!resp.success) throw new Error(resp.message);
         addToast({
-          description: resp.message,
+          title: "Successfully",
+          description: "Anggota baru ditambahkan",
           color: "success",
         });
         props.onSuccess?.(resp.data.user);
@@ -103,9 +105,11 @@ const AddUser = (props: Props) => {
         props.onClose?.();
       })
       .catch((err) => {
-        addToast({
-          description: err.message,
-          color: "danger",
+        Swal.fire({
+          icon: "error",
+          titleText: "Process Failed",
+          text: err.message,
+          draggable: true,
         });
         props.onError?.(err.message);
       })

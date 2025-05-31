@@ -6,7 +6,6 @@ import { cookies } from "next/headers";
 import {
   getErrorMessage,
   hashPassword,
-  isAuthorized,
   isAuthorizedOrThrow,
   verifyToken,
 } from "./utils";

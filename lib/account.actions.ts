@@ -14,7 +14,7 @@ import { RespType, UserType } from "@/types";
 
 export const Login = async (
   phone: string,
-  password: string
+  password: string,
 ): Promise<RespType<{ user: UserType; authToken: string }>> => {
   try {
     const cookie = await cookies();
@@ -65,6 +65,7 @@ export const Login = async (
 export const Logout = async (): Promise<RespType> => {
   try {
     const cookie = await cookies();
+
     cookie.delete("_session");
 
     return {
@@ -83,8 +84,10 @@ export const Logout = async (): Promise<RespType> => {
 export const GetUser = async (): Promise<RespType<{ user: UserType }>> => {
   try {
     const token = (await cookies()).get("_session")?.value;
+
     if (!token) throw new Error("Token not found");
     const payload = await verifyToken(token);
+
     if (!payload) throw new Error("Invalid token");
 
     return {

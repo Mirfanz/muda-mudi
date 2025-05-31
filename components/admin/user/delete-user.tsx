@@ -11,6 +11,7 @@ import {
 } from "@heroui/modal";
 import { addToast } from "@heroui/toast";
 import React from "react";
+import Swal from "sweetalert2";
 
 import { UserType } from "@/types";
 import { DeleteUser } from "@/lib/user.actions";
@@ -34,17 +35,18 @@ const DeleteUserModal = ({ user, onClose, onError, onSuccess }: Props) => {
         if (!resp.success) throw new Error(resp.message);
         onSuccess?.(user);
         addToast({
-          title: "Berhasil",
-          description: resp.message,
+          title: "Successfully",
+          description: `${user.name.split(" ")[0]} dihapus`,
           color: "success",
         });
         onClose();
       })
       .catch((error) => {
-        addToast({
-          title: "Gagal",
-          description: error.message,
-          color: "danger",
+        Swal.fire({
+          icon: "error",
+          titleText: "Process Failed",
+          text: error.message,
+          draggable: true,
         });
         onError?.(error.message);
       })

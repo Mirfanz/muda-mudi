@@ -8,7 +8,7 @@ import { Fragment, ReactNode, useState } from "react";
 import clsx from "clsx";
 import Link from "next/link";
 
-import { DonateIcon, InstagramIcon, QuranIcon, XIcon } from "./icons";
+import { DonateIcon, InstagramIcon, QuranIcon } from "./icons";
 
 import { ThemeSwitch } from "@/components/theme-switch";
 import { siteConfig } from "@/config/site";
@@ -29,19 +29,19 @@ export const Navbar = ({ hideBrand, startContent, endContent }: Props) => {
         {!hideBrand && (
           <NextLink className="flex justify-start items-center gap-1" href="/">
             <svg
-              width="518"
-              height="664"
               className="h-7 w-7"
-              viewBox="0 0 518 664"
               fill="none"
+              height="664"
+              viewBox="0 0 518 664"
+              width="518"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path
+                className="shadow-sm"
                 d="M255.678 651.096C257.588 652.747 260.412 652.747 262.322 651.095C308.472 611.198 373.532 573.475 433.776 571.575C436.427 571.491 438.614 569.421 438.779 566.773C442.521 506.726 452.762 462.837 482 399C505.16 348.434 520.402 278.5 489 208.5C465.673 156.5 424.5 119.5 347 75.5C311.837 55.5363 276.202 25.6526 261.258 12.8096C259.374 11.1913 256.625 11.1918 254.755 12.8246C240.031 25.6759 205.923 55.5441 170.774 75.5C93.2735 119.5 52.1007 156.5 28.7736 208.5C-2.6283 278.5 12.6138 348.434 35.7736 399C65.0117 462.837 75.2528 506.726 78.9941 566.773C79.1591 569.421 81.3463 571.491 83.9978 571.575C144.252 573.475 209.518 611.198 255.678 651.096Z"
                 fill="#fff"
                 stroke="#0F5A84"
                 strokeWidth={22}
-                className="shadow-sm"
               />
               <path
                 d="M261 481.5C265.5 461.5 268.679 448.303 287.5 425.5C313.5 394 350.5 376.5 378.5 360.5C400.167 346.833 443 311.002 443 277C443 262 433.5 260 425 273.5C403 304 367.5 330 328.5 342C289.5 354 276 361.5 250.5 390C245 379.5 235 360.8 221.5 350C211.739 342.191 191.5 331.116 179 321.5C166.5 311.885 159.7 305 149.5 296.5C139.3 288 132.5 296.912 132.5 304C132.5 310.5 134.5 318 140.5 326.5C146.5 335 160.938 348.439 163 350.5C166 353.5 176.5 365.5 177 368.5C177.4 370.9 172.326 368.797 164.5 364C149 354.5 123 335 115 315C107 295 105.5 291 104 274.5C102.5 258 98.6 239 93 232C87.4 225 73 220.5 73 234C73 247.5 56.5 353.5 129.5 410.5C129.5 410.5 149.5 426 158 434C166.5 442 176.4 448.7 174 471.5C184.5 470.5 208.3 469.8 219.5 475C233.5 481.5 251.5 481.5 261 481.5Z"
@@ -91,7 +91,7 @@ export const Navbar = ({ hideBrand, startContent, endContent }: Props) => {
             <ChevronDoubleLeftIcon
               className={clsx(
                 "w-4 h-4 duration-300",
-                showLink ? "-rotate-180" : "rotate-0"
+                showLink ? "-rotate-180" : "rotate-0",
               )}
             />
           </Button>
@@ -99,13 +99,13 @@ export const Navbar = ({ hideBrand, startContent, endContent }: Props) => {
             <Fragment>
               <Tooltip content="Instagram">
                 <Button
-                  as={Link}
-                  href={siteConfig.links.instagram}
-                  target="_blank"
                   isIconOnly
+                  as={Link}
                   className="text-primary-foreground animate-appearance-in"
+                  href={siteConfig.links.instagram}
                   radius="full"
                   size="sm"
+                  target="_blank"
                   title="Instagram"
                   variant="light"
                 >
@@ -114,13 +114,13 @@ export const Navbar = ({ hideBrand, startContent, endContent }: Props) => {
               </Tooltip>
               <Tooltip content="Quran">
                 <Button
-                  as={Link}
-                  href="https://quran.com/"
-                  target="_blank"
                   isIconOnly
+                  as={Link}
                   className="text-primary-foreground animate-appearance-in"
+                  href="https://quran.com/"
                   radius="full"
                   size="sm"
+                  target="_blank"
                   title="Quran"
                   variant="light"
                 >
@@ -129,13 +129,13 @@ export const Navbar = ({ hideBrand, startContent, endContent }: Props) => {
               </Tooltip>
               <Tooltip content="Donasi">
                 <Button
-                  as={Link}
-                  href={"/finance/donation"}
-                  target="_blank"
                   isIconOnly
+                  as={Link}
                   className="text-primary-foreground animate-appearance-in"
+                  href={"/finance/donation"}
                   radius="full"
                   size="sm"
+                  target="_blank"
                   title="Donate"
                   variant="light"
                 >

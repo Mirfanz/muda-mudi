@@ -15,8 +15,11 @@ import { NumberInput } from "@heroui/number-input";
 import { Select, SelectItem } from "@heroui/select";
 import { DatePicker } from "@heroui/date-picker";
 import { DateValue } from "@heroui/calendar";
+import { getLocalTimeZone } from "@internationalized/date";
+import Swal from "sweetalert2";
+import { addToast } from "@heroui/toast";
+
 import { AddFinanceHistory } from "@/lib/finance.actions";
-import { getLocalTimeZone, now } from "@internationalized/date";
 
 type Props = {
   isOpen: boolean;
@@ -49,6 +52,7 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const date = fields.date?.toDate(getLocalTimeZone());
+
     if (!date) return;
     if (!fields.amount) return;
     AddFinanceHistory({
@@ -58,8 +62,22 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
       date,
       description: fields.description,
     }).then((resp) => {
-      console.log("resp", resp);
-      if (!resp.success) return onError?.(resp.message);
+      if (!resp.success) {
+        Swal.fire({
+          icon: "error",
+          titleText: "Process Failed",
+          text: resp.message,
+          draggable: true,
+        });
+        onError?.(resp.message);
+
+        return;
+      }
+      addToast({
+        title: "Successfully",
+        description: "History telah ditambahkan",
+        color: "success",
+      });
       onClose();
       onSuccess?.();
     });
@@ -68,76 +86,76 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
   React.useEffect(() => {
     resetFields();
   }, [isOpen]);
+
   return (
     <Modal hideCloseButton isOpen={isOpen}>
-      <Form onSubmit={handleSubmit} validationBehavior="native">
+      <Form validationBehavior="native" onSubmit={handleSubmit}>
         <ModalContent>
           <ModalHeader>Add New History</ModalHeader>
           <ModalBody>
             <Input
-              name="title"
+              isRequired
               labelPlacement="outside"
+              minLength={5}
+              name="title"
               placeholder="Title"
               type="text"
-              isRequired
-              minLength={5}
-              value={fields.title}
-              onValueChange={(val) => setFields({ ...fields, title: val })}
               validate={(val) => {
                 return true;
               }}
+              value={fields.title}
+              onValueChange={(val) => setFields({ ...fields, title: val })}
             />
             <div className="flex gap-3 items-start">
               <Select
+                isRequired
                 name="type"
                 placeholder="Jenis"
                 selectedKeys={[fields.type]}
-                onSelectionChange={(keys) => {
-                  setFields({ ...fields, type: keys.currentKey || "" });
-                  console.log("keys", keys.currentKey);
-                }}
-                isRequired
+                onSelectionChange={(keys) =>
+                  setFields({ ...fields, type: keys.currentKey || "" })
+                }
               >
                 <SelectItem key={"income"}>Pemasukan</SelectItem>
                 <SelectItem key={"outcome"}>Pengeluaran</SelectItem>
               </Select>
               <NumberInput
+                isRequired
+                labelPlacement="outside"
+                minValue={0}
                 name="amount"
+                placeholder="Nilai"
+                startContent={"Rp"}
+                step={1000}
                 value={fields.amount}
                 onValueChange={(val) => setFields({ ...fields, amount: val })}
-                labelPlacement="outside"
-                startContent={"Rp"}
-                placeholder="Nilai"
-                isRequired
-                minValue={0}
-                step={1000}
               />
             </div>
             <DatePicker
-              label="Tanggal"
-              labelPlacement="outside-left"
+              hideTimeZone
               isRequired
               showMonthAndYearPickers
-              hideTimeZone
+              label="Tanggal"
+              labelPlacement="outside-left"
               name="date"
-              value={fields.date}
-              onChange={(val) => setFields({ ...fields, date: val })}
               validate={(val) => {
                 return true;
               }}
+              value={fields.date}
+              onChange={(val) => setFields({ ...fields, date: val })}
             />
             <Textarea
+              label="Deskripsi"
               name="description"
               value={fields.description}
               onValueChange={(val) =>
                 setFields({ ...fields, description: val })
               }
-              label="Deskripsi"
             />
           </ModalBody>
           <ModalFooter>
             <Button onPress={onClose}>Cancel</Button>
-            <Button type="submit" color="primary">
+            <Button color="primary" type="submit">
               Save
             </Button>
           </ModalFooter>

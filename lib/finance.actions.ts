@@ -1,11 +1,12 @@
 "use server";
 
+import { Role } from "@prisma/client";
+import { cookies } from "next/headers";
+
 import { getErrorMessage, isAuthorizedOrThrow, verifyToken } from "./utils";
 
 import prisma from "@/prisma";
 import { FinanceHistory, RespType } from "@/types";
-import { Role } from "@prisma/client";
-import { cookies } from "next/headers";
 
 export const FindFinanceHistory = async (): Promise<
   RespType<{
@@ -76,6 +77,7 @@ export const AddFinanceHistory = async ({
 }): Promise<RespType<{}>> => {
   try {
     const payload = await verifyToken((await cookies()).get("_session")?.value);
+
     if (!payload) throw new Error("Invalid Token");
     isAuthorizedOrThrow(payload.user.role, [Role.BENDAHARA, Role.ADMIN]);
 
@@ -93,6 +95,7 @@ export const AddFinanceHistory = async ({
         },
       },
     });
+
     return {
       success: true,
       message: "Add history success",
@@ -103,7 +106,7 @@ export const AddFinanceHistory = async ({
       success: false,
       message: getErrorMessage(
         error.code,
-        error.message ?? "Failed add history"
+        error.message ?? "Failed add history",
       ),
     };
   }
@@ -116,6 +119,7 @@ export const DeleteFinanceHistory = async ({
 }): Promise<RespType<{}>> => {
   try {
     const payload = await verifyToken((await cookies()).get("_session")?.value);
+
     if (!payload) throw new Error("Invalid Token");
     isAuthorizedOrThrow(payload.user.role, [Role.BENDAHARA, Role.ADMIN]);
 

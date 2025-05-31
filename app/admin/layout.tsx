@@ -1,11 +1,11 @@
 import { PropsWithChildren } from "react";
 import clsx from "clsx";
-
-import Sidebar from "@/components/admin/sidebar";
-import { Navbar } from "@/components/navbar";
 import { Button } from "@heroui/button";
 import { Alert } from "@heroui/alert";
 import Link from "next/link";
+
+import { Navbar } from "@/components/navbar";
+import Sidebar from "@/components/admin/sidebar";
 
 export default function AdminLayout({ children }: PropsWithChildren) {
   return (
@@ -14,19 +14,19 @@ export default function AdminLayout({ children }: PropsWithChildren) {
       <div className="flex md:hidden flex-grow justify-center items-center">
         <div className="max-w-full p-2">
           <Alert
-            content="dsdsssd"
-            variant="faded"
             color="warning"
+            content="dsdsssd"
             title="Aktifkan Mode Dekstop"
+            variant="faded"
           >
             <Button
-              size="sm"
               fullWidth
               as={Link}
-              href="/"
-              variant="flat"
-              color="primary"
               className="mt-2"
+              color="primary"
+              href="/"
+              size="sm"
+              variant="flat"
             >
               BACK TO HOME
             </Button>

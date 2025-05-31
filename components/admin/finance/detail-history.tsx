@@ -39,7 +39,7 @@ const DetailHistoryModal = ({ data, onClose }: Props) => {
             <p
               className={clsx(
                 "text-2xl font-bold",
-                data?.income ? "text-success-500" : "text-danger-500"
+                data?.income ? "text-success-500" : "text-danger-500",
               )}
             >
               {(data?.income ? "+" : "-") +

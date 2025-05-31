@@ -24,7 +24,7 @@ const SidebarItem = (
         titleId?: string;
       } & React.RefAttributes<SVGSVGElement>
     >;
-  } & ButtonProps
+  } & ButtonProps,
 ) => {
   return (
     <Button
@@ -34,7 +34,7 @@ const SidebarItem = (
         "justify-start text-sm px-3",
         props.active
           ? "border-1.5 text-primary-500 bg-primary-50 font-medium border-primary-500"
-          : "text-foreground-600"
+          : "text-foreground-600",
       )}
       color={props.active ? "primary" : "default"}
       startContent={

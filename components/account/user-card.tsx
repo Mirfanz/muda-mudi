@@ -12,9 +12,9 @@ type Props = {
 };
 
 const UserCard = ({ user, hidden }: Props) => {
-  return hidden ? (
-    ""
-  ) : (
+  if (hidden) return "";
+
+  return (
     <Card shadow="sm">
       <CardBody className="">
         <User

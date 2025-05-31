@@ -1,8 +1,8 @@
 import * as jose from "jose";
 import * as bcrypt from "bcryptjs";
+import { Role } from "@prisma/client";
 
 import { SessionPayload, UserType } from "@/types";
-import { Role } from "@prisma/client";
 
 export const generateToken = async (payload: { user: UserType }) => {
   const secret = new TextEncoder().encode(process.env.JWT_SECRET);
@@ -22,6 +22,7 @@ export const verifyToken = async (token?: string) => {
     const { payload } = await jose.jwtVerify(token, secret, {
       algorithms: ["HS256"],
     });
+
     return payload as SessionPayload;
   } catch (error) {
     return null;
@@ -30,6 +31,7 @@ export const verifyToken = async (token?: string) => {
 
 export const hashPassword = (password: string) => {
   const saltRounds: number = parseInt(process.env.SALT_ROUNDS);
+
   return bcrypt.hash(password, saltRounds);
 };
 
@@ -111,7 +113,7 @@ export const isAuthorized = (userRole: string, authorizedRoles: string[]) =>
 
 export const isAuthorizedOrThrow = (
   userRole: Role,
-  authorizedRoles: Role[]
+  authorizedRoles: Role[],
 ) => {
   if (!authorizedRoles.includes(userRole)) throw new Error("unauthorized");
 };

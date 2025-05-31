@@ -36,7 +36,7 @@ const Users = () => {
   return (
     <main>
       <Header
-        description="Seng sopo wonge manak wedus siji."
+        description="Manajemen anggota karang taruna."
         endContent={
           <>
             <Input

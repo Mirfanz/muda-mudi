@@ -3,12 +3,13 @@
 import { addToast } from "@heroui/toast";
 import { useRouter } from "next/navigation";
 import React from "react";
+import Swal from "sweetalert2";
 
 import { UserType } from "@/types";
 import { GetUser, Login, Logout } from "@/lib/account.actions";
 
 const AuthContext = React.createContext<{
-  user?: UserType;
+  user: UserType | null;
   logout: () => void;
   login: (email: string, password: string) => Promise<boolean>;
   isLoading: boolean;
@@ -18,7 +19,7 @@ const AuthContext = React.createContext<{
 export const AuthProvider = ({ children }: React.PropsWithChildren) => {
   const router = useRouter();
 
-  const [user, setUser] = React.useState<UserType>();
+  const [user, setUser] = React.useState<UserType | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
 
   const hasRole = (...role: string[]) => {
@@ -28,33 +29,60 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
   };
 
   const login = async (phone: string, password: string) => {
-    const result = await Login(phone, password);
+    const resp = await Login(phone, password);
 
-    if (result.success) {
-      setUser(result.data.user);
+    if (resp.success) {
+      setUser(resp.data.user);
       router.replace("/account");
-      addToast({ title: "Login Berhasil", color: "success" });
+      addToast({
+        title: `Hi, ${resp.data.user.name.split(" ")[0]}`,
+        color: "success",
+      });
 
       return true;
     } else {
-      addToast({ title: "Login Gagal", color: "danger" });
+      Swal.fire({
+        icon: "error",
+        titleText: "Login Gagal",
+        text: resp.message,
+        draggable: true,
+      });
 
       return false;
     }
   };
 
   const logout = async () => {
-    if (!confirm("Serius mau logout?")) return;
-    const result = await Logout();
+    const { isConfirmed } = await Swal.fire({
+      icon: "warning",
+      title: "Serius Logout?",
+      text: "Yaa gapapa sihh... tapi nanti login lagi yaa >_<",
+      showCancelButton: true,
+      confirmButtonColor:
+        "hsl(var(--heroui-danger) / var(--heroui-danger-opacity, 1))",
+      confirmButtonText: "Ya, Logout",
+      cancelButtonText: "Batal",
+    });
 
-    if (result.success) {
-      setUser(undefined);
-      addToast({ description: "Logout" });
+    if (!isConfirmed) return;
+    const resp = await Logout();
+
+    if (resp.success) {
+      setUser(null);
+      addToast({
+        color: "warning",
+        title: "Anda Telah Logout",
+        description: "Silahkan login kembali nanti",
+      });
       router.refresh();
 
       return true;
     } else {
-      addToast({ description: "Logout Gagal", color: "danger" });
+      addToast({
+        color: "danger",
+        title: "Logout Gagal",
+        description: resp.message,
+      });
 
       return false;
     }
@@ -79,9 +107,7 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
 export const useAuth = () => {
   const context = React.useContext(AuthContext);
 
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
+  if (!context) throw new Error("useAuth must be used within an AuthProvider");
 
   return context;
 };
