@@ -8,6 +8,7 @@ import { Checkbox } from "@heroui/checkbox";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { z } from "zod";
 import clsx from "clsx";
+import Image from "next/image";
 
 import { useAuth } from "../auth-provider";
 
@@ -51,16 +52,15 @@ const LoginUI = (props: Props) => {
   };
 
   return (
-    <section className="h-full flex justify-center items-center">
-      <Card className="max-w-96 p-1">
-        <CardBody>
-          <div className="mb-4">
-            <h3 className="font-bold text-3xl my-4 text-primary">
-              Login Lurr...
-            </h3>
+    <section className="h-full p-3 flex justify-center items-center">
+      <Image fill alt="bg" objectFit="cover" src={"/src/images/bg.jpg"} />
+      <Card className="max-w-96 w-full">
+        <CardBody className="p-6 pt-8 lg:p-8">
+          <div className="text-4xl text-center font-semibold mb-6">{">_<"}</div>
+          <div className="mb-4 text-center">
+            <h3 className="text-2xl mb-2 font-semibold">Selamat Datang</h3>
             <p className="text-foreground-500 mb-1 text-sm">
-              Selamat datang di <strong>MudaMudi</strong>, silahkan login untuk
-              melanjutkan.
+              Assalamu&apos;alaikum, login dulu yaaw
             </p>
           </div>
           <form noValidate className="flex flex-col" onSubmit={submitFormLogin}>
@@ -113,6 +113,63 @@ const LoginUI = (props: Props) => {
           </form>
         </CardBody>
       </Card>
+      {/* <div className="p-6 flex-grow h-full flex flex-col justify-evenly py-28">
+        <div className="text-4xl text-center font-semibold mb-6">{">_<"}</div>
+        <div className="mb-4 text-center">
+          <h3 className="text-2xl mb-2 font-semibold">Selamat Datang</h3>
+          <p className="text-foreground-500 mb-1 text-sm">
+            Assalamu'alaikum, login dulu yaaw
+          </p>
+        </div>
+        <form noValidate className="flex flex-col" onSubmit={submitFormLogin}>
+          <Input
+            className={clsx(!!errors?.phone ? "mb-1" : "mb-3")}
+            errorMessage={errors?.phone?._errors[0]}
+            isInvalid={!!errors?.phone}
+            name="phone"
+            placeholder="Nomor Telepon"
+            readOnly={isLoading}
+            type="number"
+            value={fields.phone}
+            onChange={handleInputChange}
+          />
+          <Input
+            className={clsx(!!errors?.password ? "mb-1" : "mb-3")}
+            endContent={
+              <Button
+                isIconOnly
+                className="-me-2 text-foreground-500"
+                size="sm"
+                variant="light"
+                onPress={() => setShowPass((prev) => !prev)}
+              >
+                {showPass ? (
+                  <EyeIcon className="w-5 h-5" />
+                ) : (
+                  <EyeSlashIcon className="w-5 h-5" />
+                )}
+              </Button>
+            }
+            errorMessage={errors?.password?._errors[0]}
+            isInvalid={!!errors?.password}
+            name="password"
+            placeholder="Password"
+            readOnly={isLoading}
+            type={showPass ? "text" : "password"}
+            value={fields.password}
+            onChange={handleInputChange}
+          />
+          <div className="flex mb-4 justify-between items-center">
+            <Checkbox isSelected={fields.remember} size="sm">
+              Remember Me
+            </Checkbox>
+            <small className="ms-auto">Lupa Password?</small>
+          </div>
+          <Button color="primary" isLoading={isLoading} type="submit">
+            LOGIN
+          </Button>
+        </form>
+      </div> */}
     </section>
   );
 };
