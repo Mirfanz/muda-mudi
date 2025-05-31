@@ -66,6 +66,7 @@ const DetailHistoryModal = ({ data, onClose }: Props) => {
               ))}
             </Swiper>
           )}
+          {/* <Skeleton className="w-full aspect-video rounded-lg" /> */}
           <div className="flex items-center mt-3 justify-between">
             <small className="text-xs text-foreground-500">
               {data?.createdAt.toLocaleString("id-ID")}

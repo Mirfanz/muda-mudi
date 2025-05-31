@@ -30,12 +30,11 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
     title: string;
     description?: string;
     date: DateValue | null;
-    amount: number;
+    amount?: number;
     type: string;
   }>({
     title: "",
     date: null,
-    amount: 0,
     type: "",
   });
 
@@ -43,7 +42,6 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
     setFields({
       title: "",
       date: null,
-      amount: 0,
       type: "",
     });
   };
@@ -52,6 +50,7 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
     e.preventDefault();
     const date = fields.date?.toDate(getLocalTimeZone());
     if (!date) return;
+    if (!fields.amount) return;
     AddFinanceHistory({
       amount: fields.amount,
       income: fields.type == "income",

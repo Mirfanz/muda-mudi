@@ -14,6 +14,9 @@ export const FindFinanceHistory = async (): Promise<
 > => {
   try {
     const result = await prisma.financialHistories.findMany({
+      where: {
+        deletedAt: null,
+      },
       orderBy: {
         date: "desc",
       },
@@ -32,7 +35,7 @@ export const FindFinanceHistory = async (): Promise<
           title: item.title,
           description: item.description ?? undefined,
           amount: item.amount,
-          images: item.images ?? [],
+          images: item.images,
           date: item.date,
           createdAt: item.createdAt,
           authorId: item.authorId,
@@ -102,6 +105,41 @@ export const AddFinanceHistory = async ({
         error.code,
         error.message ?? "Failed add history"
       ),
+    };
+  }
+};
+
+export const DeleteFinanceHistory = async ({
+  historyId,
+}: {
+  historyId: string;
+}): Promise<RespType<{}>> => {
+  try {
+    const payload = await verifyToken((await cookies()).get("_session")?.value);
+    if (!payload) throw new Error("Invalid Token");
+    isAuthorizedOrThrow(payload.user.role, [Role.BENDAHARA, Role.ADMIN]);
+
+    const result = await prisma.financialHistories.update({
+      where: { id: historyId },
+      data: {
+        deletedAt: new Date(),
+        deletedBy: {
+          connect: {
+            id: payload.user.id,
+          },
+        },
+      },
+    });
+
+    return {
+      success: true,
+      message: "",
+      data: {},
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: getErrorMessage(error.code, error.message),
     };
   }
 };

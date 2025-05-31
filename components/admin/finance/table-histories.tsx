@@ -1,5 +1,8 @@
 "use client";
+
 import { FinanceHistory } from "@/types";
+import { EyeIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { Button } from "@heroui/button";
 import { Chip } from "@heroui/chip";
 import {
   Table,
@@ -13,9 +16,11 @@ import React from "react";
 
 type Props = {
   data: FinanceHistory[];
+  onShowDetail: (history: FinanceHistory) => void;
+  onDeleteHistory: (history: FinanceHistory) => void;
 };
 
-const TableHistories = ({ data }: Props) => {
+const TableHistories = ({ data, onShowDetail, onDeleteHistory }: Props) => {
   return (
     <Table>
       <TableHeader>
@@ -50,7 +55,27 @@ const TableHistories = ({ data }: Props) => {
               </Chip>
             </TableCell>
             <TableCell>Rp {item.amount.toLocaleString("id-ID")}</TableCell>
-            <TableCell>Lihat</TableCell>
+            <TableCell>
+              <Button
+                isIconOnly
+                variant="light"
+                color="default"
+                size="sm"
+                onPress={() => onShowDetail(item)}
+              >
+                <EyeIcon className="w-4 h-4" />
+              </Button>
+              <Button
+                isIconOnly
+                variant="light"
+                color="danger"
+                size="sm"
+                isDisabled={Date.now() - item.createdAt.getTime() > 86400000}
+                onPress={() => onDeleteHistory(item)}
+              >
+                <TrashIcon className="w-4 h-4" />
+              </Button>
+            </TableCell>
           </TableRow>
         )}
       </TableBody>
