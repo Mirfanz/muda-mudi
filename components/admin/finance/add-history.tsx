@@ -15,7 +15,7 @@ import { NumberInput } from "@heroui/number-input";
 import { Select, SelectItem } from "@heroui/select";
 import { DatePicker } from "@heroui/date-picker";
 import { DateValue } from "@heroui/calendar";
-import { getLocalTimeZone } from "@internationalized/date";
+import { getLocalTimeZone, now } from "@internationalized/date";
 import Swal from "sweetalert2";
 import { addToast } from "@heroui/toast";
 
@@ -101,6 +101,8 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
               placeholder="Title"
               type="text"
               validate={(val) => {
+                if (!/^[a-zA-Z0-9\s]+$/.test(val))
+                  return "Hanya boleh huruf dan angka";
                 return true;
               }}
               value={fields.title}
@@ -139,6 +141,10 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
               labelPlacement="outside-left"
               name="date"
               validate={(val) => {
+                const compare = val.compare(now(getLocalTimeZone()));
+                console.log("compare", compare);
+                if (compare > 0) return "Peramal masa depan?";
+                if (compare < -7) return "Tidak boleh dari 7 hari lalu";
                 return true;
               }}
               value={fields.date}
