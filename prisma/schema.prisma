@@ -61,10 +61,3 @@ model FinancialHistories {
 
   @@map("financial_histories")
 }
-
-model FinancialSummary {
-  id          String  @id @default(cuid())
-  income      Int
-  expense     Int
-  
-}

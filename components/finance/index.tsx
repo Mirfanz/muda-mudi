@@ -20,6 +20,12 @@ const Finance = (props: Props) => {
   const [showDetail, setShowDetail] = React.useState<FinanceHistory | null>(
     null,
   );
+  const [finance, setFinance] = React.useState({
+    income: 0,
+    expense: 0,
+    incomeCount: 0,
+    expenseCount: 0,
+  });
 
   const { data, refetch } = useQuery({
     queryKey: ["get-finance-history"],
@@ -32,20 +38,56 @@ const Finance = (props: Props) => {
     },
   });
 
+  React.useEffect(() => {
+    if (!data) return;
+    let income = 0,
+      expense = 0,
+      incomeCount = 0,
+      expenseCount = 0;
+
+    for (let history of data) {
+      if (history.income) {
+        income += history.amount;
+        incomeCount++;
+      } else {
+        expense += history.amount;
+        expenseCount++;
+      }
+    }
+    setFinance({
+      income,
+      expense,
+      incomeCount,
+      expenseCount,
+    });
+  }, [data]);
+
   return (
     <main className="bg-primary-500">
-      <section className="p-4">
+      <section className="p-4 pt-1">
+        <div className="flesx justify-between items-center text-primary-foreground mb-3">
+          <h5 className="text-primary-foreground text-opacity-85 text-sm">
+            Sisa Saldo :
+          </h5>
+          <p className="font-semibold text-2xl">
+            Rp {(finance.income - finance.expense).toLocaleString("id-ID")}
+          </p>
+        </div>
         <div className="flex gap-3">
           <Card className="bg-background w-full" radius="sm" shadow="none">
             <CardBody>
               <p className="text-sm flex items-cente gap-1r">Pemasukan :</p>
-              <p className="text-success-500 font-semibold">Rp 1.400.000</p>
+              <p className="text-success-500 font-semibold">
+                Rp {finance.income.toLocaleString("id-ID")}
+              </p>
             </CardBody>
           </Card>
           <Card className="bg-background w-full" radius="sm" shadow="none">
             <CardBody>
               <p className="text-sm flex items-center gap-1">Pengeluaran :</p>
-              <p className="text-danger-500 font-semibold">Rp 1.150.000</p>
+              <p className="text-danger-500 font-semibold">
+                Rp {finance.expense.toLocaleString("id-ID")}
+              </p>
             </CardBody>
           </Card>
         </div>
@@ -64,7 +106,7 @@ const Finance = (props: Props) => {
             <Card
               key={history.id}
               isPressable
-              className="flex-row items-center bg-background text-start py-3 px-2 border-b-1 gap-1"
+              className="flex-row items-center bg-background text-start py-3 px-2 border-b-1 dark:border-b-foreground-50 gap-1"
               radius="none"
               shadow="none"
               onClick={() => setShowDetail(history)}

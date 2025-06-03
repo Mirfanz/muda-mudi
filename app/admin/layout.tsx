@@ -36,7 +36,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
       <div className="hidden md:flex flex-grow overflow-y-hidden">
         <aside
           className={clsx(
-            "h-full hidden overflow-y-hidden md:flex duration-250 ease-in-out !w-72"
+            "h-full hidden overflow-y-hidden md:flex duration-250 ease-in-out !w-72",
           )}
         >
           <Sidebar />

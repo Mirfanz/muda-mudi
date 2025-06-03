@@ -103,6 +103,7 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
               validate={(val) => {
                 if (!/^[a-zA-Z0-9\s]+$/.test(val))
                   return "Hanya boleh huruf dan angka";
+
                 return true;
               }}
               value={fields.title}
@@ -142,7 +143,6 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
               name="date"
               validate={(val) => {
                 const compare = val.compare(now(getLocalTimeZone()));
-                console.log("compare", compare);
                 if (compare > 0) return "Peramal masa depan?";
                 if (compare < -7) return "Tidak boleh dari 7 hari lalu";
                 return true;
