@@ -1,11 +1,11 @@
 import {
   RectangleGroupIcon,
-  HomeIcon,
   UserIcon,
   BanknotesIcon,
   CalendarDateRangeIcon,
   UserGroupIcon,
   HeartIcon,
+  RectangleStackIcon,
 } from "@heroicons/react/24/solid";
 
 export type SiteConfig = typeof siteConfig;
@@ -18,7 +18,7 @@ export const siteConfig = {
     {
       label: "Beranda",
       href: "/",
-      icon: HomeIcon,
+      icon: RectangleStackIcon,
       isActive: (path: string) => /^\/$/.test(path),
     },
     {
@@ -26,6 +26,12 @@ export const siteConfig = {
       href: "/finance",
       icon: BanknotesIcon,
       isActive: (path: string) => /^\/finance/.test(path),
+    },
+    {
+      label: "Donation",
+      href: "/donation",
+      icon: HeartIcon,
+      isActive: (path: string) => /^\/donation/.test(path),
     },
     {
       label: "Acara",

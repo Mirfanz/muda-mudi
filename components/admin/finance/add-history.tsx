@@ -143,8 +143,10 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
               name="date"
               validate={(val) => {
                 const compare = val.compare(now(getLocalTimeZone()));
+
                 if (compare > 0) return "Peramal masa depan?";
                 if (compare < -7) return "Tidak boleh dari 7 hari lalu";
+
                 return true;
               }}
               value={fields.date}
