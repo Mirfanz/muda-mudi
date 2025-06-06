@@ -21,9 +21,7 @@ const Tabbar = (props: Props) => {
   return (
     <Tabs
       fullWidth
-      classNames={{
-        tabList: "bg-background dark:bg-background",
-      }}
+      classNames={{ tabList: "bg-foreground-100 dark:bg-foreground-100" }}
       color="primary"
       radius="lg"
       selectedKey={activeTab}

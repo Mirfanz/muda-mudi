@@ -34,12 +34,12 @@ export const FindFinanceHistory = async (): Promise<
           id: item.id,
           income: item.income,
           title: item.title,
-          description: item.description ?? undefined,
+          description: item.description,
           amount: item.amount,
           images: item.images,
           date: item.date,
           createdAt: item.createdAt,
-          authorId: item.authorId,
+          deletedAt: item.deletedAt,
           author: {
             id: item.author.id,
             name: item.author.name,
@@ -72,10 +72,11 @@ export const AddFinanceHistory = async ({
   title: string;
   description?: string;
   amount: number;
-  date: Date;
+  date: string;
   income: boolean;
 }): Promise<RespType<{}>> => {
   try {
+    console.log("date", date);
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
     if (!payload) throw new Error("Invalid Token");
@@ -84,7 +85,7 @@ export const AddFinanceHistory = async ({
     const result = await prisma.financialHistories.create({
       data: {
         title,
-        date,
+        date: new Date(date),
         amount,
         description,
         income,

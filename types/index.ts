@@ -1,4 +1,4 @@
-import { User } from "@prisma/client";
+import { User, Events, FinancialHistories } from "@prisma/client";
 import { JWTPayload } from "jose";
 import { SVGProps } from "react";
 
@@ -26,15 +26,13 @@ export type SessionPayload = JWTPayload & {
   user: UserType;
 };
 
-export type FinanceHistory = {
-  id: string;
-  income: boolean;
-  title: string;
-  description?: string;
-  amount: number;
-  images: string[];
-  date: Date;
-  createdAt: Date;
-  authorId: string;
+export type FinanceHistory = Omit<
+  FinancialHistories,
+  "authorId" | "deletedById"
+> & {
+  author: UserType;
+};
+
+export type EventType = Omit<Events, "authorId"> & {
   author: UserType;
 };

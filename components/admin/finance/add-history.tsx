@@ -51,7 +51,7 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const date = fields.date?.toDate(getLocalTimeZone());
+    const date = fields.date?.toString().slice(0, 10);
 
     if (!date) return;
     if (!fields.amount) return;
@@ -145,7 +145,7 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
                 const compare = val.compare(now(getLocalTimeZone()));
 
                 if (compare > 0) return "Peramal masa depan?";
-                if (compare < -7) return "Tidak boleh dari 7 hari lalu";
+                if (compare < -6) return "Tidak boleh dari 7 hari lalu";
 
                 return true;
               }}

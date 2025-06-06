@@ -41,6 +41,7 @@ model User {
 
   deletedFinancialHistories FinancialHistories[] @relation("DeleterFinancialHistory")
   financialHistories        FinancialHistories[] @relation("AuthorFinancialHistory")
+  events                    Events[]             @relation("AuthorEvent")
 }
 
 model FinancialHistories {
@@ -60,4 +61,21 @@ model FinancialHistories {
   author      User    @relation("AuthorFinancialHistory", fields: [authorId], references: [id])
 
   @@map("financial_histories")
+}
+
+model Events {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  location    String
+  locationUrl String?
+  startDate   DateTime @db.Date()
+  endDate     DateTime @db.Date()
+  cover       String?
+  images      String[]
+  updatedAt   DateTime @updatedAt
+  createdAt   DateTime @default(now())
+
+  authorId String
+  author   User   @relation("AuthorEvent", fields: [authorId], references: [id])
 }
