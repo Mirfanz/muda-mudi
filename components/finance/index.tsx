@@ -111,7 +111,13 @@ const Finance = (props: Props) => {
               shadow="none"
               onClick={() => setShowDetail(history)}
             >
-              <Button isIconOnly className="me-2" color="primary" radius="sm">
+              <Button
+                isIconOnly
+                as={"div"}
+                className="me-2"
+                color="primary"
+                radius="sm"
+              >
                 <BanknotesIcon className="w-5 h-5" />
               </Button>
               <div className="me-auto">

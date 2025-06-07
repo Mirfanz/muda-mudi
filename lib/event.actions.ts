@@ -53,3 +53,54 @@ export const FindEvents = async (): Promise<
     };
   }
 };
+
+export const FindEventById = async ({
+  eventId,
+}: {
+  eventId: string;
+}): Promise<RespType<EventType>> => {
+  try {
+    const result = await prisma.events.findUniqueOrThrow({
+      where: {
+        id: eventId,
+      },
+      include: {
+        author: true,
+      },
+    });
+
+    return {
+      success: true,
+      message: "data",
+      data: {
+        id: result.id,
+        cover: result.cover,
+        title: result.title,
+        description: result.description,
+        startDate: result.startDate,
+        endDate: result.endDate,
+        images: result.images,
+        location: result.location,
+        locationUrl: result.locationUrl,
+        createdAt: result.createdAt,
+        updatedAt: result.updatedAt,
+        author: {
+          id: result.author.id,
+          active: result.author.active,
+          avatar: result.author.avatar,
+          name: result.author.name,
+          role: result.author.role,
+          phone: result.author.phone,
+          isMale: result.author.isMale,
+          birth: result.author.birth,
+          inStudy: result.author.inStudy,
+        },
+      },
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: getErrorMessage(error.code, error.message),
+    };
+  }
+};

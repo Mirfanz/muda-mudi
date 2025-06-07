@@ -91,7 +91,6 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
   React.useEffect(() => {
     GetUser()
       .then((resp) => {
-        console.log("resp", resp);
         if (resp.success) setUser(resp.data.user);
       })
       .finally(() => setIsLoading(false));

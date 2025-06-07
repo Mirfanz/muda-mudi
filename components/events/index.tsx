@@ -4,6 +4,7 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import CardEvent from "./card-event";
+import SkeletonEvent from "./skeleton-event";
 
 import { FindEvents } from "@/lib/event.actions";
 import { getEventStatus } from "@/lib/utils-client";
@@ -21,6 +22,8 @@ const Events = (props: Props) => {
       return resp.data.events;
     },
   });
+
+  if (isLoading) return <SkeletonEvent />;
 
   return (
     <main className="p-2">

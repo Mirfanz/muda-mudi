@@ -1,8 +1,10 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, Suspense } from "react";
 import clsx from "clsx";
 import { Button } from "@heroui/button";
 import { Alert } from "@heroui/alert";
 import Link from "next/link";
+
+import Loading from "./laoding";
 
 import { Navbar } from "@/components/navbar";
 import Sidebar from "@/components/admin/sidebar";
@@ -42,7 +44,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
           <Sidebar />
         </aside>
         <main className="container flex-grow overflow-y-auto p-2">
-          {children}
+          <Suspense fallback={<Loading />}>{children}</Suspense>
         </main>
       </div>
     </div>

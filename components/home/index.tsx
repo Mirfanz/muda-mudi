@@ -51,7 +51,7 @@ const listMenu = [
     href: "#",
   },
   {
-    label: "Denda",
+    label: "Listrik",
     icon: BoltIcon,
     href: "#",
   },

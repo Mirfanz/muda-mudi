@@ -42,7 +42,7 @@ const CardEvent = ({ event, status }: Props) => {
           <div className="flex mt-auto gap-1">
             {status === "ongoing" ? (
               <Chip color="success" radius="md" variant="flat">
-                Sekarang
+                Hari Ini
               </Chip>
             ) : (
               <Chip color="primary" radius="md" variant="flat">
