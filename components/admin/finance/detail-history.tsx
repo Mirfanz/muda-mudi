@@ -9,10 +9,10 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import Image from "next/image";
 
-import { FinanceHistory } from "@/types";
+import { FinancialHistoryType } from "@/types";
 
 type Props = {
-  data: FinanceHistory | null;
+  data: FinancialHistoryType | null;
   onClose: () => void;
 };
 

@@ -80,7 +80,7 @@ const EditUserModal = ({ user, onSuccess, onError, onClose }: Props) => {
       id: user.id,
       name: fields.name,
       phone: fields.phone,
-      birth: fields.birth ? new Date(fields.birth) : user.birth,
+      birth: fields.birth,
       role: fields.role as Role,
       isMale: fields.gender == "male",
       inStudy: fields.inStudy,
@@ -93,7 +93,7 @@ const EditUserModal = ({ user, onSuccess, onError, onClose }: Props) => {
           description: resp.message,
           color: "success",
         });
-        onSuccess?.(resp.data.user);
+        onSuccess?.(resp.data);
         onClose?.();
       })
       .catch((err) => {

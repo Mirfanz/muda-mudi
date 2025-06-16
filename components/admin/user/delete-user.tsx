@@ -36,7 +36,7 @@ const DeleteUserModal = ({ user, onClose, onError, onSuccess }: Props) => {
         onSuccess?.(user);
         addToast({
           title: "Successfully",
-          description: `${user.name.split(" ")[0]} dihapus`,
+          description: `${resp.data.name.split(" ")[0]} dihapus`,
           color: "success",
         });
         onClose();

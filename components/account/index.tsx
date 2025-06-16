@@ -55,7 +55,7 @@ const Account = (props: Props) => {
 
       if (!resp.success) throw new Error();
 
-      return resp.data.users;
+      return resp.data;
     },
   });
 

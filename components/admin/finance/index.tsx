@@ -13,7 +13,7 @@ import TableHistories from "./table-histories";
 import AddHistoryModal from "./add-history";
 import DetailHistoryModal from "./detail-history";
 
-import { FinanceHistory } from "@/types";
+import { FinancialHistoryType } from "@/types";
 import {
   DeleteFinanceHistory,
   FindFinanceHistory,
@@ -24,7 +24,7 @@ type Props = {};
 const Finance = (props: Props) => {
   const [addHistory, setAddHistory] = React.useState(false);
   const [detailHistory, setDetailHistory] =
-    React.useState<FinanceHistory | null>(null);
+    React.useState<FinancialHistoryType | null>(null);
   const { data, refetch, isLoading } = useQuery({
     queryKey: ["get-finance-history"],
     queryFn: async () => {
@@ -32,10 +32,10 @@ const Finance = (props: Props) => {
 
       if (!resp.success) throw new Error(resp.message);
 
-      return resp.data.histories;
+      return resp.data;
     },
   });
-  const handleDeleteHistory = async (history: FinanceHistory) => {
+  const handleDeleteHistory = async (history: FinancialHistoryType) => {
     Swal.fire({
       titleText: "Hapus History?",
       text: "History akan dihapus dan tidak dapat dipulihkan kembali.",
@@ -75,7 +75,9 @@ const Finance = (props: Props) => {
         <TableHistories
           data={data || []}
           onDeleteHistory={handleDeleteHistory}
-          onShowDetail={(history: FinanceHistory) => setDetailHistory(history)}
+          onShowDetail={(history: FinancialHistoryType) =>
+            setDetailHistory(history)
+          }
         />
       </section>
       <AddHistoryModal

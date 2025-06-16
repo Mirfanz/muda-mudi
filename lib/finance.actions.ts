@@ -6,53 +6,48 @@ import { cookies } from "next/headers";
 import { getErrorMessage, isAuthorizedOrThrow, verifyToken } from "./utils";
 
 import prisma from "@/prisma";
-import { FinanceHistory, RespType } from "@/types";
+import { FinancialHistoryType, RespType } from "@/types";
 
 export const FindFinanceHistory = async (): Promise<
-  RespType<{
-    histories: FinanceHistory[];
-  }>
+  RespType<FinancialHistoryType[], { page: number }>
 > => {
   try {
-    const result = await prisma.financialHistories.findMany({
-      where: {
-        deletedAt: null,
-      },
-      orderBy: {
-        date: "desc",
-      },
-      include: {
-        author: true,
+    const result = await prisma.financialHistory.findMany({
+      where: { deletedAt: null },
+      orderBy: { date: "desc" },
+      select: {
+        id: true,
+        income: true,
+        title: true,
+        description: true,
+        amount: true,
+        images: true,
+        date: true,
+        createdAt: true,
+        deletedAt: true,
+        authorId: true,
+        deletedById: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            active: true,
+            avatar: true,
+            birth: true,
+            inStudy: true,
+            isMale: true,
+            phone: true,
+            role: true,
+          },
+        },
       },
     });
 
     return {
       success: true,
       message: "Finance history fetched successfully",
-      data: {
-        histories: result.map((item) => ({
-          id: item.id,
-          income: item.income,
-          title: item.title,
-          description: item.description,
-          amount: item.amount,
-          images: item.images,
-          date: item.date,
-          createdAt: item.createdAt,
-          deletedAt: item.deletedAt,
-          author: {
-            id: item.author.id,
-            name: item.author.name,
-            active: item.author.active,
-            avatar: item.author.avatar,
-            birth: item.author.birth,
-            inStudy: item.author.inStudy,
-            isMale: item.author.isMale,
-            phone: item.author.phone,
-            role: item.author.role,
-          },
-        })),
-      },
+      page: 1,
+      data: result,
     };
   } catch (error: any) {
     return {
@@ -74,15 +69,14 @@ export const AddFinanceHistory = async ({
   amount: number;
   date: string;
   income: boolean;
-}): Promise<RespType<{}>> => {
+}): Promise<RespType<FinancialHistoryType>> => {
   try {
-    console.log("date", date);
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
-    if (!payload) throw new Error("Invalid Token");
+    if (!payload) throw new Error("Login Dulu Yaa :)");
     isAuthorizedOrThrow(payload.user.role, [Role.BENDAHARA, Role.ADMIN]);
 
-    const result = await prisma.financialHistories.create({
+    const result = await prisma.financialHistory.create({
       data: {
         title,
         date: new Date(date),
@@ -92,6 +86,32 @@ export const AddFinanceHistory = async ({
         author: {
           connect: {
             id: payload.user.id,
+          },
+        },
+      },
+      select: {
+        id: true,
+        income: true,
+        title: true,
+        description: true,
+        amount: true,
+        images: true,
+        date: true,
+        createdAt: true,
+        deletedAt: true,
+        authorId: true,
+        deletedById: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            active: true,
+            avatar: true,
+            birth: true,
+            inStudy: true,
+            isMale: true,
+            phone: true,
+            role: true,
           },
         },
       },
@@ -117,22 +137,18 @@ export const DeleteFinanceHistory = async ({
   historyId,
 }: {
   historyId: string;
-}): Promise<RespType<{}>> => {
+}): Promise<RespType> => {
   try {
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
     if (!payload) throw new Error("Invalid Token");
     isAuthorizedOrThrow(payload.user.role, [Role.BENDAHARA, Role.ADMIN]);
 
-    const result = await prisma.financialHistories.update({
+    const result = await prisma.financialHistory.update({
       where: { id: historyId },
       data: {
         deletedAt: new Date(),
-        deletedBy: {
-          connect: {
-            id: payload.user.id,
-          },
-        },
+        deletedById: payload.user.id,
       },
     });
 

@@ -13,12 +13,12 @@ import {
 } from "@heroui/table";
 import React from "react";
 
-import { FinanceHistory } from "@/types";
+import { FinancialHistoryType } from "@/types";
 
 type Props = {
-  data: FinanceHistory[];
-  onShowDetail: (history: FinanceHistory) => void;
-  onDeleteHistory: (history: FinanceHistory) => void;
+  data: FinancialHistoryType[];
+  onShowDetail: (history: FinancialHistoryType) => void;
+  onDeleteHistory: (history: FinancialHistoryType) => void;
 };
 
 const TableHistories = ({ data, onShowDetail, onDeleteHistory }: Props) => {

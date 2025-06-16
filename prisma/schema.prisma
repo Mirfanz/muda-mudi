@@ -39,12 +39,15 @@ model User {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  deletedFinancialHistories FinancialHistories[] @relation("DeleterFinancialHistory")
-  financialHistories        FinancialHistories[] @relation("AuthorFinancialHistory")
-  events                    Events[]             @relation("AuthorEvent")
+  deletedFinancialHistories FinancialHistory[]  @relation("DeleterFinancialHistory")
+  financialHistories        FinancialHistory[]  @relation("AuthorFinancialHistory")
+  events                    Event[]             @relation("AuthorEvent")
+  attendances               AttendanceHistory[] @relation("UserAttendances")
+
+  @@map("users")
 }
 
-model FinancialHistories {
+model FinancialHistory {
   id          String    @id @default(cuid())
   income      Boolean
   title       String
@@ -63,7 +66,7 @@ model FinancialHistories {
   @@map("financial_histories")
 }
 
-model Events {
+model Event {
   id          String   @id @default(cuid())
   title       String
   description String?
@@ -76,6 +79,33 @@ model Events {
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
 
-  authorId String
-  author   User   @relation("AuthorEvent", fields: [authorId], references: [id])
+  authorId    String
+  author      User         @relation("AuthorEvent", fields: [authorId], references: [id])
+  attendances Attendance[] @relation("EventAttendance")
+
+  @@map("events")
+}
+
+model Attendance {
+  id        String              @id @default(cuid())
+  title     String
+  start     DateTime
+  end       DateTime
+  createdAt DateTime            @default(now())
+  eventId   String
+  event     Event               @relation("EventAttendance", fields: [eventId], references: [id], onDelete: Cascade)
+  histories AttendanceHistory[] @relation("AttendanceHistory")
+
+  @@map("attendances")
+}
+
+model AttendanceHistory {
+  id           String     @id
+  attendanceId String
+  userId       String
+  attendance   Attendance @relation("AttendanceHistory", fields: [attendanceId], references: [id], onDelete: Cascade)
+  user         User       @relation("UserAttendances", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+
+  @@map("attendance_histories")
 }

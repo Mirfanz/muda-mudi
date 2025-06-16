@@ -15,7 +15,7 @@ import { RespType, UserType } from "@/types";
 export const Login = async (
   phone: string,
   password: string,
-): Promise<RespType<{ user: UserType; authToken: string }>> => {
+): Promise<RespType<UserType, { authToken: string }>> => {
   try {
     const cookie = await cookies();
     const result = await prisma.user.findUniqueOrThrow({
@@ -28,7 +28,7 @@ export const Login = async (
     if (!(await comparePassword(password, result.password)))
       throw new Error("Wrong password");
 
-    const data: UserType = {
+    const user: UserType = {
       id: result.id,
       name: result.name,
       phone: result.phone,
@@ -40,7 +40,7 @@ export const Login = async (
       isMale: result.isMale,
     };
 
-    const token = await generateToken({ user: data });
+    const token = await generateToken({ user });
 
     cookie.set("_session", token, {
       expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
@@ -49,10 +49,8 @@ export const Login = async (
     return {
       success: true,
       message: "Login Successfull",
-      data: {
-        authToken: token,
-        user: data,
-      },
+      authToken: token,
+      data: user,
     };
   } catch (error: any) {
     return {
@@ -81,7 +79,7 @@ export const Logout = async (): Promise<RespType> => {
   }
 };
 
-export const GetUser = async (): Promise<RespType<{ user: UserType }>> => {
+export const GetUser = async (): Promise<RespType<UserType>> => {
   try {
     const token = (await cookies()).get("_session")?.value;
 
@@ -94,10 +92,8 @@ export const GetUser = async (): Promise<RespType<{ user: UserType }>> => {
       success: true,
       message: "User has been logged in",
       data: {
-        user: {
-          ...payload.user,
-          birth: new Date(payload.user.birth),
-        },
+        ...payload.user,
+        birth: new Date(payload.user.birth),
       },
     };
   } catch (error) {

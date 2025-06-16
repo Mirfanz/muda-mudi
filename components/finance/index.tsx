@@ -11,15 +11,14 @@ import React from "react";
 
 import DetailHistoryModal from "./detail-history";
 
-import { FinanceHistory } from "@/types";
+import { FinancialHistoryType } from "@/types";
 import { FindFinanceHistory } from "@/lib/finance.actions";
 
 type Props = {};
 
 const Finance = (props: Props) => {
-  const [showDetail, setShowDetail] = React.useState<FinanceHistory | null>(
-    null,
-  );
+  const [showDetail, setShowDetail] =
+    React.useState<FinancialHistoryType | null>(null);
   const [finance, setFinance] = React.useState({
     income: 0,
     expense: 0,
@@ -34,7 +33,7 @@ const Finance = (props: Props) => {
 
       if (!resp.success) throw new Error(resp.message);
 
-      return resp.data.histories;
+      return resp.data;
     },
   });
 

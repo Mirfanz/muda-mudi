@@ -88,7 +88,7 @@ const AddUser = (props: Props) => {
     RegisterUser({
       name: fields.name,
       phone: fields.phone,
-      birth: new Date(fields.birth),
+      birth: fields.birth,
       role: fields.role as Role,
       isMale: fields.gender == "male",
       inStudy: fields.inStudy,
@@ -100,7 +100,7 @@ const AddUser = (props: Props) => {
           description: "Anggota baru ditambahkan",
           color: "success",
         });
-        props.onSuccess?.(resp.data.user);
+        props.onSuccess?.(resp.data);
         resetFields();
         props.onClose?.();
       })

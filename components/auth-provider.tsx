@@ -4,6 +4,7 @@ import { addToast } from "@heroui/toast";
 import { useRouter } from "next/navigation";
 import React from "react";
 import Swal from "sweetalert2";
+import { Role } from "@prisma/client";
 
 import { UserType } from "@/types";
 import { GetUser, Login, Logout } from "@/lib/account.actions";
@@ -13,7 +14,7 @@ const AuthContext = React.createContext<{
   logout: () => void;
   login: (email: string, password: string) => Promise<boolean>;
   isLoading: boolean;
-  hasRole: (...role: string[]) => boolean;
+  hasRole: (...role: Role[]) => boolean;
 } | null>(null);
 
 export const AuthProvider = ({ children }: React.PropsWithChildren) => {
@@ -22,9 +23,9 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
   const [user, setUser] = React.useState<UserType | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
 
-  const hasRole = (...role: string[]) => {
+  const hasRole = (...role: Role[]) => {
     if (!user) return false;
-    else if (user?.role === "ADMIN") return true;
+    // else if (user?.role === "ADMIN") return true;
     else return role.includes(user?.role);
   };
 
@@ -32,10 +33,10 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
     const resp = await Login(phone, password);
 
     if (resp.success) {
-      setUser(resp.data.user);
+      setUser(resp.data);
       router.replace("/account");
       addToast({
-        title: `Hi, ${resp.data.user.name.split(" ")[0]}`,
+        title: `Hi, ${resp.data.name.split(" ")[0]}`,
         color: "success",
       });
 
@@ -91,7 +92,7 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
   React.useEffect(() => {
     GetUser()
       .then((resp) => {
-        if (resp.success) setUser(resp.data.user);
+        if (resp.success) setUser(resp.data);
       })
       .finally(() => setIsLoading(false));
   }, []);

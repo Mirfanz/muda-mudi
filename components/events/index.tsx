@@ -19,7 +19,7 @@ const Events = (props: Props) => {
 
       if (!resp.success) throw new Error(resp.message);
 
-      return resp.data.events;
+      return resp.data;
     },
   });
 
