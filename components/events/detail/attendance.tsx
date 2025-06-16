@@ -124,7 +124,11 @@ const Attendance = ({ event }: Props) => {
         />
       </section>
       <section className="bg-background mt-auto sticky bottom-0 p-2">
-        <Button fullWidth color="primary">
+        <Button
+          fullWidth
+          color="primary"
+          onPress={() => setIsScannerOpen(true)}
+        >
           Scan QR Absen
         </Button>
       </section>
