@@ -60,7 +60,7 @@ const AttendanceScanner = ({ onScan, onSuccess, isOpen, onClose }: Props) => {
             })
             .finally(() => setIsLoading(false));
         },
-        (error) => {}
+        (error) => {},
       )
       .then(() => setIsScanning(true));
   };
@@ -82,7 +82,7 @@ const AttendanceScanner = ({ onScan, onSuccess, isOpen, onClose }: Props) => {
             <div
               className={clsx(
                 "rounded-lg bg-foreground-100 flex justify-center items-center flex-col aspect-square gap-3",
-                isScanning && "hidden"
+                isScanning && "hidden",
               )}
             >
               {isLoading ? (

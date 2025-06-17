@@ -1,6 +1,6 @@
 "use client";
 
-import { QrCodeIcon, UsersIcon } from "@heroicons/react/24/solid";
+import { QrCodeIcon } from "@heroicons/react/24/outline";
 import { Card, CardBody } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 import React, { useState } from "react";
@@ -65,36 +65,8 @@ const Attendance = ({ event, isActive }: Props) => {
               shadow="sm"
               onPress={() => setDetailAttendance(attendance)}
             >
-              <CardBody className="">
-                <div className="flex flex-row justify-between items-center gap-2">
-                  <p className="text-sm me-auto">Absen {index + 1}</p>
-                  <Chip
-                    className="!pe-0 gap-1"
-                    color="success"
-                    radius="sm"
-                    size="md"
-                    startContent={<UsersIcon className="w-4 h-4 ms-1" />}
-                    variant="light"
-                  >
-                    {attendance.histories.length}
-                  </Chip>
-                  {hasRole(Role.ADMIN, Role.KETUA, Role.SEKRETARIS) ? (
-                    <Button
-                      isIconOnly
-                      color="primary"
-                      radius="sm"
-                      size="sm"
-                      variant="flat"
-                      onPress={() => setShowQRValue(attendance.id)}
-                    >
-                      <QrCodeIcon className="h-5 w-5" />
-                    </Button>
-                  ) : (
-                    ""
-                  )}
-                </div>
-                <hr className="border-foreground-200 dark:border-foreground-100 my-3" />
-                <div className="flex justify-between text-xs text-foreground-500">
+              <CardBody className="gap-3">
+                <div className="flex justify-between text-sm font-medium">
                   <p className="">
                     {attendance.start.toLocaleString("id-ID", {
                       day: "numeric",
@@ -113,6 +85,33 @@ const Attendance = ({ event, isActive }: Props) => {
                       minute: "2-digit",
                     })}
                   </p>
+                </div>
+                {/* <hr className="border-foreground-200 dark:border-foreground-100 my-3" /> */}
+                <div className="flex flex-row justify-between items-center gap-2">
+                  <Chip
+                    className="me-auto"
+                    color="danger"
+                    size="sm"
+                    variant="flat"
+                  >
+                    Sudah Lewat
+                  </Chip>
+                  <Button size="sm" variant="flat">
+                    {attendance.histories.length} Hadir
+                  </Button>
+
+                  <Button
+                    isIconOnly
+                    color="primary"
+                    size="sm"
+                    variant="flat"
+                    onPress={() => {
+                      if (hasRole(Role.ADMIN, Role.KETUA, Role.SEKRETARIS))
+                        setShowQRValue(attendance.id);
+                    }}
+                  >
+                    <QrCodeIcon className="h-5 w-5" />
+                  </Button>
                 </div>
               </CardBody>
             </Card>
