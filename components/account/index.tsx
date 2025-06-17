@@ -22,6 +22,7 @@ import { useAuth } from "../auth-provider";
 import UserCard from "./user-card";
 
 import { FindUsers } from "@/lib/user.actions";
+import Loading from "@/components/loading";
 
 type Props = {};
 
@@ -48,7 +49,7 @@ const Account = (props: Props) => {
     hideRoles: ["ADMIN"] as string[],
   });
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isPending } = useQuery({
     queryKey: ["get-users"],
     queryFn: async () => {
       const resp = await FindUsers();
@@ -68,6 +69,8 @@ const Account = (props: Props) => {
     else return;
     setFilter({ ...filter, hideRoles: newHideRoles });
   };
+
+  if (isPending) return <Loading />;
 
   return (
     <main>

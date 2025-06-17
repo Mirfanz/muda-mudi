@@ -18,7 +18,7 @@ type Props = {
   onSuccess?: () => void;
 };
 
-const AbsenScanner = ({ onScan, onSuccess, isOpen, onClose }: Props) => {
+const AttendanceScanner = ({ onScan, onSuccess, isOpen, onClose }: Props) => {
   const [isScanning, setIsScanning] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(false);
   const qrRef = React.useRef<HTMLDivElement>(null);
@@ -39,13 +39,10 @@ const AbsenScanner = ({ onScan, onSuccess, isOpen, onClose }: Props) => {
           aspectRatio: 1, // Force camera preview to be square
         },
         (decodedText, result) => {
-          console.log("decodedText", decodedText);
-          console.log("result", result);
           stopScanning();
           setIsLoading(true);
           SubmitAttendance({ code: decodedText })
             .then((resp) => {
-              console.log("resp", resp);
               if (!resp.success)
                 return Swal.fire({
                   icon: "warning",
@@ -63,9 +60,7 @@ const AbsenScanner = ({ onScan, onSuccess, isOpen, onClose }: Props) => {
             })
             .finally(() => setIsLoading(false));
         },
-        (error) => {
-          console.log("error", error);
-        },
+        (error) => {}
       )
       .then(() => setIsScanning(true));
   };
@@ -87,7 +82,7 @@ const AbsenScanner = ({ onScan, onSuccess, isOpen, onClose }: Props) => {
             <div
               className={clsx(
                 "rounded-lg bg-foreground-100 flex justify-center items-center flex-col aspect-square gap-3",
-                isScanning && "hidden",
+                isScanning && "hidden"
               )}
             >
               {isLoading ? (
@@ -122,4 +117,4 @@ const AbsenScanner = ({ onScan, onSuccess, isOpen, onClose }: Props) => {
   );
 };
 
-export default AbsenScanner;
+export default AttendanceScanner;

@@ -4,7 +4,7 @@ import { Button } from "@heroui/button";
 import { Alert } from "@heroui/alert";
 import Link from "next/link";
 
-import Loading from "./laoding";
+import Loading from "./loading";
 
 import { Navbar } from "@/components/navbar";
 import Sidebar from "@/components/admin/sidebar";
@@ -43,7 +43,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
         >
           <Sidebar />
         </aside>
-        <main className="container flex-grow overflow-y-auto p-2">
+        <main className="relative flex-grow overflow-y-auto p-2">
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </main>
       </div>

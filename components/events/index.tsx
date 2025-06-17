@@ -3,6 +3,8 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 
+import CustomAlert from "../custom-alert";
+
 import CardEvent from "./card-event";
 import SkeletonEvent from "./skeleton-event";
 
@@ -12,7 +14,7 @@ import { getEventStatus } from "@/lib/utils-client";
 type Props = {};
 
 const Events = (props: Props) => {
-  const { data, refetch, isLoading } = useQuery({
+  const { data, refetch, isLoading, isError, error } = useQuery({
     queryKey: ["get-events"],
     queryFn: async () => {
       const resp = await FindEvents();
@@ -24,6 +26,8 @@ const Events = (props: Props) => {
   });
 
   if (isLoading) return <SkeletonEvent />;
+  if (isError)
+    return <CustomAlert description={error.message} title={"Mohon Maaf"} />;
 
   return (
     <main className="p-2">

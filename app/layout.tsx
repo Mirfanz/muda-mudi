@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { Suspense } from "react";
 
 import { Providers } from "./providers";
-import Loading from "./laoding";
+import Loading from "./loading";
 
 import { siteConfig } from "@/config/site";
 import { fontPoppins } from "@/config/fonts";

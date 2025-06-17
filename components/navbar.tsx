@@ -23,7 +23,7 @@ export const Navbar = ({ hideBrand, startContent, endContent }: Props) => {
   const [showLink, setShowLink] = useState(true);
 
   return (
-    <nav className="container !text-primary-foreground px-2 bg-primary-500">
+    <nav className="!text-primary-foreground px-2 bg-primary-500">
       <div className="flex py-2 gap-2 items-center">
         {startContent}
         {!hideBrand && (

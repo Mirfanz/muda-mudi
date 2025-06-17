@@ -1,18 +1,17 @@
 "use client";
 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { BanknotesIcon } from "@heroicons/react/24/solid";
-import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
 import { Input } from "@heroui/input";
 import { useQuery } from "@tanstack/react-query";
-import clsx from "clsx";
 import React from "react";
 
 import DetailHistoryModal from "./detail-history";
+import FinanceHistory from "./finance-history";
 
 import { FinancialHistoryType } from "@/types";
 import { FindFinanceHistory } from "@/lib/finance.actions";
+import Loading from "@/components/loading";
 
 type Props = {};
 
@@ -26,8 +25,8 @@ const Finance = (props: Props) => {
     expenseCount: 0,
   });
 
-  const { data, refetch } = useQuery({
-    queryKey: ["get-finance-history"],
+  const { data, refetch, isPending, isError, error } = useQuery({
+    queryKey: ["get-finance-histories"],
     queryFn: async () => {
       const resp = await FindFinanceHistory();
 
@@ -101,41 +100,17 @@ const Finance = (props: Props) => {
           />
         </div>
         <div className="flex flex-col px-2">
-          {data?.map((history) => (
-            <Card
-              key={history.id}
-              isPressable
-              className="flex-row items-center bg-background text-start py-3 px-2 border-b-1 dark:border-b-foreground-50 gap-1"
-              radius="none"
-              shadow="none"
-              onClick={() => setShowDetail(history)}
-            >
-              <Button
-                isIconOnly
-                as={"div"}
-                className="me-2"
-                color="primary"
-                radius="sm"
-              >
-                <BanknotesIcon className="w-5 h-5" />
-              </Button>
-              <div className="me-auto">
-                <p className="text-sm -mb-1 line-clamp-1">{history.title}</p>
-                <small className="text-xs text-foreground-500">
-                  {history.date.toLocaleDateString("id-ID")}
-                </small>
-              </div>
-              <div
-                className={clsx(
-                  "text-sm font-semibold",
-                  history.income ? "text-success-500" : "text-danger-500",
-                )}
-              >
-                {(history.income ? "+" : "-") +
-                  history.amount.toLocaleString("id-ID")}
-              </div>
-            </Card>
-          ))}
+          {isPending ? (
+            <Loading />
+          ) : (
+            data?.map((history) => (
+              <FinanceHistory
+                key={history.id}
+                history={history}
+                showDetail={() => setShowDetail(history)}
+              />
+            ))
+          )}
         </div>
       </section>
       <DetailHistoryModal

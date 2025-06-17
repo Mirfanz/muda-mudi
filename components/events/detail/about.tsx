@@ -9,9 +9,12 @@ import { EventType } from "@/types";
 
 type Props = {
   event: EventType;
+  isActive: boolean;
 };
 
-const EventAbout = ({ event }: Props) => {
+const EventAbout = ({ event, isActive }: Props) => {
+  if (!isActive) return;
+
   return (
     <section className="px-3">
       <h2 className="font-semibold text-lg my-4">{event.title}</h2>

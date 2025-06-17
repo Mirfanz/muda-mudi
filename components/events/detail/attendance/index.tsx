@@ -6,47 +6,56 @@ import { Chip } from "@heroui/chip";
 import React, { useState } from "react";
 import { Button } from "@heroui/button";
 import { useQuery } from "@tanstack/react-query";
-import { Alert } from "@heroui/alert";
 import { Role } from "@prisma/client";
 
-import AbsenScanner from "./absen-scanner";
+import AttendanceScanner from "./scanner";
 import AttendanceModal from "./attendance-modal";
 import AttendanceQR from "./attendance-qr";
 
 import { FindEventAttendances } from "@/lib/event.actions";
 import { AttendanceType, EventType } from "@/types";
 import { useAuth } from "@/components/auth-provider";
+import Loading from "@/components/loading";
+import CustomAlert from "@/components/custom-alert";
 
 type Props = {
   event: EventType;
+  isActive: boolean;
 };
 
-const Attendance = ({ event }: Props) => {
+const Attendance = ({ event, isActive }: Props) => {
   const { hasRole, user } = useAuth();
   const [detailAttendance, setDetailAttendance] =
     useState<AttendanceType | null>(null);
   const [showQRValue, setShowQRValue] = useState<string>("");
   const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
 
-  const { data, error, isLoading, refetch } = useQuery({
-    queryKey: ["attendances-" + event.id],
-    queryFn: async () => {
-      const resp = await FindEventAttendances({ eventId: event.id });
+  const { data, error, isLoading, refetch, isError, isFetching, isPending } =
+    useQuery({
+      queryKey: ["attendances-" + event.id],
+      queryFn: async () => {
+        const resp = await FindEventAttendances({ eventId: event.id });
 
-      if (!resp.success) throw new Error(resp.message);
+        if (!resp.success) throw new Error(resp.message);
 
-      return resp.data;
-    },
-  });
+        return resp.data;
+      },
+    });
 
-  if (isLoading) return "Loading...";
-  if (!data)
+  if (!isActive) return;
+  if (isPending) return <Loading />;
+
+  if (isError)
     return (
-      <Alert color="danger" description={error?.message} title="Sorry Guyss" />
+      <CustomAlert
+        color="danger"
+        description="Terjadi kesalahan saat mengambil data."
+        title="Mohon Maaf"
+      />
     );
 
   return (
-    <main className="min-h-full flex flex-col">
+    <div className="min-h-full flex flex-col">
       <section className="p-3">
         <div className="flex flex-col gap-3 mb-4">
           {data.map((attendance, index) => (
@@ -109,7 +118,7 @@ const Attendance = ({ event }: Props) => {
             </Card>
           ))}
         </div>
-        <AbsenScanner
+        <AttendanceScanner
           isOpen={isScannerOpen}
           onClose={() => setIsScannerOpen(false)}
           onSuccess={refetch}
@@ -132,7 +141,7 @@ const Attendance = ({ event }: Props) => {
           Scan QR Absen
         </Button>
       </section>
-    </main>
+    </div>
   );
 };
 
