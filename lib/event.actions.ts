@@ -9,6 +9,7 @@ import {
   AttendanceHistoryType,
   AttendanceType,
   EventType,
+  FinancialHistoryType,
   RespType,
 } from "@/types";
 
@@ -119,9 +120,7 @@ export const FindEventAttendances = async ({
 }): Promise<RespType<AttendanceType[], { eventId: string }>> => {
   try {
     const result = await prisma.attendance.findMany({
-      where: {
-        eventId,
-      },
+      where: { eventId },
       select: {
         id: true,
         start: true,
@@ -148,6 +147,58 @@ export const FindEventAttendances = async ({
                 role: true,
               },
             },
+          },
+        },
+      },
+    });
+
+    return {
+      success: true,
+      message: "",
+      eventId,
+      data: result,
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: getErrorMessage(error.code, error.message),
+    };
+  }
+};
+
+export const FindEventCosts = async ({
+  eventId,
+}: {
+  eventId: string;
+}): Promise<RespType<FinancialHistoryType[], { eventId: string }>> => {
+  try {
+    const result = await prisma.financialHistory.findMany({
+      where: { eventId, deletedAt: null },
+      orderBy: { date: "desc" },
+      select: {
+        id: true,
+        income: true,
+        title: true,
+        description: true,
+        amount: true,
+        images: true,
+        date: true,
+        createdAt: true,
+        deletedAt: true,
+        authorId: true,
+        deletedById: true,
+        eventId: true,
+        author: {
+          select: {
+            id: true,
+            name: true,
+            active: true,
+            avatar: true,
+            birth: true,
+            inStudy: true,
+            isMale: true,
+            phone: true,
+            role: true,
           },
         },
       },

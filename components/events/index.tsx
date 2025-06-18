@@ -15,7 +15,7 @@ type Props = {};
 
 const Events = (props: Props) => {
   const { data, refetch, isLoading, isError, error } = useQuery({
-    queryKey: ["get-events"],
+    queryKey: ["find-events"],
     queryFn: async () => {
       const resp = await FindEvents();
 

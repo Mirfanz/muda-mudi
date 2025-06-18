@@ -19,6 +19,8 @@ import { Card } from "@heroui/card";
 import Link from "next/link";
 import { Autoplay, EffectCoverflow, Pagination } from "swiper/modules";
 
+import EventSection from "./event";
+
 const listMenu = [
   {
     label: "Quran",
@@ -128,6 +130,7 @@ const Home = (props: Props) => {
           ))}
         </div>
       </section>
+      <EventSection />
     </main>
   );
 };

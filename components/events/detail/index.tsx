@@ -9,7 +9,7 @@ import { Tab, Tabs } from "@heroui/tabs";
 import EventAbout from "./about";
 import Attendance from "./attendance";
 import Feedback from "./feedback";
-import EventFinance from "./finance";
+import EventCosts from "./cost";
 
 import Loading from "@/components/loading";
 import { FindEventById } from "@/lib/event.actions";
@@ -57,14 +57,14 @@ const DetailEvent = ({}: Props) => {
         >
           <Tab key="about" title="Acara" />
           <Tab key="attendance" title="Absensi" />
-          <Tab key="finance" title="Anggaran" />
+          <Tab key="cost" title="Anggaran" />
           <Tab key="feedback" title="Feedback" />
         </Tabs>
       </section>
       <div className="relative grow">
         <EventAbout event={data} isActive={activeTabs === "about"} />
         <Attendance event={data} isActive={activeTabs === "attendance"} />
-        <EventFinance event={data} isActive={activeTabs === "finance"} />
+        <EventCosts event={data} isActive={activeTabs === "cost"} />
         <Feedback event={data} isActive={activeTabs === "feedback"} />
       </div>
     </main>

@@ -58,10 +58,12 @@ model FinancialHistory {
   createdAt   DateTime  @default(now())
   deletedAt   DateTime? @db.Timestamptz()
 
-  deletedById String?
   authorId    String
-  deletedBy   User?   @relation("DeleterFinancialHistory", fields: [deletedById], references: [id])
+  deletedById String?
+  eventId     String?
   author      User    @relation("AuthorFinancialHistory", fields: [authorId], references: [id])
+  deletedBy   User?   @relation("DeleterFinancialHistory", fields: [deletedById], references: [id])
+  event       Event?  @relation("EventCost", fields: [eventId], references: [id])
 
   @@map("financial_histories")
 }
@@ -80,8 +82,9 @@ model Event {
   createdAt   DateTime @default(now())
 
   authorId    String
-  author      User         @relation("AuthorEvent", fields: [authorId], references: [id])
-  attendances Attendance[] @relation("EventAttendance")
+  author      User               @relation("AuthorEvent", fields: [authorId], references: [id])
+  attendances Attendance[]       @relation("EventAttendance")
+  costs       FinancialHistory[] @relation("EventCost")
 
   @@map("events")
 }

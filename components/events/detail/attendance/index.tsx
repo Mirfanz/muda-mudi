@@ -7,6 +7,7 @@ import React, { useState } from "react";
 import { Button } from "@heroui/button";
 import { useQuery } from "@tanstack/react-query";
 import { Role } from "@prisma/client";
+import { Alert } from "@heroui/alert";
 
 import AttendanceScanner from "./scanner";
 import AttendanceModal from "./attendance-modal";
@@ -24,23 +25,22 @@ type Props = {
 };
 
 const Attendance = ({ event, isActive }: Props) => {
-  const { hasRole, user } = useAuth();
+  const { hasRole } = useAuth();
   const [detailAttendance, setDetailAttendance] =
     useState<AttendanceType | null>(null);
   const [showQRValue, setShowQRValue] = useState<string>("");
   const [isScannerOpen, setIsScannerOpen] = useState<boolean>(false);
 
-  const { data, error, isLoading, refetch, isError, isFetching, isPending } =
-    useQuery({
-      queryKey: ["attendances-" + event.id],
-      queryFn: async () => {
-        const resp = await FindEventAttendances({ eventId: event.id });
+  const { data, error, refetch, isError, isPending } = useQuery({
+    queryKey: ["attendances-" + event.id],
+    queryFn: async () => {
+      const resp = await FindEventAttendances({ eventId: event.id });
 
-        if (!resp.success) throw new Error(resp.message);
+      if (!resp.success) throw new Error(resp.message);
 
-        return resp.data;
-      },
-    });
+      return resp.data;
+    },
+  });
 
   if (!isActive) return;
   if (isPending) return <Loading />;
@@ -58,64 +58,68 @@ const Attendance = ({ event, isActive }: Props) => {
     <div className="min-h-full flex flex-col">
       <section className="p-3">
         <div className="flex flex-col gap-3 mb-4">
-          {data.map((attendance, index) => (
-            <Card
-              key={"absen-" + attendance}
-              isPressable
-              shadow="sm"
-              onPress={() => setDetailAttendance(attendance)}
-            >
-              <CardBody className="gap-3">
-                <div className="flex justify-between text-sm font-medium">
-                  <p className="">
-                    {attendance.start.toLocaleString("id-ID", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
-                  <p className="">
-                    {attendance.end.toLocaleString("id-ID", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
-                </div>
-                {/* <hr className="border-foreground-200 dark:border-foreground-100 my-3" /> */}
-                <div className="flex flex-row justify-between items-center gap-2">
-                  <Chip
-                    className="me-auto"
-                    color="danger"
-                    size="sm"
-                    variant="flat"
-                  >
-                    Sudah Lewat
-                  </Chip>
-                  <Button size="sm" variant="flat">
-                    {attendance.histories.length} Hadir
-                  </Button>
+          {data.length ? (
+            data.map((attendance, index) => (
+              <Card
+                key={"absen-" + attendance}
+                isPressable
+                shadow="sm"
+                onPress={() => setDetailAttendance(attendance)}
+              >
+                <CardBody className="gap-3">
+                  <div className="flex justify-between text-sm font-medium">
+                    <p className="">
+                      {attendance.start.toLocaleString("id-ID", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                    <p className="">
+                      {attendance.end.toLocaleString("id-ID", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
+                  {/* <hr className="border-foreground-200 dark:border-foreground-100 my-3" /> */}
+                  <div className="flex flex-row justify-between items-center gap-2">
+                    <Chip
+                      className="me-auto"
+                      color="danger"
+                      size="sm"
+                      variant="flat"
+                    >
+                      Sudah Lewat
+                    </Chip>
+                    <Button size="sm" variant="flat">
+                      {attendance.histories.length} Hadir
+                    </Button>
 
-                  <Button
-                    isIconOnly
-                    color="primary"
-                    size="sm"
-                    variant="flat"
-                    onPress={() => {
-                      if (hasRole(Role.ADMIN, Role.KETUA, Role.SEKRETARIS))
-                        setShowQRValue(attendance.id);
-                    }}
-                  >
-                    <QrCodeIcon className="h-5 w-5" />
-                  </Button>
-                </div>
-              </CardBody>
-            </Card>
-          ))}
+                    <Button
+                      isIconOnly
+                      color="primary"
+                      size="sm"
+                      variant="flat"
+                      onPress={() => {
+                        if (hasRole(Role.ADMIN, Role.KETUA, Role.SEKRETARIS))
+                          setShowQRValue(attendance.id);
+                      }}
+                    >
+                      <QrCodeIcon className="h-5 w-5" />
+                    </Button>
+                  </div>
+                </CardBody>
+              </Card>
+            ))
+          ) : (
+            <Alert color="default" description="Tidak ada absensi." />
+          )}
         </div>
         <AttendanceScanner
           isOpen={isScannerOpen}

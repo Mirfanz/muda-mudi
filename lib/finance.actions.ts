@@ -27,6 +27,7 @@ export const FindFinanceHistory = async (): Promise<
         deletedAt: true,
         authorId: true,
         deletedById: true,
+        eventId: true,
         author: {
           select: {
             id: true,
@@ -101,6 +102,7 @@ export const AddFinanceHistory = async ({
         deletedAt: true,
         authorId: true,
         deletedById: true,
+        eventId: true,
         author: {
           select: {
             id: true,
