@@ -10,10 +10,10 @@ import Link from "next/link";
 import React from "react";
 
 import { EventType } from "@/types";
+import { compareDate } from "@/lib/utils/client";
 
 type Props = {
   event: EventType;
-  status: "ongoing" | "passed" | "soon";
 };
 
 const statusColor = {
@@ -22,12 +22,14 @@ const statusColor = {
   soon: "warning",
 };
 
-const CardEvent = ({ event, status }: Props) => {
+const CardEvent = ({ event }: Props) => {
+  const gap = compareDate(event.startDate, event.endDate);
+
   return (
     <Card
       isPressable
       as={Link}
-      className={clsx(status === "ongoing" ? "order-none" : "order-1")}
+      className={clsx(gap == 0 ? "order-none" : "order-1")}
       href={"/events/" + event.id}
     >
       <CardBody className="flex-row justify-between">
@@ -40,7 +42,7 @@ const CardEvent = ({ event, status }: Props) => {
             {event.location}
           </small>
           <div className="flex mt-auto gap-1">
-            {status === "ongoing" ? (
+            {gap == 0 ? (
               <Chip color="success" radius="md" variant="flat">
                 Hari Ini
               </Chip>
@@ -59,10 +61,10 @@ const CardEvent = ({ event, status }: Props) => {
           </div>
         </div>
         <Badge
-          color={status === "ongoing" ? "success" : "warning"}
+          color={gap == 0 ? "success" : "warning"}
           content=""
-          isDot={status === "soon"}
-          isInvisible={status === "passed"}
+          isDot={gap > 0}
+          isInvisible={gap < 0}
           placement="top-right"
         >
           <div className="min-w-24 h-24 relative overflow-hidden rounded-lg flex text-gray-50 flex-col text-3xl justify-center items-center">

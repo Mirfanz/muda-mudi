@@ -22,6 +22,7 @@ import {
 import { CheckIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
 import { UserType } from "@/types";
+import dayjs from "@/lib/utils/dayjs";
 
 type Props = {
   users: UserType[];
@@ -59,7 +60,11 @@ const TableUser = ({ users, deleteUser, editUser }: Props) => {
                   name={item.name}
                 />
               </TableCell>
-              <TableCell>{item.birth.toLocaleDateString()}</TableCell>
+              <TableCell>
+                {dayjs(item.birth.toISOString().slice(0, 10)).format(
+                  "DD-MM-YYYY",
+                )}
+              </TableCell>
               <TableCell>{item.phone}</TableCell>
               <TableCell>{item.isMale ? "Laki-Laki" : "Perempuan"}</TableCell>
               <TableCell>

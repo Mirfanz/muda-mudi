@@ -69,7 +69,7 @@ export const RegisterUser = async ({
       data: {
         name,
         birth: new Date(birth),
-        password: await hashPassword("remajaklumpit"),
+        password: await hashPassword(process.env.DEFAULT_PASSWORD),
         phone,
         role: role,
         active: true,

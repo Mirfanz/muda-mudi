@@ -9,7 +9,6 @@ import CardEvent from "./card-event";
 import SkeletonEvent from "./skeleton-event";
 
 import { FindEvents } from "@/lib/event.actions";
-import { getEventStatus } from "@/lib/utils-client";
 
 type Props = {};
 
@@ -33,13 +32,7 @@ const Events = (props: Props) => {
     <main className="p-2">
       <section>
         <div className="flex flex-col gap-3">
-          {data?.map((event) => (
-            <CardEvent
-              key={event.id}
-              event={event}
-              status={getEventStatus(event.startDate, event.endDate)}
-            />
-          ))}
+          {data?.map((event) => <CardEvent key={event.id} event={event} />)}
         </div>
       </section>
     </main>

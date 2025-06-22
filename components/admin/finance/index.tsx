@@ -26,7 +26,7 @@ const Finance = (props: Props) => {
   const [detailHistory, setDetailHistory] =
     React.useState<FinancialHistoryType | null>(null);
   const { data, refetch, isLoading } = useQuery({
-    queryKey: ["get-finance-history"],
+    queryKey: ["fin-finance-history"],
     queryFn: async () => {
       const resp = await FindFinanceHistory();
 

@@ -23,6 +23,7 @@ import UserCard from "./user-card";
 
 import { FindUsers } from "@/lib/user.actions";
 import Loading from "@/components/loading";
+import dayjs from "@/lib/utils/dayjs";
 
 type Props = {};
 
@@ -71,6 +72,7 @@ const Account = (props: Props) => {
   };
 
   if (isPending) return <Loading />;
+  if (!auth.user) return <Loading />;
 
   return (
     <main>
@@ -87,7 +89,7 @@ const Account = (props: Props) => {
             Keluar
           </Button>
           <div className="relative flex justify-center rounded-full mt-3">
-            <Avatar className="w-32 h-32" src={auth.user?.avatar || ""} />
+            <Avatar className="w-32 h-32" src={auth.user.avatar || ""} />
             <Button
               isIconOnly
               className="absolute bottom-1 right-1"
@@ -98,28 +100,36 @@ const Account = (props: Props) => {
               <PencilSquareIcon className="w-4 h-4" />
             </Button>
           </div>
-          <h6 className="font-semibold text-lg">{auth.user?.name}</h6>
+          <h6 className="font-semibold text-lg">{auth.user.name}</h6>
           <Card className="w-full" shadow={"sm"}>
             <CardBody className="gap-1 text-xs">
               <div className="flex justify-between">
                 <p>Role</p>
-                <p className="capitalize">{auth.user?.role.toLowerCase()}</p>
+                <p className="capitalize">{auth.user.role.toLowerCase()}</p>
               </div>
               <div className="flex justify-between">
                 <p>Umur</p>
-                <p>21 Tahun</p>
+                <p>
+                  {dayjs(auth.user.birth.toISOString().slice(0, 10)).toNow(
+                    true,
+                  )}
+                </p>
               </div>
               <div className="flex justify-between">
                 <p>Status Aktif</p>
-                <p>{auth.user?.active ? "Aktif" : "Purna Tugas"}</p>
+                <p>{auth.user.active ? "Aktif" : "Purna Tugas"}</p>
               </div>
               <div className="flex justify-between">
                 <p>Whatsapp</p>
-                <p>{auth.user?.phone}</p>
+                <p>{auth.user.phone}</p>
               </div>
               <div className="flex justify-between">
                 <p>Tanggal Lahir</p>
-                <p>{auth.user?.birth.toLocaleDateString("id-ID")}</p>
+                <p>
+                  {dayjs(auth.user.birth.toISOString().slice(0, 10)).format(
+                    "DD-MM-YYYY",
+                  )}
+                </p>
               </div>
             </CardBody>
           </Card>

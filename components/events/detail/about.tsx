@@ -6,6 +6,7 @@ import { Card, CardBody } from "@heroui/card";
 import React from "react";
 
 import { EventType } from "@/types";
+import dayjs from "@/lib/utils/dayjs";
 
 type Props = {
   event: EventType;
@@ -16,29 +17,25 @@ const EventAbout = ({ event, isActive }: Props) => {
   if (!isActive) return;
 
   return (
-    <section className="px-3">
-      <h2 className="font-semibold text-lg my-4">{event.title}</h2>
+    <section className="px-3 pt-6">
+      {/* <h2 className="font-semibold text-lg my-4">
+        {compareDate("2025-06-10")}
+      </h2> */}
       <div className="flex justify-between text-sm mb-4">
         <div className="">
           <p className="text-foreground-500">Mulai</p>
           <p className="">
-            {event.startDate.toLocaleDateString("id-ID", {
-              weekday: "long",
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })}
+            {dayjs(event.startDate.toISOString().slice(0, 10)).format(
+              "dddd, DD MMMM YYYY",
+            )}
           </p>
         </div>
         <div className="text-end">
           <p className="text-foreground-500">Selesai</p>
           <p className="">
-            {event.endDate.toLocaleDateString("id-ID", {
-              weekday: "long",
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            })}
+            {dayjs(event.endDate.toISOString().slice(0, 10)).format(
+              "dddd, DD MMMM YYYY",
+            )}
           </p>
         </div>
       </div>

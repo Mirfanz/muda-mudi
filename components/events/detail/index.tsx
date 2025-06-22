@@ -20,8 +20,7 @@ type Props = {};
 const DetailEvent = ({}: Props) => {
   const { eventId } = useParams<{ eventId: string }>();
   const [activeTabs, setActiveTabs] = React.useState<string>("about");
-  const [isScannerOpen, setIsScannerOpen] = React.useState<boolean>(false);
-  const { data, isLoading, isError, error, isPending } = useQuery({
+  const { data, isError, error, isPending } = useQuery({
     queryKey: ["event-detail-" + eventId],
     queryFn: async () => {
       const resp = await FindEventById({ eventId });
@@ -38,7 +37,7 @@ const DetailEvent = ({}: Props) => {
 
   return (
     <main className="min-h-full relative flex flex-col">
-      <section>
+      <section className="relative">
         <Image
           alt="event cover"
           className="aspect-video object-cover"
@@ -46,6 +45,9 @@ const DetailEvent = ({}: Props) => {
           src={data?.cover ?? "/src/images/bg.jpg"}
           width={500}
         />
+        <div className="absolute p-3 w-full bottom-0 bg-gradient-to-t from-black to-transparent">
+          <h2 className="text-xl font-medium text-gray-100">{data.title}</h2>
+        </div>
       </section>
       <section className="sticky shadow z-10 top-0 bg-background">
         <Tabs

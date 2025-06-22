@@ -10,7 +10,7 @@ import { ToastProvider } from "@heroui/toast";
 import { QueryClientProvider } from "@tanstack/react-query";
 
 import { AuthProvider } from "@/components/auth-provider";
-import queryClient from "@/lib/query-client";
+import queryClient from "@/lib/utils/query-client";
 
 export interface ProvidersProps {
   children: React.ReactNode;

@@ -14,6 +14,7 @@ import {
 import React from "react";
 
 import { FinancialHistoryType } from "@/types";
+import dayjs from "@/lib/utils/dayjs";
 
 type Props = {
   data: FinancialHistoryType[];
@@ -37,11 +38,7 @@ const TableHistories = ({ data, onShowDetail, onDeleteHistory }: Props) => {
         {(item) => (
           <TableRow>
             <TableCell>
-              {item.date.toLocaleDateString("id-ID", {
-                day: "2-digit",
-                month: "2-digit",
-                year: "numeric",
-              })}
+              {dayjs(item.date.toISOString().slice(0, 10)).format("DD/MM/YYYY")}
             </TableCell>
             <TableCell>{item.title}</TableCell>
             <TableCell>{item.author.name}</TableCell>

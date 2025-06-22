@@ -10,6 +10,7 @@ import { Pagination } from "swiper/modules";
 import Image from "next/image";
 
 import { FinancialHistoryType } from "@/types";
+import dayjs from "@/lib/utils/dayjs";
 
 type Props = {
   data: FinancialHistoryType | null;
@@ -22,11 +23,9 @@ const DetailHistoryModal = ({ data, onClose }: Props) => {
       <ModalContent>
         <ModalBody className="p-4 gap-0">
           <p className="text-sm text-foreground-600 mb-1">
-            {data?.date.toLocaleDateString("id-ID", {
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            })}
+            {dayjs(data?.date.toISOString().slice(0, 10), {}).format(
+              "dddd, DD MMMM YYYY",
+            )}
           </p>
           <h2 className="text-xl font-semibold mb-1">{data?.title}</h2>
           <p className="text-sm mb-4">
@@ -69,13 +68,12 @@ const DetailHistoryModal = ({ data, onClose }: Props) => {
           {/* <Skeleton className="w-full aspect-video rounded-lg" /> */}
           <div className="flex items-center mt-3 justify-between">
             <small className="text-xs text-foreground-500">
-              {data?.createdAt.toLocaleString("id-ID")}
+              {dayjs(data?.createdAt).format("DD/MM/YYYY, HH:mm:ss")}
             </small>
             <User
               avatarProps={{
                 src: data?.author.avatar || "",
                 size: "sm",
-                showFallback: false,
               }}
               name={data?.author.name}
             />

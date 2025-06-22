@@ -1,7 +1,10 @@
-# Database Configuration
+# Database
 DATABASE_URL = ""
 DIRECT_URL = ""
 
-# Auth Configuration
+# Auth
 JWT_SECRET = ""
 SALT_ROUNDS = 10
+
+# Default password when add new user
+DEFAULT_PASSWORD = ""

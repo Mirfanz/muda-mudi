@@ -5,6 +5,7 @@ import { Button } from "@heroui/button";
 import { Card } from "@heroui/card";
 import clsx from "clsx";
 import React from "react";
+import dayjs from "dayjs";
 
 import { FinancialHistoryType } from "@/types";
 
@@ -34,7 +35,7 @@ const FinanceHistory = ({ history, showDetail }: Props) => {
       <div className="me-auto">
         <p className="text-sm -mb-1 line-clamp-1">{history.title}</p>
         <small className="text-xs text-foreground-500">
-          {history.date.toLocaleDateString("id-ID")}
+          {dayjs(history.date.toISOString().slice(0, 10)).format("DD MMM YYYY")}
         </small>
       </div>
       <div
