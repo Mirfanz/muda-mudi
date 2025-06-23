@@ -52,7 +52,7 @@ const Sidebar = () => {
   const auth = useAuth();
 
   return (
-    <div className="flex-grow bg-white overflow-y-auto shadow-sm dark:bg-black p-3">
+    <div className="flex-grow bg-foreground-100 h-full overflow-y-auto shadow-sm dark:bg-foreground-50 p-3 w-72">
       <p className="text-sm text-foreground-600 uppercase mb-1 mt-2">
         Menu Utama
       </p>

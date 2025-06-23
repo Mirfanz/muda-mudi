@@ -17,10 +17,9 @@ import { useDisclosure } from "@heroui/modal";
 import { Switch } from "@heroui/switch";
 import { Checkbox } from "@heroui/checkbox";
 
-import { useAuth } from "../auth-provider";
-
 import UserCard from "./user-card";
 
+import { useAuth } from "@/components/auth-provider";
 import { FindUsers } from "@/lib/user.actions";
 import Loading from "@/components/loading";
 import dayjs from "@/lib/utils/dayjs";

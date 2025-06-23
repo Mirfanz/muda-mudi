@@ -3,7 +3,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 
-import CustomAlert from "../custom-alert";
+import CustomAlert from "../../custom-alert";
 
 import CardEvent from "./card-event";
 import SkeletonEvent from "./skeleton-event";

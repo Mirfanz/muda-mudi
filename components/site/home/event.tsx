@@ -37,7 +37,7 @@ const EventSection = (props: Props) => {
           Lainnya
         </Button>
       </div>
-      <div className="flex flex-col">
+      <div className="flex flex-col gap-2">
         {data?.map((event) => <CardEvent key={event.id} event={event} />)}
       </div>
     </section>

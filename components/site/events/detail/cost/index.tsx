@@ -8,8 +8,8 @@ import CustomAlert from "@/components/custom-alert";
 import { EventType, FinancialHistoryType } from "@/types";
 import { FindEventCosts } from "@/lib/event.actions";
 import Loading from "@/components/loading";
-import FinanceHistory from "@/components/finance/finance-history";
-import DetailHistoryModal from "@/components/finance/detail-history";
+import FinanceHistory from "@/components/site/finance/finance-history";
+import DetailHistoryModal from "@/components/site/finance/detail-history";
 
 type Props = {
   event: EventType;

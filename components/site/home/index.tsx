@@ -112,7 +112,7 @@ const Home = (props: Props) => {
           {listMenu.map((menu) => (
             <div
               key={menu.label}
-              className="flex items-center bg-red-200s w-[5rem] gap-1 flex-col"
+              className="flex items-center w-[5rem] gap-1 flex-col"
             >
               <Card
                 isPressable

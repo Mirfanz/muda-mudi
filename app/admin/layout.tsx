@@ -1,5 +1,4 @@
 import { PropsWithChildren, Suspense } from "react";
-import clsx from "clsx";
 import { Button } from "@heroui/button";
 import { Alert } from "@heroui/alert";
 import Link from "next/link";
@@ -36,16 +35,10 @@ export default function AdminLayout({ children }: PropsWithChildren) {
         </div>
       </div>
       <div className="hidden md:flex flex-grow overflow-y-hidden">
-        <aside
-          className={clsx(
-            "h-full hidden overflow-y-hidden md:flex duration-250 ease-in-out !w-72",
-          )}
-        >
-          <Sidebar />
-        </aside>
-        <main className="relative flex-grow overflow-y-auto p-2">
+        <Sidebar />
+        <div className="relative flex-grow w-full overflow-y-auto">
           <Suspense fallback={<Loading />}>{children}</Suspense>
-        </main>
+        </div>
       </div>
     </div>
   );

@@ -71,12 +71,6 @@ export const siteConfig = {
       icon: BanknotesIcon,
       isActive: (path: string) => /^\/admin\/finance/.test(path),
     },
-    {
-      label: "Donations",
-      href: "/admin/donation",
-      icon: HeartIcon,
-      isActive: (path: string) => /^\/admin\/donation/.test(path),
-    },
   ],
   links: {
     github: "https://github.com/mirfanz",
