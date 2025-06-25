@@ -29,7 +29,7 @@ const CardEvent = ({ event }: Props) => {
     <Card
       isPressable
       as={Link}
-      className={clsx(gap == 0 ? "order-none" : "order-1")}
+      className={clsx(gap == 0 ? "order-none" : "order-1", "w-full")}
       href={"/events/" + event.id}
     >
       <CardBody className="flex-row justify-between">

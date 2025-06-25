@@ -19,24 +19,29 @@ const Tabbar = (props: Props) => {
   }, [pathname]);
 
   return (
-    <Tabs
-      fullWidth
-      classNames={{ tabList: "bg-foreground-100 dark:bg-foreground-100" }}
-      color="primary"
-      radius="lg"
-      selectedKey={activeTab}
-      size="lg"
-      variant="bordered"
-    >
-      {siteConfig.navItems.map((item) => (
-        <Tab
-          key={item.label}
-          as={Link}
-          href={item.href}
-          title={<item.icon className="w-6 h-6" />}
-        />
-      ))}
-    </Tabs>
+    <div className="z-50">
+      <Tabs
+        fullWidth
+        className="z-50"
+        classNames={{
+          tabList: "bg-foreground-100 dark:bg-foreground-100 z-50",
+        }}
+        color="primary"
+        radius="lg"
+        selectedKey={activeTab}
+        size="lg"
+        variant="bordered"
+      >
+        {siteConfig.navItems.map((item) => (
+          <Tab
+            key={item.label}
+            as={Link}
+            href={item.href}
+            title={<item.icon className="w-6 h-6" />}
+          />
+        ))}
+      </Tabs>
+    </div>
   );
 };
 

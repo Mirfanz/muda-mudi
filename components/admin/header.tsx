@@ -11,7 +11,7 @@ type Props = {
 
 const Header = (props: Props) => {
   return (
-    <header className="flex gap-2 w-full items-center p-4">
+    <header className="flex gap-2 w-full items-center p-4 mt-2 mb-3">
       {props.startContent}
       <div className=" me-auto">
         <h2 className="text-2xl font-semibold">{props.title}</h2>
