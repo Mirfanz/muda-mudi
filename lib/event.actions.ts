@@ -13,12 +13,18 @@ import {
   RespType,
 } from "@/types";
 
-export const FindEvents = async (): Promise<
-  RespType<EventType[], { page: number }>
-> => {
+export const FindEvents = async ({
+  page,
+  take = 20,
+}: {
+  page: number;
+  take?: number;
+}): Promise<RespType<EventType[], { page: number; take: number }>> => {
   try {
     const result = await prisma.event.findMany({
       orderBy: { startDate: "desc" },
+      take: take,
+      skip: (page - 1) * take,
       select: {
         id: true,
         title: true,
@@ -51,7 +57,8 @@ export const FindEvents = async (): Promise<
     return {
       success: true,
       message: "Events data",
-      page: 1,
+      page,
+      take,
       data: result,
     };
   } catch (error: any) {

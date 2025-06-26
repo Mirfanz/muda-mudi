@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { Button } from "@heroui/button";
 
 import CustomAlert from "../../custom-alert";
 
@@ -13,18 +14,32 @@ import { FindEvents } from "@/lib/event.actions";
 type Props = {};
 
 const Events = (props: Props) => {
-  const { data, refetch, isLoading, isError, error } = useQuery({
-    queryKey: ["find-events"],
-    queryFn: async () => {
-      const resp = await FindEvents();
+  const {
+    data,
+    isPending,
+    isError,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["events"],
+    initialPageParam: 1,
+    queryFn: async ({ pageParam = 1 }) => {
+      const resp = await FindEvents({ page: pageParam });
 
       if (!resp.success) throw new Error(resp.message);
 
-      return resp.data;
+      return resp;
+    },
+    getNextPageParam: (lastPage) => {
+      if (lastPage.data.length == lastPage.take) return lastPage.page + 1;
+
+      return undefined;
     },
   });
 
-  if (isLoading) return <SkeletonEvent />;
+  if (isPending) return <SkeletonEvent />;
   if (isError)
     return <CustomAlert description={error.message} title={"Mohon Maaf"} />;
 
@@ -32,9 +47,24 @@ const Events = (props: Props) => {
     <main className="p-2">
       <section>
         <div className="flex flex-col gap-3">
-          {data?.map((event) => <CardEvent key={event.id} event={event} />)}
+          {data.pages
+            .flatMap((page) => page.data)
+            .map((event) => (
+              <CardEvent key={event.id} event={event} />
+            ))}
         </div>
       </section>
+      {hasNextPage && (
+        <div className="flex my-4">
+          <Button
+            className="mx-auto"
+            isLoading={isFetchingNextPage}
+            onPress={() => fetchNextPage({ cancelRefetch: false })}
+          >
+            Show More
+          </Button>
+        </div>
+      )}
     </main>
   );
 };

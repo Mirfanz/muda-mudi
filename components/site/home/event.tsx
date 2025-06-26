@@ -15,7 +15,7 @@ const EventSection = (props: Props) => {
   const { data, isPending } = useQuery({
     queryKey: ["find-events"],
     queryFn: async () => {
-      const resp = await FindEvents();
+      const resp = await FindEvents({ page: 1, take: 3 });
 
       if (!resp.success) throw new Error(resp.message);
 
@@ -26,7 +26,7 @@ const EventSection = (props: Props) => {
   return (
     <section className="p-3">
       <div className="flex items-center mb-1 ms-1 justify-between">
-        <p className="text-sm font-medium">Event Terdekat</p>
+        <p className="text-sm font-medium">Event Terbaru</p>
         <Button
           as={Link}
           color="primary"

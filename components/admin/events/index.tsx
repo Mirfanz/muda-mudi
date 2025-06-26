@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { Button } from "@heroui/button";
 import { PlusIcon } from "@heroicons/react/24/solid";
 
@@ -15,16 +15,23 @@ import Loading from "@/components/loading";
 type Props = {};
 
 const AdminEvents = (props: Props) => {
-  const { data: events, isPending } = useQuery({
-    queryKey: ["find-events"],
-    queryFn: async () => {
-      const resp = await FindEvents();
+  const { data, isPending, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["events"],
+      initialPageParam: 1,
+      queryFn: async ({ pageParam = 1 }) => {
+        const resp = await FindEvents({ page: pageParam });
 
-      if (!resp.success) throw new Error(resp.message);
+        if (!resp.success) throw new Error(resp.message);
 
-      return resp.data;
-    },
-  });
+        return resp;
+      },
+      getNextPageParam: (lastPage) => {
+        if (lastPage.data.length == lastPage.take) return lastPage.page + 1;
+
+        return undefined;
+      },
+    });
 
   return (
     <main className="">
@@ -46,10 +53,21 @@ const AdminEvents = (props: Props) => {
         ) : (
           <div className="px-4 pb-4 text-justify">
             <div className="grid grid-cols-2 gap-6">
-              {events?.map((event) => (
-                <EventCard key={event.id} event={event} />
-              ))}
+              {data?.pages
+                .flatMap((page) => page.data)
+                .map((event) => <EventCard key={event.id} event={event} />)}
             </div>
+          </div>
+        )}
+        {hasNextPage && (
+          <div className="flex my-4">
+            <Button
+              className="mx-auto"
+              isLoading={isFetchingNextPage}
+              onPress={() => fetchNextPage({ cancelRefetch: false })}
+            >
+              Show More
+            </Button>
           </div>
         )}
       </section>
