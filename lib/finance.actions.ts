@@ -75,7 +75,7 @@ export const AddFinanceHistory = async ({
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
     if (!payload) throw new Error("Login Dulu Yaa :)");
-    isAuthorizedOrThrow(payload.user.role, [Role.BENDAHARA, Role.ADMIN]);
+    isAuthorizedOrThrow(payload.user.role, [Role.Bendahara, Role.Admin]);
 
     const result = await prisma.financialHistory.create({
       data: {
@@ -144,7 +144,7 @@ export const DeleteFinanceHistory = async ({
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
     if (!payload) throw new Error("Invalid Token");
-    isAuthorizedOrThrow(payload.user.role, [Role.BENDAHARA, Role.ADMIN]);
+    isAuthorizedOrThrow(payload.user.role, [Role.Bendahara, Role.Admin]);
 
     const result = await prisma.financialHistory.update({
       where: { id: historyId },

@@ -36,7 +36,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
       </div>
       <div className="hidden md:flex flex-grow overflow-y-hidden">
         <Sidebar />
-        <div className="relative flex-grow w-full overflow-y-auto">
+        <div className="relative flex-grow w-full overflow-y-auto bg-background">
           <Suspense fallback={<Loading />}>{children}</Suspense>
         </div>
       </div>

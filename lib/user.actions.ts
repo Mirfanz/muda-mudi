@@ -48,7 +48,7 @@ export const RegisterUser = async ({
   name,
   birth,
   phone,
-  role = Role.ANGGOTA,
+  role = Role.Anggota,
   isMale,
   inStudy = false,
 }: {
@@ -63,7 +63,7 @@ export const RegisterUser = async ({
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
     if (!payload) throw new Error("Invalid Token");
-    isAuthorizedOrThrow(payload.user.role, [Role.ADMIN, Role.KETUA]);
+    isAuthorizedOrThrow(payload.user.role, [Role.Admin, Role.Ketua]);
 
     const result = await prisma.user.create({
       data: {
@@ -108,7 +108,7 @@ export const UpdateUser = async ({
   name,
   birth,
   phone,
-  role = Role.ANGGOTA,
+  role = Role.Anggota,
   isMale,
   inStudy = false,
 }: {
@@ -125,7 +125,7 @@ export const UpdateUser = async ({
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
     if (!payload) throw new Error("Invalid Token");
-    isAuthorizedOrThrow(payload.user.role, [Role.ADMIN, Role.KETUA]);
+    isAuthorizedOrThrow(payload.user.role, [Role.Admin, Role.Ketua]);
 
     const result = await prisma.user.update({
       where: {
@@ -175,7 +175,7 @@ export const DeleteUser = async ({
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
     if (!payload) throw new Error("Invalid Token");
-    isAuthorizedOrThrow(payload.user.role, [Role.ADMIN, Role.KETUA]);
+    isAuthorizedOrThrow(payload.user.role, [Role.Admin, Role.Ketua]);
 
     const result = await prisma.user.update({
       where: {

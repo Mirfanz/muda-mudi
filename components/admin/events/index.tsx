@@ -34,7 +34,7 @@ const AdminEvents = (props: Props) => {
     });
 
   return (
-    <main className="">
+    <main className="px-8 py-4">
       <Header
         description="Kelola dan atur semua acara yang di sini."
         endContent={
@@ -51,7 +51,7 @@ const AdminEvents = (props: Props) => {
         {isPending ? (
           <Loading />
         ) : (
-          <div className="px-4 pb-4 text-justify">
+          <div className="">
             <div className="grid grid-cols-2 gap-6">
               {data?.pages
                 .flatMap((page) => page.data)

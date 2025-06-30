@@ -56,7 +56,7 @@ const Finance = (props: Props) => {
   };
 
   return (
-    <main>
+    <main className="px-8 py-4">
       <Header
         description="Manusia tempat salah dan dosa."
         endContent={
@@ -71,7 +71,7 @@ const Finance = (props: Props) => {
         title="Financial Manager"
       />
 
-      <section className="px-4 bgprimary">
+      <section className="">
         <TableHistories
           data={data || []}
           onDeleteHistory={handleDeleteHistory}

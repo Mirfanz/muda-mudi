@@ -23,6 +23,7 @@ import { useAuth } from "@/components/auth-provider";
 import { FindUsers } from "@/lib/user.actions";
 import Loading from "@/components/loading";
 import dayjs from "@/lib/utils/dayjs";
+import { age } from "@/lib/utils/client";
 
 type Props = {};
 
@@ -46,7 +47,7 @@ const Account = (props: Props) => {
 
   const [filter, setFilter] = useState({
     activeOnly: false,
-    hideRoles: ["ADMIN"] as string[],
+    hideRoles: ["Admin"] as string[],
   });
 
   const { data, isLoading, isPending } = useQuery({
@@ -104,15 +105,11 @@ const Account = (props: Props) => {
             <CardBody className="gap-1 text-xs">
               <div className="flex justify-between">
                 <p>Role</p>
-                <p className="capitalize">{auth.user.role.toLowerCase()}</p>
+                <p className="capitalize">{auth.user.role}</p>
               </div>
               <div className="flex justify-between">
                 <p>Umur</p>
-                <p>
-                  {dayjs(auth.user.birth.toISOString().slice(0, 10)).toNow(
-                    true,
-                  )}
-                </p>
+                <p>{age(auth.user.birth.toISOString().slice(0, 10))} Tahun</p>
               </div>
               <div className="flex justify-between">
                 <p>Status Aktif</p>

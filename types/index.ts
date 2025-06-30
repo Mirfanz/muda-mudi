@@ -3,7 +3,7 @@ import {
   Event,
   FinancialHistory,
   Attendance,
-  AttendanceHistory,
+  Attendees,
 } from "@prisma/client";
 import { JWTPayload } from "jose";
 import { SVGProps } from "react";
@@ -37,10 +37,11 @@ export type FinancialHistoryType = FinancialHistory & {
 };
 
 export type AttendanceType = Attendance & {
-  histories: AttendanceHistoryType[];
+  present: AttendeesType[];
+  absent: AttendeesType[];
 };
 
-export type AttendanceHistoryType = AttendanceHistory & {
+export type AttendeesType = Attendees & {
   user: UserType;
 };
 

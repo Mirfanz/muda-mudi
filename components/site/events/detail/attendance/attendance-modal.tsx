@@ -14,6 +14,7 @@ import QRCode from "react-qr-code";
 import { Role } from "@prisma/client";
 import { Button } from "@heroui/button";
 import { QrCodeIcon } from "@heroicons/react/24/solid";
+import dayjs from "dayjs";
 
 import { useAuth } from "@/components/auth-provider";
 import { AttendanceType } from "@/types";
@@ -36,7 +37,7 @@ const AttendanceModal = ({ attendance, onClose }: Props) => {
     >
       <ModalContent className="">
         <ModalHeader>
-          {showQRCode && hasRole(Role.ADMIN, Role.KETUA, Role.SEKRETARIS) && (
+          {showQRCode && hasRole(Role.Admin, Role.Ketua, Role.Sekretaris) && (
             <div className="object-contain w-full flex rounded-lg aspect-square overflow-hidden">
               <QRCode
                 className="p-1 bg-foreground-200 m-auto rounded-lg"
@@ -47,9 +48,9 @@ const AttendanceModal = ({ attendance, onClose }: Props) => {
         </ModalHeader>
         <ModalBody className="">
           <div className="flex gap-3 flex-col-reverse">
-            {attendance?.histories.map((history) => (
+            {attendance?.present.map((present) => (
               <Card
-                key={history.id}
+                key={present.id}
                 isPressable
                 className="border border-foreground-200"
                 shadow="none"
@@ -57,133 +58,14 @@ const AttendanceModal = ({ attendance, onClose }: Props) => {
                 <CardBody className="flex-row items-center justify-between">
                   <User
                     avatarProps={{
-                      src: history.user.avatar ?? "",
+                      src: present.user.avatar ?? "",
                     }}
-                    description={history.user.role}
-                    name={history.user.name}
+                    description={present.user.role}
+                    name={present.user.name}
                   />
-                  <div className="flex flex-col items-end text-foreground-500 text-xs">
-                    <p>{history.createdAt.toLocaleTimeString("id-ID")}</p>
-                    <p>
-                      {history.createdAt.toLocaleDateString("id-ID", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </p>
-                  </div>
-                </CardBody>
-              </Card>
-            ))}
-            {attendance?.histories.map((history) => (
-              <Card
-                key={history.id}
-                isPressable
-                className="border border-foreground-200"
-                shadow="none"
-              >
-                <CardBody className="flex-row items-center justify-between">
-                  <User
-                    avatarProps={{
-                      src: history.user.avatar ?? "",
-                    }}
-                    description={history.user.role}
-                    name={history.user.name}
-                  />
-                  <div className="flex flex-col items-end text-foreground-500 text-xs">
-                    <p>{history.createdAt.toLocaleTimeString("id-ID")}</p>
-                    <p>
-                      {history.createdAt.toLocaleDateString("id-ID", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </p>
-                  </div>
-                </CardBody>
-              </Card>
-            ))}
-            {attendance?.histories.map((history) => (
-              <Card
-                key={history.id}
-                isPressable
-                className="border border-foreground-200"
-                shadow="none"
-              >
-                <CardBody className="flex-row items-center justify-between">
-                  <User
-                    avatarProps={{
-                      src: history.user.avatar ?? "",
-                    }}
-                    description={history.user.role}
-                    name={history.user.name}
-                  />
-                  <div className="flex flex-col items-end text-foreground-500 text-xs">
-                    <p>{history.createdAt.toLocaleTimeString("id-ID")}</p>
-                    <p>
-                      {history.createdAt.toLocaleDateString("id-ID", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </p>
-                  </div>
-                </CardBody>
-              </Card>
-            ))}
-            {attendance?.histories.map((history) => (
-              <Card
-                key={history.id}
-                isPressable
-                className="border border-foreground-200"
-                shadow="none"
-              >
-                <CardBody className="flex-row items-center justify-between">
-                  <User
-                    avatarProps={{
-                      src: history.user.avatar ?? "",
-                    }}
-                    description={history.user.role}
-                    name={history.user.name}
-                  />
-                  <div className="flex flex-col items-end text-foreground-500 text-xs">
-                    <p>{history.createdAt.toLocaleTimeString("id-ID")}</p>
-                    <p>
-                      {history.createdAt.toLocaleDateString("id-ID", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </p>
-                  </div>
-                </CardBody>
-              </Card>
-            ))}
-            {attendance?.histories.map((history) => (
-              <Card
-                key={history.id}
-                isPressable
-                className="border border-foreground-200"
-                shadow="none"
-              >
-                <CardBody className="flex-row items-center justify-between">
-                  <User
-                    avatarProps={{
-                      src: history.user.avatar ?? "",
-                    }}
-                    description={history.user.role}
-                    name={history.user.name}
-                  />
-                  <div className="flex flex-col items-end text-foreground-500 text-xs">
-                    <p>{history.createdAt.toLocaleTimeString("id-ID")}</p>
-                    <p>
-                      {history.createdAt.toLocaleDateString("id-ID", {
-                        day: "numeric",
-                        month: "short",
-                        year: "numeric",
-                      })}
-                    </p>
-                  </div>
+                  <p className="text-foreground-500 text-xs text-end whitespace-pre">
+                    {dayjs(present.presentAt).format("HH:mm:ss\nDD MMM YYYY")}
+                  </p>
                 </CardBody>
               </Card>
             ))}

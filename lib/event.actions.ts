@@ -6,8 +6,8 @@ import { getErrorMessage, verifyToken } from "./utils";
 
 import prisma from "@/prisma";
 import {
-  AttendanceHistoryType,
   AttendanceType,
+  AttendeesType,
   EventType,
   FinancialHistoryType,
   RespType,
@@ -132,14 +132,14 @@ export const FindEventAttendances = async ({
         id: true,
         start: true,
         end: true,
-        title: true,
         createdAt: true,
         eventId: true,
-        histories: {
+        attendees: {
           select: {
-            attendanceId: true,
-            createdAt: true,
             id: true,
+            attendanceId: true,
+            isMandatory: true,
+            presentAt: true,
             userId: true,
             user: {
               select: {
@@ -159,11 +159,26 @@ export const FindEventAttendances = async ({
       },
     });
 
+    const data: AttendanceType[] = result.map((attendance) => {
+      const present: AttendeesType[] = [];
+      const absent: AttendeesType[] = [];
+
+      attendance.attendees.forEach((attendee) => {
+        attendee.presentAt ? present.push(attendee) : absent.push(attendee);
+      });
+
+      return {
+        ...attendance,
+        present,
+        absent,
+      };
+    });
+
     return {
       success: true,
       message: "",
       eventId,
-      data: result,
+      data,
     };
   } catch (error: any) {
     return {
@@ -229,23 +244,28 @@ export const SubmitAttendance = async ({
   code,
 }: {
   code: string;
-}): Promise<RespType<AttendanceHistoryType>> => {
+}): Promise<RespType<AttendeesType>> => {
   try {
     const payload = await verifyToken((await cookies()).get("_session")?.value);
 
     if (!payload) throw new Error("Invalid Token");
 
-    const result = await prisma.attendanceHistory.create({
-      data: {
+    const result = await prisma.attendees.upsert({
+      where: { id: code + payload.user.id },
+      update: { presentAt: new Date() },
+      create: {
         id: code + payload.user.id,
         userId: payload.user.id,
         attendanceId: code,
+        isMandatory: false,
+        presentAt: new Date(),
       },
       select: {
         id: true,
         attendanceId: true,
-        createdAt: true,
         userId: true,
+        isMandatory: true,
+        presentAt: true,
         user: {
           select: {
             id: true,

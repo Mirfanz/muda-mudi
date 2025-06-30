@@ -13,7 +13,7 @@ type Props = {};
 
 const EventSection = (props: Props) => {
   const { data, isPending } = useQuery({
-    queryKey: ["find-events"],
+    queryKey: ["find-events", "home"],
     queryFn: async () => {
       const resp = await FindEvents({ page: 1, take: 3 });
 

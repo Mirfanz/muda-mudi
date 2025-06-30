@@ -3,12 +3,12 @@
 import { QrCodeIcon } from "@heroicons/react/24/solid";
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
-import { Chip } from "@heroui/chip";
 import dayjs from "dayjs";
 import React from "react";
 
 import { AttendanceType } from "@/types";
 import { compareDate } from "@/lib/utils/client";
+import ChipStatus from "@/components/chip-status";
 
 type Props = {
   attendance: AttendanceType;
@@ -26,22 +26,9 @@ const AttendanceCard = ({ attendance, showDetail }: Props) => {
           <p>{dayjs(attendance.end).format("DD-MM-YYYY, HH:mm")}</p>
         </div>
         <div className="flex flex-row justify-between items-center gap-2">
-          {gap < 0 ? (
-            <Chip className="me-auto" color="danger" size="sm" variant="flat">
-              Sudah Lewat
-            </Chip>
-          ) : gap == 0 ? (
-            <Chip className="me-auto" color="success" size="sm" variant="flat">
-              Sekarang
-            </Chip>
-          ) : (
-            <Chip className="me-auto" color="warning" size="sm" variant="flat">
-              Belum Buka
-            </Chip>
-          )}
-
+          <ChipStatus status={gap} />
           <Button size="sm" variant="flat">
-            {attendance.histories.length} Hadir
+            {attendance.present.length} Hadir
           </Button>
 
           <Button isIconOnly color="primary" size="sm" variant="flat">

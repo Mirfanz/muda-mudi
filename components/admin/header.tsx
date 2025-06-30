@@ -1,21 +1,30 @@
 "use client";
 
+import clsx from "clsx";
 import React from "react";
 
 type Props = {
   startContent?: React.ReactNode;
   endContent?: React.ReactNode;
   title: string;
-  description?: string;
+  description?: React.ReactNode;
+  className?: string;
 };
 
 const Header = (props: Props) => {
   return (
-    <header className="flex gap-2 w-full items-center p-4 mt-2 mb-3">
+    <header
+      className={clsx(
+        "flex gap-2 w-full items-center py-2 mb-6",
+        props.className,
+      )}
+    >
       {props.startContent}
-      <div className=" me-auto">
-        <h2 className="text-2xl font-semibold">{props.title}</h2>
-        <p className="text-foreground-600">{props.description}</p>
+      <div className="me-auto">
+        <h2 className="text-3xl font-bold text-foreground-800">
+          {props.title}
+        </h2>
+        <div className="text-foreground-600 mt-1">{props.description}</div>
       </div>
       {props.endContent}
     </header>

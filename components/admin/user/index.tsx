@@ -34,7 +34,7 @@ const Users = () => {
   });
 
   return (
-    <main>
+    <main className="px-8 py-4">
       <Header
         description="Manajemen anggota karang taruna."
         endContent={
@@ -53,7 +53,7 @@ const Users = () => {
         }
         title="Pengelola Anggota"
       />
-      <div className="flex flex-col px-4">
+      <div className="flex flex-col">
         <TableUser
           deleteUser={(user: UserType) => setDeleteUser(user)}
           editUser={(user: UserType) => setEditUser(user)}
