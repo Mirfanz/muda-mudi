@@ -78,83 +78,80 @@ const Attendance = ({ event, attendanceQuery }: Props) => {
               </TableColumn>
             </TableHeader>
             <TableBody className="!bg-blue-600">
-              {attendanceQuery.data?.map((attendance, i) => {
-                const gap = dateStatus(attendance.start, attendance.end);
-
-                return (
-                  <TableRow key={attendance.id}>
-                    <TableCell>{i + 1}</TableCell>
-                    <TableCell>
-                      <div className="w-max">
-                        {dayjs(attendance.start).format("DD MMM YYYY, HH:mm")}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {dayjs(attendance.end).format("DD MMM YYYY, HH:mm")}
-                    </TableCell>
-                    <TableCell>
-                      <ChipStatus status={gap} />
-                    </TableCell>
-                    <TableCell>{attendance.present.length}</TableCell>
-                    <TableCell>
-                      <div className="flex">
-                        <Button
-                          isIconOnly
-                          color="primary"
-                          size="sm"
-                          variant="light"
-                          onPress={() => setShowDetailAttendance(attendance)}
-                        >
-                          <EyeIcon className="w-4 h-4" />
-                        </Button>
-                        <Button
-                          isIconOnly
-                          color="danger"
-                          size="sm"
-                          variant="light"
-                          onPress={() => {
-                            Swal.fire({
-                              title: "Hapus Absensi?",
-                              text: "Data absensi yang dihapus tidak dapat dikembalikan.",
-                              icon: "warning",
-                              showCancelButton: true,
-                              confirmButtonText: "Ya, hapus",
-                              cancelButtonText: "Batal",
-                              confirmButtonColor: "#d33",
-                              cancelButtonColor: "#3085d6",
-                            }).then(({ isConfirmed }) => {
-                              if (!isConfirmed) return;
-                              DeleteAttendance({
-                                attendanceId: attendance.id,
-                              }).then((resp) => {
-                                if (!resp.success) {
-                                  return Swal.fire({
-                                    title: "Gagal",
-                                    text:
-                                      resp.message ||
-                                      "Gagal menghapus absensi.",
-                                    icon: "error",
-                                  });
-                                }
-                                Swal.fire({
-                                  title: "Berhasil",
-                                  text: "Absensi berhasil dihapus.",
-                                  icon: "success",
-                                  timer: 1500,
-                                  showConfirmButton: false,
+              {attendanceQuery.data?.map((attendance, i) => (
+                <TableRow key={attendance.id}>
+                  <TableCell>{i + 1}</TableCell>
+                  <TableCell>
+                    <div className="w-max">
+                      {dayjs(attendance.start).format("DD MMM YYYY, HH:mm")}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {dayjs(attendance.end).format("DD MMM YYYY, HH:mm")}
+                  </TableCell>
+                  <TableCell>
+                    <ChipStatus
+                      status={dateStatus(attendance.start, attendance.end)}
+                    />
+                  </TableCell>
+                  <TableCell>{attendance.present.length}</TableCell>
+                  <TableCell>
+                    <div className="flex">
+                      <Button
+                        isIconOnly
+                        color="primary"
+                        size="sm"
+                        variant="light"
+                        onPress={() => setShowDetailAttendance(attendance)}
+                      >
+                        <EyeIcon className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        isIconOnly
+                        color="danger"
+                        size="sm"
+                        variant="light"
+                        onPress={() => {
+                          Swal.fire({
+                            title: "Hapus Absensi?",
+                            text: "Data absensi yang dihapus tidak dapat dikembalikan.",
+                            icon: "warning",
+                            showCancelButton: true,
+                            confirmButtonText: "Ya, hapus",
+                            cancelButtonText: "Batal",
+                            confirmButtonColor: "#d33",
+                            cancelButtonColor: "#3085d6",
+                          }).then(({ isConfirmed }) => {
+                            if (!isConfirmed) return;
+                            DeleteAttendance({
+                              attendanceId: attendance.id,
+                            }).then((resp) => {
+                              if (!resp.success) {
+                                return Swal.fire({
+                                  title: "Gagal",
+                                  text:
+                                    resp.message || "Gagal menghapus absensi.",
+                                  icon: "error",
                                 });
-                                attendanceQuery.refetch();
+                              }
+                              Swal.fire({
+                                title: "Berhasil",
+                                text: "Absensi berhasil dihapus.",
+                                icon: "success",
+                                timer: 1500,
+                                showConfirmButton: false,
                               });
+                              attendanceQuery.refetch();
                             });
-                          }}
-                        >
-                          <TrashIcon className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                          });
+                        }}
+                      >
+                        <TrashIcon className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         )}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardBody } from "@heroui/card";
 import { Input } from "@heroui/input";
 import { Button } from "@heroui/button";
@@ -9,6 +9,7 @@ import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
 import { z } from "zod";
 import clsx from "clsx";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 
 import { useAuth } from "../auth-provider";
 
@@ -22,6 +23,7 @@ const schema = z.object({
 
 const LoginUI = (props: Props) => {
   const auth = useAuth();
+  const searchParams = useSearchParams();
   const [showPass, setShowPass] = useState(false);
   const [fields, setFields] = useState({
     phone: "",
@@ -31,7 +33,7 @@ const LoginUI = (props: Props) => {
   const [errors, setErrors] = useState<z.inferFormattedError<typeof schema>>();
   const [isLoading, setIsLoading] = useState(false);
 
-  const submitFormLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const submitFormLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validation = schema.safeParse(fields);
     const error = validation.error?.format();
@@ -40,8 +42,10 @@ const LoginUI = (props: Props) => {
     if (error) return;
 
     setIsLoading(true);
+    const redirectUrl = searchParams.get("redirect_url");
+
     auth
-      .login(fields.phone, fields.password)
+      .login(fields.phone, fields.password, redirectUrl)
       .finally(() => setIsLoading(false));
   };
 
@@ -50,6 +54,10 @@ const LoginUI = (props: Props) => {
 
     setFields((prev) => ({ ...prev, [name]: value }));
   };
+
+  useEffect(() => {
+    console.log("redirect_url", searchParams.get("redirect_url"));
+  }, []);
 
   return (
     <section className="h-full p-3 flex justify-center items-center">

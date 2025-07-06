@@ -11,6 +11,7 @@ import React from "react";
 
 import { EventType } from "@/types";
 import { dateStatus } from "@/lib/utils/client";
+import ChipStatus from "@/components/chip-status";
 
 type Props = {
   event: EventType;
@@ -23,13 +24,13 @@ const statusColor = {
 };
 
 const CardEvent = ({ event }: Props) => {
-  const gap = dateStatus(event.startDate, event.endDate, true);
+  const status = dateStatus(event.startDate, event.endDate, true);
 
   return (
     <Card
       isPressable
       as={Link}
-      className={clsx(gap == 0 ? "order-none" : "order-1", "w-full")}
+      className={clsx(status == "now" ? "order-none" : "order-1", "w-full")}
       href={"/events/" + event.id}
     >
       <CardBody className="flex-row justify-between">
@@ -42,15 +43,7 @@ const CardEvent = ({ event }: Props) => {
             {event.location}
           </small>
           <div className="flex mt-auto gap-1">
-            {gap == 0 ? (
-              <Chip color="success" radius="md" variant="flat">
-                Hari Ini
-              </Chip>
-            ) : (
-              <Chip color="primary" radius="md" variant="flat">
-                {event.startDate.getFullYear()}
-              </Chip>
-            )}
+            <ChipStatus status={status} />
             <Chip
               radius="md"
               startContent={<CameraIcon className="w-4 h-4 ms-2" />}
@@ -61,10 +54,10 @@ const CardEvent = ({ event }: Props) => {
           </div>
         </div>
         <Badge
-          color={gap == 0 ? "success" : "warning"}
+          color={status == "now" ? "success" : "warning"}
           content=""
-          isDot={gap > 0}
-          isInvisible={gap < 0}
+          isDot={status != "pass"}
+          isInvisible={status == "pass"}
           placement="top-right"
         >
           <div className="min-w-24 h-24 relative overflow-hidden rounded-lg flex text-gray-50 flex-col text-3xl justify-center items-center">

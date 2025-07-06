@@ -4,11 +4,10 @@ import { Chip, ChipProps } from "@heroui/chip";
 import React from "react";
 
 type Props = {
-  status: number | "pass" | "now" | "soon";
+  status: "pass" | "now" | "soon";
 } & ChipProps;
 
 type Color = "danger" | "success" | "warning";
-
 const status = {
   pass: {
     color: "danger" as Color,
@@ -25,16 +24,14 @@ const status = {
 };
 
 const ChipStatus = (props: Props) => {
-  let s: "pass" | "now" | "soon";
-
-  if (typeof props.status === "string") s = props.status;
-  else if (props.status < 0) s = "pass";
-  else if (props.status > 0) s = "soon";
-  else s = "now";
-
   return (
-    <Chip {...props} color={status[s].color} size="sm" variant="flat">
-      {status[s].content}
+    <Chip
+      {...props}
+      color={status[props.status].color}
+      size="sm"
+      variant="flat"
+    >
+      {status[props.status].content}
     </Chip>
   );
 };

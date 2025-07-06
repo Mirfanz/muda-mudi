@@ -12,14 +12,17 @@ import { GetUser, Login, Logout } from "@/lib/account.actions";
 const AuthContext = React.createContext<{
   user: UserType | null;
   logout: () => void;
-  login: (email: string, password: string) => Promise<boolean>;
+  login: (
+    email: string,
+    password: string,
+    redirectUrl?: string | null,
+  ) => Promise<boolean>;
   isLoading: boolean;
   hasRole: (...role: Role[]) => boolean;
 } | null>(null);
 
 export const AuthProvider = ({ children }: React.PropsWithChildren) => {
   const router = useRouter();
-
   const [user, setUser] = React.useState<UserType | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
 
@@ -29,12 +32,16 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
     else return role.includes(user?.role);
   };
 
-  const login = async (phone: string, password: string) => {
+  const login = async (
+    phone: string,
+    password: string,
+    redirectUrl?: string | null,
+  ) => {
     const resp = await Login(phone, password);
 
     if (resp.success) {
       setUser(resp.data);
-      router.replace("/account");
+      router.replace(redirectUrl ?? "/account");
       addToast({
         title: `Hi, ${resp.data.name.split(" ")[0]}`,
         color: "success",

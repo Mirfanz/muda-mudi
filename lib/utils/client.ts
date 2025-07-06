@@ -2,28 +2,20 @@ export function dateStatus(
   startDate: Date | string,
   endDate?: Date | string,
   dateOnly = false,
-): number {
+): "soon" | "pass" | "now" {
   const now = new Date();
-  let start = new Date(startDate);
-  let end = endDate ? new Date(endDate) : undefined;
+  const start = new Date(startDate);
+  const end = new Date(endDate || startDate);
 
   if (dateOnly) {
     now.setHours(0, 0, 0, 0);
     start.setHours(0, 0, 0, 0);
-    if (end) end.setHours(0, 0, 0, 0);
+    end.setHours(0, 0, 0, 0);
   }
 
-  let result: number;
-
-  if (!end)
-    result = (start.getTime() - now.getTime()) / (dateOnly ? 86400000 : 1);
-  else if (now < start)
-    result = (start.getTime() - now.getTime()) / (dateOnly ? 86400000 : 1);
-  else if (now > end)
-    result = (end.getTime() - now.getTime()) / (dateOnly ? 86400000 : 1);
-  else result = 0;
-
-  return Math.floor(result);
+  if (now < start) return "soon";
+  else if (now > end) return "pass";
+  else return "now";
 }
 export function age(birthDate: Date | string): number {
   const date = new Date(birthDate);
