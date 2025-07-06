@@ -3,7 +3,11 @@
 import { Role } from "@prisma/client";
 import { cookies } from "next/headers";
 
-import { getErrorMessage, isAuthorizedOrThrow, verifyToken } from "./utils";
+import {
+  getErrorMessage,
+  isAuthorizedOrThrow,
+  verifyToken,
+} from "./utils/server";
 
 import prisma from "@/prisma";
 import { FinancialHistoryType, RespType } from "@/types";
@@ -19,7 +23,7 @@ export const FindFinanceHistory = async (): Promise<
         id: true,
         income: true,
         title: true,
-        description: true,
+        note: true,
         amount: true,
         images: true,
         date: true,
@@ -63,10 +67,10 @@ export const AddFinanceHistory = async ({
   income,
   amount,
   date,
-  description,
+  note,
 }: {
   title: string;
-  description?: string;
+  note?: string;
   amount: number;
   date: string;
   income: boolean;
@@ -82,7 +86,7 @@ export const AddFinanceHistory = async ({
         title,
         date: new Date(date),
         amount,
-        description,
+        note,
         income,
         author: {
           connect: {
@@ -94,7 +98,7 @@ export const AddFinanceHistory = async ({
         id: true,
         income: true,
         title: true,
-        description: true,
+        note: true,
         amount: true,
         images: true,
         date: true,

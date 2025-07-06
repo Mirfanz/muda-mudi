@@ -23,26 +23,16 @@ const DetailHistoryModal = ({ data, onClose }: Props) => {
       <ModalContent>
         <ModalBody className="p-4 gap-0">
           <p className="text-sm text-foreground-600 mb-1">
-            {dayjs(data?.date.toISOString().slice(0, 10), {}).format(
-              "dddd, DD MMMM YYYY",
-            )}
+            {dayjs(data?.date.toISOString().slice(0, 10), {}).format("dddd, DD MMMM YYYY")}
           </p>
           <h2 className="text-xl font-semibold mb-1">{data?.title}</h2>
-          <p className="text-sm mb-4">
-            {data?.description || "Tidak ada deskripsi."}
-          </p>
+          <p className="text-sm mb-4">{data?.note ?? "Tidak ada cataan."}</p>
           <div className="flex justify-between items-center mb-4">
             <Chip color={data?.income ? "success" : "danger"} variant="flat">
               {data?.income ? "PEMASUKAN" : "PENGELUARAN"}
             </Chip>
-            <p
-              className={clsx(
-                "text-2xl font-bold",
-                data?.income ? "text-success-500" : "text-danger-500",
-              )}
-            >
-              {(data?.income ? "+" : "-") +
-                data?.amount.toLocaleString("id-ID")}
+            <p className={clsx("text-2xl font-bold", data?.income ? "text-success-500" : "text-danger-500")}>
+              {(data?.income ? "+" : "-") + data?.amount.toLocaleString("id-ID")}
             </p>
           </div>
           {data?.images.length !== 0 && (
@@ -67,9 +57,7 @@ const DetailHistoryModal = ({ data, onClose }: Props) => {
           )}
           {/* <Skeleton className="w-full aspect-video rounded-lg" /> */}
           <div className="flex items-center mt-3 justify-between">
-            <small className="text-xs text-foreground-500">
-              {dayjs(data?.createdAt).format("DD/MM/YYYY, HH:mm:ss")}
-            </small>
+            <small className="text-xs text-foreground-500">{dayjs(data?.createdAt).format("DD/MM/YYYY, HH:mm:ss")}</small>
             <User
               avatarProps={{
                 src: data?.author.avatar || "",

@@ -52,7 +52,7 @@ model FinancialHistory {
   id          String    @id @default(cuid())
   income      Boolean
   title       String
-  description String?
+  note        String?
   amount      Int
   images      String[]
   date        DateTime  @db.Date
@@ -72,7 +72,7 @@ model FinancialHistory {
 model Event {
   id          String   @id @default(cuid())
   title       String
-  description String?
+  note        String?
   location    String
   locationUrl String?
   startDate   DateTime @db.Date()

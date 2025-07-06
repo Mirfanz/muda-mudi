@@ -8,7 +8,7 @@ import {
   hashPassword,
   isAuthorizedOrThrow,
   verifyToken,
-} from "./utils";
+} from "./utils/server";
 
 import prisma from "@/prisma";
 import { RespType, UserType } from "@/types";

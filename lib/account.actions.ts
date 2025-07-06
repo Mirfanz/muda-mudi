@@ -7,7 +7,7 @@ import {
   verifyToken,
   comparePassword,
   getErrorMessage,
-} from "./utils";
+} from "./utils/server";
 
 import prisma from "@/prisma";
 import { RespType, UserType } from "@/types";

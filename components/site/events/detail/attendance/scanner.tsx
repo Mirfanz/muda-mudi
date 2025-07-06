@@ -47,7 +47,7 @@ const AttendanceScanner = ({ onScan, onSuccess, isOpen, onClose }: Props) => {
                 return Swal.fire({
                   icon: "warning",
                   title: "Gagal Absen",
-                  text: "Kode QR tidak valid atau sudah digunakan. Silakan coba lagi.",
+                  text: resp.message,
                 });
 
               Swal.fire({

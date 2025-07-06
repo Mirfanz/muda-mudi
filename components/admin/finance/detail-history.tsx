@@ -28,9 +28,7 @@ const DetailHistoryModal = ({ data, onClose }: Props) => {
             )}
           </p>
           <h2 className="text-xl font-semibold mb-1">{data?.title}</h2>
-          <p className="text-sm mb-4">
-            {data?.description || "Tidak ada deskripsi."}
-          </p>
+          <p className="text-sm mb-4">{data?.note || "Tidak ada catatan."}</p>
           <div className="flex justify-between items-center mb-4">
             <Chip color={data?.income ? "success" : "danger"} variant="flat">
               {data?.income ? "PEMASUKAN" : "PENGELUARAN"}

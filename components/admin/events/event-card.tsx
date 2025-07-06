@@ -43,7 +43,7 @@ const EventCard = ({ event }: Props) => {
         <div className="p-3 bg-foreground-100 rounded-lg">
           <p className="text-sm">Catatan:</p>
           <p className="text-sm text-foreground-600">
-            {event.description ?? "Tidak ada catatan."}
+            {event.note ?? "Tidak ada catatan."}
           </p>
         </div>
       </Card>

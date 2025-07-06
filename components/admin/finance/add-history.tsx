@@ -31,7 +31,7 @@ type Props = {
 const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
   const [fields, setFields] = React.useState<{
     title: string;
-    description?: string;
+    note?: string;
     date: DateValue | null;
     amount?: number;
     type: string;
@@ -60,7 +60,7 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
       income: fields.type == "income",
       title: fields.title,
       date,
-      description: fields.description,
+      note: fields.note,
     }).then((resp) => {
       if (!resp.success) {
         Swal.fire({
@@ -154,11 +154,9 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
             />
             <Textarea
               label="Deskripsi"
-              name="description"
-              value={fields.description}
-              onValueChange={(val) =>
-                setFields({ ...fields, description: val })
-              }
+              name="note"
+              value={fields.note}
+              onValueChange={(val) => setFields({ ...fields, note: val })}
             />
           </ModalBody>
           <ModalFooter>

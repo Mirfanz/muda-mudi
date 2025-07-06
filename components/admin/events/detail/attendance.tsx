@@ -15,14 +15,16 @@ import {
 import { UseQueryResult } from "@tanstack/react-query";
 import dayjs from "dayjs";
 import React from "react";
+import Swal from "sweetalert2";
 
 import AddAttendanceModal from "./add-attendance";
 import DetailAttendance from "./detail-attendance";
 
 import { AttendanceType, EventType } from "@/types";
-import { compareDate } from "@/lib/utils/client";
+import { dateStatus } from "@/lib/utils/client";
 import Loading from "@/components/loading";
 import ChipStatus from "@/components/chip-status";
+import { DeleteAttendance } from "@/lib/event.actions";
 
 type Props = {
   event: EventType;
@@ -77,7 +79,7 @@ const Attendance = ({ event, attendanceQuery }: Props) => {
             </TableHeader>
             <TableBody className="!bg-blue-600">
               {attendanceQuery.data?.map((attendance, i) => {
-                const gap = compareDate(attendance.start, attendance.end);
+                const gap = dateStatus(attendance.start, attendance.end);
 
                 return (
                   <TableRow key={attendance.id}>
@@ -110,6 +112,41 @@ const Attendance = ({ event, attendanceQuery }: Props) => {
                           color="danger"
                           size="sm"
                           variant="light"
+                          onPress={() => {
+                            Swal.fire({
+                              title: "Hapus Absensi?",
+                              text: "Data absensi yang dihapus tidak dapat dikembalikan.",
+                              icon: "warning",
+                              showCancelButton: true,
+                              confirmButtonText: "Ya, hapus",
+                              cancelButtonText: "Batal",
+                              confirmButtonColor: "#d33",
+                              cancelButtonColor: "#3085d6",
+                            }).then(({ isConfirmed }) => {
+                              if (!isConfirmed) return;
+                              DeleteAttendance({
+                                attendanceId: attendance.id,
+                              }).then((resp) => {
+                                if (!resp.success) {
+                                  return Swal.fire({
+                                    title: "Gagal",
+                                    text:
+                                      resp.message ||
+                                      "Gagal menghapus absensi.",
+                                    icon: "error",
+                                  });
+                                }
+                                Swal.fire({
+                                  title: "Berhasil",
+                                  text: "Absensi berhasil dihapus.",
+                                  icon: "success",
+                                  timer: 1500,
+                                  showConfirmButton: false,
+                                });
+                                attendanceQuery.refetch();
+                              });
+                            });
+                          }}
                         >
                           <TrashIcon className="w-4 h-4" />
                         </Button>
@@ -123,8 +160,10 @@ const Attendance = ({ event, attendanceQuery }: Props) => {
         )}
       </Card>
       <AddAttendanceModal
+        event={event}
         isOpen={showAddAttendance}
         onClose={() => setShowAddAttendance(false)}
+        onSuccess={() => attendanceQuery.refetch()}
       />
       <DetailAttendance
         attendance={showDetailAttendance}

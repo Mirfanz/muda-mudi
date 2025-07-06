@@ -10,7 +10,7 @@ import dayjs from "dayjs";
 import React from "react";
 
 import { AttendanceType } from "@/types";
-import { compareDate } from "@/lib/utils/client";
+import { dateStatus } from "@/lib/utils/client";
 import ChipStatus from "@/components/chip-status";
 
 type Props = {
@@ -31,13 +31,12 @@ const DetailAttendance = ({ attendance, onClose }: Props) => {
       size="5xl"
       onClose={onClose}
     >
-      <ModalContent className="h-[80dvh] bg-background">
+      <ModalContent className="h-[80dvh]">
         <ModalBody className="p-4">
           <div className="flex justify-between items-center">
             <div className="w-full abg-green-500">
               <Tabs
                 className=""
-                // color="primary"
                 selectedKey={activeTab}
                 variant="solid"
                 onSelectionChange={(key) => setActiveTab(key.toString())}
@@ -48,7 +47,7 @@ const DetailAttendance = ({ attendance, onClose }: Props) => {
             </div>
             <div className="w-full abg-red-500 text-center">
               <ChipStatus
-                status={compareDate(attendance?.start, attendance?.end)}
+                status={dateStatus(attendance?.start, attendance?.end)}
               />
             </div>
             <div className="w-full abg-blue-400 text-end">
@@ -62,7 +61,7 @@ const DetailAttendance = ({ attendance, onClose }: Props) => {
           <div className="h-full overflow-y-auto scrollbar-hide">
             <div className={clsx(activeTab != "present" ? "hidden" : "")}>
               {attendance.present.length ? (
-                <div className="p-1 grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-3 p-1">
                   {attendance.present.map((present) => (
                     <Card
                       key={present.id}
@@ -89,7 +88,7 @@ const DetailAttendance = ({ attendance, onClose }: Props) => {
             </div>
             <div className={clsx(activeTab !== "absent" ? "hidden" : "")}>
               {attendance.absent.length ? (
-                <div className="p-1 grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-3 gap-3 p-1">
                   {attendance.absent.map((absent) => (
                     <Card
                       key={absent.id}

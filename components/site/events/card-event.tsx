@@ -10,7 +10,7 @@ import Link from "next/link";
 import React from "react";
 
 import { EventType } from "@/types";
-import { compareDate } from "@/lib/utils/client";
+import { dateStatus } from "@/lib/utils/client";
 
 type Props = {
   event: EventType;
@@ -23,7 +23,7 @@ const statusColor = {
 };
 
 const CardEvent = ({ event }: Props) => {
-  const gap = compareDate(event.startDate, event.endDate);
+  const gap = dateStatus(event.startDate, event.endDate, true);
 
   return (
     <Card

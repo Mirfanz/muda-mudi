@@ -117,3 +117,10 @@ export const isAuthorizedOrThrow = (
 ) => {
   if (!authorizedRoles.includes(userRole)) throw new Error("unauthorized");
 };
+
+export const respError = (
+  message: string,
+): { success: false; message: string } => ({
+  success: false,
+  message,
+});

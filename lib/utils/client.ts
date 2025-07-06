@@ -1,20 +1,30 @@
-export function compareDate(
+export function dateStatus(
   startDate: Date | string,
   endDate?: Date | string,
-  includeTime: boolean = false,
+  dateOnly = false,
 ): number {
-  const d1 = new Date(startDate).setHours(0, 0, 0, 0);
-  const d2 = endDate ? new Date(endDate).setHours(0, 0, 0, 0) : null;
-  const now = new Date().setHours(0, 0, 0, 0);
-  const divider = includeTime ? 1 : 1000 * 60 * 60 * 24;
+  const now = new Date();
+  let start = new Date(startDate);
+  let end = endDate ? new Date(endDate) : undefined;
 
-  if (!d2) return (d1 - now) / divider;
-  if (now < d1) return (d1 - now) / divider;
-  if (now > d2) return (d2 - now) / divider;
+  if (dateOnly) {
+    now.setHours(0, 0, 0, 0);
+    start.setHours(0, 0, 0, 0);
+    if (end) end.setHours(0, 0, 0, 0);
+  }
 
-  return 0;
+  let result: number;
+
+  if (!end)
+    result = (start.getTime() - now.getTime()) / (dateOnly ? 86400000 : 1);
+  else if (now < start)
+    result = (start.getTime() - now.getTime()) / (dateOnly ? 86400000 : 1);
+  else if (now > end)
+    result = (end.getTime() - now.getTime()) / (dateOnly ? 86400000 : 1);
+  else result = 0;
+
+  return Math.floor(result);
 }
-
 export function age(birthDate: Date | string): number {
   const date = new Date(birthDate);
   const today = new Date();

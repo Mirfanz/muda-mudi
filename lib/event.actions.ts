@@ -1,8 +1,15 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { Role } from "@prisma/client";
 
-import { getErrorMessage, verifyToken } from "./utils";
+import {
+  getErrorMessage,
+  isAuthorized,
+  isAuthorizedOrThrow,
+  respError,
+  verifyToken,
+} from "./utils/server";
 
 import prisma from "@/prisma";
 import {
@@ -29,7 +36,7 @@ export const FindEvents = async ({
         id: true,
         title: true,
         cover: true,
-        description: true,
+        note: true,
         startDate: true,
         endDate: true,
         images: true,
@@ -81,7 +88,7 @@ export const FindEventById = async ({
         id: true,
         title: true,
         cover: true,
-        description: true,
+        note: true,
         startDate: true,
         endDate: true,
         images: true,
@@ -157,6 +164,9 @@ export const FindEventAttendances = async ({
           },
         },
       },
+      orderBy: {
+        start: "asc",
+      },
     });
 
     const data: AttendanceType[] = result.map((attendance) => {
@@ -164,7 +174,8 @@ export const FindEventAttendances = async ({
       const absent: AttendeesType[] = [];
 
       attendance.attendees.forEach((attendee) => {
-        attendee.presentAt ? present.push(attendee) : absent.push(attendee);
+        if (attendee.presentAt) present.push(attendee);
+        else if (attendee.isMandatory) absent.push(attendee);
       });
 
       return {
@@ -201,7 +212,7 @@ export const FindEventCosts = async ({
         id: true,
         income: true,
         title: true,
-        description: true,
+        note: true,
         amount: true,
         images: true,
         date: true,
@@ -250,11 +261,22 @@ export const SubmitAttendance = async ({
 
     if (!payload) throw new Error("Invalid Token");
 
+    const now = new Date();
+
+    const attendance = await prisma.attendance.findUnique({
+      where: { id: code },
+    });
+
+    if (!attendance) return respError("Kode tidak valid");
+
+    if (now < attendance.start) return respError("Absensi belum dimulai");
+    if (now > attendance.end) return respError("Absensi sudah ditutup");
+
     const result = await prisma.attendees.upsert({
-      where: { id: code + payload.user.id },
+      where: { id: `${code}_${payload.user.id}`, presentAt: null },
       update: { presentAt: new Date() },
       create: {
-        id: code + payload.user.id,
+        id: `${code}_${payload.user.id}`,
         userId: payload.user.id,
         attendanceId: code,
         isMandatory: false,
@@ -292,5 +314,89 @@ export const SubmitAttendance = async ({
       success: false,
       message: getErrorMessage(error.code, error.message),
     };
+  }
+};
+
+export const CreateAttendance = async ({
+  eventId,
+  end,
+  start,
+  attendees,
+}: {
+  eventId: string;
+  start: Date;
+  end: Date;
+  attendees: Role[];
+}): Promise<RespType<{}>> => {
+  try {
+    const payload = await verifyToken((await cookies()).get("_session")?.value);
+
+    if (!payload) throw new Error("Invalid Token");
+    isAuthorizedOrThrow(payload.user.role, [
+      Role.Admin,
+      Role.Sekretaris,
+      Role.Ketua,
+    ]);
+
+    const result = await prisma.attendance.create({
+      data: { eventId, start, end },
+    });
+
+    if (attendees.length) {
+      const result2 = await prisma.user.findMany({
+        where: { role: { in: attendees }, active: true },
+        select: { id: true },
+      });
+
+      if (result2.length) {
+        await prisma.attendees.createMany({
+          data: result2.map((user) => ({
+            id: `${result.id}_${user.id}`,
+            isMandatory: true,
+            attendanceId: result.id,
+            userId: user.id,
+          })),
+          skipDuplicates: true,
+        });
+      }
+    }
+
+    return {
+      success: true,
+      message: "",
+      data: {},
+    };
+  } catch (error: any) {
+    return {
+      success: false,
+      message: getErrorMessage(error.code, error.message),
+    };
+  }
+};
+
+export const DeleteAttendance = async ({
+  attendanceId,
+}: {
+  attendanceId: string;
+}): Promise<RespType> => {
+  const payload = await verifyToken((await cookies()).get("_session")?.value);
+
+  if (!payload) return respError("Token tidak valid");
+  if (
+    !isAuthorized(payload.user.role, [Role.Admin, Role.Sekretaris, Role.Ketua])
+  )
+    return respError("Maaf anda tidak diizinkan menghapus absensi");
+  try {
+    const result = await prisma.attendance.delete({
+      where: { id: attendanceId },
+    });
+
+    return {
+      success: true,
+      message: "Absensi dihapus",
+      data: {},
+    };
+  } catch (error) {
+    return respError("Gagal menghapus absensi");
   }
 };

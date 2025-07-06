@@ -52,9 +52,7 @@ const EventAbout = ({ event, isActive }: Props) => {
       </Card>
       <div className="mb-6">
         <h5 className="font-medium">Catatan:</h5>
-        <p className="text-sm">
-          {event.description ?? <i>Tidak ada catatan</i>}
-        </p>
+        <p className="text-sm">{event.note ?? <i>Tidak ada catatan</i>}</p>
       </div>
     </section>
   );

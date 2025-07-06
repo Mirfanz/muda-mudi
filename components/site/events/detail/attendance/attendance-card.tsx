@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import React from "react";
 
 import { AttendanceType } from "@/types";
-import { compareDate } from "@/lib/utils/client";
+import { dateStatus } from "@/lib/utils/client";
 import ChipStatus from "@/components/chip-status";
 
 type Props = {
@@ -16,17 +16,18 @@ type Props = {
 };
 
 const AttendanceCard = ({ attendance, showDetail }: Props) => {
-  const gap = compareDate(attendance.start, attendance.end);
+  const gap = dateStatus(attendance.start, attendance.end);
 
   return (
     <Card isPressable shadow="sm" onPress={() => showDetail?.(attendance)}>
       <CardBody className="gap-3">
-        <div className="flex justify-between text-sm font-medium">
+        <div className="flex justify-between items-center text-sm font-medium">
           <p>{dayjs(attendance.start).format("DD-MM-YYYY, HH:mm")}</p>
+          {" <-> "}
           <p>{dayjs(attendance.end).format("DD-MM-YYYY, HH:mm")}</p>
         </div>
         <div className="flex flex-row justify-between items-center gap-2">
-          <ChipStatus status={gap} />
+          <ChipStatus className="me-auto" status={gap} />
           <Button size="sm" variant="flat">
             {attendance.present.length} Hadir
           </Button>
