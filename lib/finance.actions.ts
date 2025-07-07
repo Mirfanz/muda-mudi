@@ -68,12 +68,14 @@ export const AddFinanceHistory = async ({
   amount,
   date,
   note,
+  eventId,
 }: {
   title: string;
   note?: string;
   amount: number;
   date: string;
   income: boolean;
+  eventId?: string;
 }): Promise<RespType<FinancialHistoryType>> => {
   try {
     const payload = await verifyToken((await cookies()).get("_session")?.value);
@@ -88,11 +90,8 @@ export const AddFinanceHistory = async ({
         amount,
         note,
         income,
-        author: {
-          connect: {
-            id: payload.user.id,
-          },
-        },
+        eventId,
+        authorId: payload.user.id,
       },
       select: {
         id: true,

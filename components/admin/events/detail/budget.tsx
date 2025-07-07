@@ -8,6 +8,9 @@ import React from "react";
 import { Button } from "@heroui/button";
 import { Alert } from "@heroui/alert";
 
+import AddHistoryModal from "../../finance/add-history";
+
+import DetailHistoryModal from "@/components/site/finance/detail-history";
 import Loading from "@/components/loading";
 import dayjs from "@/lib/utils/dayjs";
 import { EventType, FinancialHistoryType } from "@/types";
@@ -19,6 +22,9 @@ type Props = {
 
 const Budget = ({ event, budgetQuery }: Props) => {
   const [budgetTotal, setBudgetTotal] = React.useState(0);
+  const [addFinanceModal, setAddFinanceModal] = React.useState(false);
+  const [shownDetailHistory, setShownDetailHistory] =
+    React.useState<FinancialHistoryType | null>(null);
 
   React.useEffect(() => {
     if (budgetQuery.data?.length) {
@@ -34,14 +40,25 @@ const Budget = ({ event, budgetQuery }: Props) => {
       <Card className="p-6">
         <div className="flex items-center">
           <h3 className="text-lg font-medium me-auto">Rekap Anggaran</h3>
-          <Button color="primary" size="sm">
+          <Button
+            color="primary"
+            size="sm"
+            onPress={() => setAddFinanceModal(true)}
+          >
             Tambah
           </Button>
         </div>
         <Divider className="my-4" />
         <div className="space-y-4">
           {budgetQuery.data?.map((budget) => (
-            <div key={budget.id} className="">
+            <Card
+              key={budget.id}
+              fullWidth
+              isPressable
+              radius="none"
+              shadow="none"
+              onPress={() => setShownDetailHistory(budget)}
+            >
               <div className="flex justify-between">
                 <span className="text-sm font-medium text-foreground-700">
                   {budget.title}
@@ -66,7 +83,7 @@ const Budget = ({ event, budgetQuery }: Props) => {
                   {Math.round((budget.amount / budgetTotal) * 100)}% Pengeluaran
                 </span>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
         {budgetQuery.isFetched && !budgetQuery.data?.length && (
@@ -91,6 +108,16 @@ const Budget = ({ event, budgetQuery }: Props) => {
           </span>
         </div>
       </Card>
+      <AddHistoryModal
+        event={event}
+        isOpen={addFinanceModal}
+        onClose={() => setAddFinanceModal(false)}
+        onSuccess={() => budgetQuery.refetch}
+      />
+      <DetailHistoryModal
+        data={shownDetailHistory}
+        onClose={() => setShownDetailHistory(null)}
+      />
     </section>
   );
 };

@@ -16,6 +16,7 @@ import {
 import { useDisclosure } from "@heroui/modal";
 import { Switch } from "@heroui/switch";
 import { Checkbox } from "@heroui/checkbox";
+import { Role } from "@prisma/client";
 
 import UserCard from "./user-card";
 
@@ -27,16 +28,6 @@ import { age } from "@/lib/utils/client";
 
 type Props = {};
 
-const roles = [
-  "ADMIN",
-  "PEMBINA",
-  "KETUA",
-  "SEKRETARIS",
-  "BENDAHARA",
-  "ANGGOTA",
-  "ALUMNI",
-];
-
 const Account = (props: Props) => {
   const auth = useAuth();
   const {
@@ -47,7 +38,7 @@ const Account = (props: Props) => {
 
   const [filter, setFilter] = useState({
     activeOnly: false,
-    hideRoles: ["Admin"] as string[],
+    hideRoles: ["Admin"] as Role[],
   });
 
   const { data, isLoading, isPending } = useQuery({
@@ -61,7 +52,7 @@ const Account = (props: Props) => {
     },
   });
 
-  const handleHideRoleChange = (val: boolean, role: string) => {
+  const handleHideRoleChange = (val: boolean, role: Role) => {
     const newHideRoles = [...filter.hideRoles];
     const index = newHideRoles.indexOf(role);
 
@@ -177,7 +168,7 @@ const Account = (props: Props) => {
               />
             </div>
             <p>Kategori Yang Ditampilkan:</p>
-            {roles.map((role) => (
+            {Object.values(Role).map((role) => (
               <Checkbox
                 key={role}
                 isSelected={!filter.hideRoles.includes(role)}

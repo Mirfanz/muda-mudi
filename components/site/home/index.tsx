@@ -73,6 +73,11 @@ const listMenu = [
     href: "#",
   },
 ];
+const cover = [
+  "/src/images/banner/1.png",
+  "/src/images/banner/2.png",
+  "/src/images/banner/3.png",
+];
 
 type Props = {};
 
@@ -81,24 +86,19 @@ const Home = (props: Props) => {
     <main>
       <section className="">
         <Swiper
-          autoplay
+          autoplay={{
+            delay: 10000,
+          }}
           className="!p-2 !pb-0"
           effect="coverflow"
           modules={[EffectCoverflow, Autoplay, Pagination]}
-          pagination={{
-            el: ".pagi",
-          }}
+          pagination={{ el: ".pagi" }}
           spaceBetween={10}
         >
-          {[1, 2, 3].map((i) => (
+          {cover.map((i) => (
             <SwiperSlide key={i}>
               <div className="aspect-[5/2] flex justify-center items-center p-2">
-                <Image
-                  fill
-                  alt="sdsds"
-                  className="rounded-lg"
-                  src={"/src/images/bg.jpg"}
-                />
+                <Image fill alt="sdsds" className="rounded-lg" src={i} />
               </div>
             </SwiperSlide>
           ))}

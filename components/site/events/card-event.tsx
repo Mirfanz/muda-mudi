@@ -1,13 +1,12 @@
 "use client";
 
-import { CameraIcon, MapPinIcon } from "@heroicons/react/24/solid";
+import { MapPinIcon } from "@heroicons/react/24/solid";
 import { Badge } from "@heroui/badge";
-import { Card, CardBody } from "@heroui/card";
-import { Chip } from "@heroui/chip";
-import clsx from "clsx";
+import { Card, CardBody, CardProps } from "@heroui/card";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import dayjs from "dayjs";
 
 import { EventType } from "@/types";
 import { dateStatus } from "@/lib/utils/client";
@@ -15,42 +14,35 @@ import ChipStatus from "@/components/chip-status";
 
 type Props = {
   event: EventType;
-};
+} & CardProps;
 
-const statusColor = {
-  ongoing: "success",
-  passed: "default",
-  soon: "warning",
-};
-
-const CardEvent = ({ event }: Props) => {
-  const status = dateStatus(event.startDate, event.endDate, true);
+const CardEvent = (props: Props) => {
+  const status = dateStatus(props.event.startDate, props.event.endDate, true);
 
   return (
     <Card
       isPressable
+      {...props}
+      fullWidth
       as={Link}
-      className={clsx(status == "now" ? "order-none" : "order-1", "w-full")}
-      href={"/events/" + event.id}
+      href={"/events/" + props.event.id}
     >
       <CardBody className="flex-row justify-between">
         <div className="flex flex-grow flex-col">
           <p className="font-semibold mb-1 text-sm line-clamp-2">
-            {event.title}
+            {props.event.title}
           </p>
           <small className="text-xs flex gap-1">
             <MapPinIcon className="w-4 h-4" />
-            {event.location}
+            {props.event.location}
           </small>
-          <div className="flex mt-auto gap-1">
+          <div className="flex mt-auto gap-2 items-center">
             <ChipStatus status={status} />
-            <Chip
-              radius="md"
-              startContent={<CameraIcon className="w-4 h-4 ms-2" />}
-              variant="flat"
-            >
-              {event.images.length}
-            </Chip>
+            <p className="text-xs">
+              {dayjs(props.event.startDate.toISOString().slice(0, 10)).format(
+                "DD MMM YYYY",
+              )}
+            </p>
           </div>
         </div>
         <Badge
@@ -65,15 +57,15 @@ const CardEvent = ({ event }: Props) => {
               fill
               alt="sds"
               className="absolute"
-              src={event.cover ?? "/src/images/bg.jpg"}
+              src={props.event.cover ?? "/src/images/bg.jpg"}
             />
             <span className="z-10 font-bold">
-              {event.startDate.toLocaleDateString("id-ID", {
+              {props.event.startDate.toLocaleDateString("id-ID", {
                 day: "2-digit",
               })}
             </span>
             <span className="z-10 font-bold">
-              {event.startDate.toLocaleDateString("id-ID", {
+              {props.event.startDate.toLocaleDateString("id-ID", {
                 month: "short",
               })}
             </span>

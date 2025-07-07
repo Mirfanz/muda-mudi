@@ -20,15 +20,24 @@ import Swal from "sweetalert2";
 import { addToast } from "@heroui/toast";
 
 import { AddFinanceHistory } from "@/lib/finance.actions";
+import { EventType } from "@/types";
+import CardEvent from "@/components/site/events/card-event";
 
 type Props = {
   isOpen: boolean;
+  event?: EventType;
   onClose: () => void;
   onSuccess?: () => void;
   onError?: (message?: string) => void;
 };
 
-const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
+const AddHistoryModal = ({
+  isOpen,
+  event,
+  onClose,
+  onSuccess,
+  onError,
+}: Props) => {
   const [fields, setFields] = React.useState<{
     title: string;
     note?: string;
@@ -61,6 +70,7 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
       title: fields.title,
       date,
       note: fields.note,
+      eventId: event?.id,
     }).then((resp) => {
       if (!resp.success) {
         Swal.fire({
@@ -91,8 +101,9 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
     <Modal hideCloseButton isOpen={isOpen}>
       <Form validationBehavior="native" onSubmit={handleSubmit}>
         <ModalContent>
-          <ModalHeader>Add New History</ModalHeader>
-          <ModalBody>
+          <ModalHeader>Tambah History Keuangan</ModalHeader>
+          <ModalBody className="">
+            {!!event && <CardEvent className="mb-3 -mt-2" event={event} />}
             <Input
               isRequired
               labelPlacement="outside"
@@ -153,7 +164,7 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
               onChange={(val) => setFields({ ...fields, date: val })}
             />
             <Textarea
-              label="Deskripsi"
+              label="Catatan"
               name="note"
               value={fields.note}
               onValueChange={(val) => setFields({ ...fields, note: val })}
@@ -162,7 +173,7 @@ const AddHistoryModal = ({ isOpen, onClose, onSuccess, onError }: Props) => {
           <ModalFooter>
             <Button onPress={onClose}>Cancel</Button>
             <Button color="primary" type="submit">
-              Save
+              Simpan
             </Button>
           </ModalFooter>
         </ModalContent>

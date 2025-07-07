@@ -28,8 +28,8 @@ const ChipStatus = (props: Props) => {
     <Chip
       {...props}
       color={status[props.status].color}
-      size="sm"
-      variant="flat"
+      size={props.size ?? "sm"}
+      variant={props.variant ?? "flat"}
     >
       {status[props.status].content}
     </Chip>

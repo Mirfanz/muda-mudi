@@ -15,13 +15,13 @@ datasource db {
 }
 
 enum Role {
-  Admin
   Pembina
   Ketua
   Sekretaris
   Bendahara
   Anggota
   Senior
+  Admin
 }
 
 model User {

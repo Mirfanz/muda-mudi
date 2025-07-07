@@ -8,9 +8,13 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination } from "swiper/modules";
 import Image from "next/image";
+import { CalendarDateRangeIcon } from "@heroicons/react/24/outline";
+import { Button } from "@heroui/button";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-import { FinancialHistoryType } from "@/types";
 import dayjs from "@/lib/utils/dayjs";
+import { FinancialHistoryType } from "@/types";
 
 type Props = {
   data: FinancialHistoryType | null;
@@ -18,15 +22,37 @@ type Props = {
 };
 
 const DetailHistoryModal = ({ data, onClose }: Props) => {
+  const pathname = usePathname();
+
   return (
-    <Modal isOpen={data !== null} onClose={onClose}>
+    <Modal hideCloseButton isOpen={data !== null} onClose={onClose}>
       <ModalContent>
         <ModalBody className="p-4 gap-0">
-          <p className="text-sm text-foreground-600 mb-1">
-            {dayjs(data?.date.toISOString().slice(0, 10), {}).format(
-              "dddd, DD MMMM YYYY",
+          <div className="flex mb-1 items-center gap-2">
+            <p className="text-sm text-foreground-600">
+              {dayjs(data?.date.toISOString().slice(0, 10), {}).format(
+                "dddd, DD MMMM YYYY",
+              )}
+            </p>
+            {!!data?.eventId && (
+              <Button
+                as={Link}
+                className="ms-auto"
+                color="primary"
+                href={
+                  pathname.startsWith("/admin")
+                    ? `/admin/events/${data.eventId}`
+                    : `/events/${data.eventId}`
+                }
+                radius="full"
+                size="sm"
+                startContent={<CalendarDateRangeIcon className="w-4 h-4" />}
+                variant="light"
+              >
+                Kunjungi Acara
+              </Button>
             )}
-          </p>
+          </div>
           <h2 className="text-xl font-semibold mb-1">{data?.title}</h2>
           <p className="text-sm mb-4">{data?.note ?? "Tidak ada cataan."}</p>
           <div className="flex justify-between items-center mb-4">

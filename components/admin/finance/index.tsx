@@ -11,8 +11,8 @@ import Header from "../header";
 
 import TableHistories from "./table-histories";
 import AddHistoryModal from "./add-history";
-import DetailHistoryModal from "./detail-history";
 
+import DetailHistoryModal from "@/components/site/finance/detail-history";
 import { FinancialHistoryType } from "@/types";
 import {
   DeleteFinanceHistory,
