@@ -76,6 +76,116 @@ export const FindEvents = async ({
   }
 };
 
+export const CreateEvent = async ({
+  title,
+  start,
+  end,
+  location,
+  locationUrl,
+  note,
+  coverUrl,
+}: {
+  title: string;
+  location: string;
+  locationUrl?: string;
+  start: string;
+  end: string;
+  note?: string;
+  coverUrl?: string;
+}): Promise<RespType<EventType>> => {
+  try {
+    const payload = await verifyToken((await cookies()).get("_session")?.value);
+
+    if (!payload) return respError("Token tidak valid");
+    if (
+      !isAuthorized(payload.user.role, [
+        Role.Admin,
+        Role.Sekretaris,
+        Role.Ketua,
+      ])
+    )
+      return respError("Maaf anda tidak diizinkan membuat event");
+
+    const result = await prisma.event.create({
+      data: {
+        authorId: payload.user.id,
+        title,
+        location,
+        locationUrl,
+        startDate: new Date(start),
+        endDate: new Date(end),
+        note,
+        cover: coverUrl,
+      },
+      select: {
+        id: true,
+        title: true,
+        cover: true,
+        note: true,
+        startDate: true,
+        endDate: true,
+        images: true,
+        location: true,
+        locationUrl: true,
+        updatedAt: true,
+        createdAt: true,
+        authorId: true,
+        author: {
+          select: {
+            id: true,
+            active: true,
+            avatar: true,
+            birth: true,
+            inStudy: true,
+            isMale: true,
+            name: true,
+            phone: true,
+            role: true,
+          },
+        },
+      },
+    });
+
+    return {
+      success: true,
+      message: "Event baru dibuat",
+      data: result,
+    };
+  } catch (error: any) {
+    return respError(getErrorMessage(error.code, "Terjadi kesalahan"));
+  }
+};
+
+export const DeleteEvent = async ({
+  eventId,
+}: {
+  eventId: string;
+}): Promise<RespType> => {
+  try {
+    const payload = await verifyToken((await cookies()).get("_session")?.value);
+
+    if (!payload) return respError("Token tidak valid");
+    if (
+      !isAuthorized(payload.user.role, [
+        Role.Admin,
+        Role.Sekretaris,
+        Role.Ketua,
+      ])
+    )
+      return respError("Maaf anda tidak diizinkan menghapus event");
+
+    const result = await prisma.event.delete({ where: { id: eventId } });
+
+    return {
+      success: true,
+      message: "Event berhasil dihapus",
+      data: {},
+    };
+  } catch (error: any) {
+    return respError(getErrorMessage(error.code, "Gagal menghapus event"));
+  }
+};
+
 export const FindEventById = async ({
   eventId,
 }: {

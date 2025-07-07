@@ -64,7 +64,7 @@ model FinancialHistory {
   eventId     String?
   author      User    @relation("AuthorFinancialHistory", fields: [authorId], references: [id])
   deletedBy   User?   @relation("DeleterFinancialHistory", fields: [deletedById], references: [id])
-  event       Event?  @relation("EventCost", fields: [eventId], references: [id])
+  event       Event?  @relation("EventCost", fields: [eventId], references: [id], onDelete: Restrict)
 
   @@map("financial_histories")
 }

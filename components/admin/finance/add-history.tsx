@@ -49,6 +49,7 @@ const AddHistoryModal = ({
     date: null,
     type: "",
   });
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const resetFields = () => {
     setFields({
@@ -60,10 +61,11 @@ const AddHistoryModal = ({
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (isLoading) return;
     const date = fields.date?.toString().slice(0, 10);
 
-    if (!date) return;
-    if (!fields.amount) return;
+    if (!date || !fields.amount) return;
+    setIsLoading(true);
     AddFinanceHistory({
       amount: fields.amount,
       income: fields.type == "income",
@@ -71,26 +73,28 @@ const AddHistoryModal = ({
       date,
       note: fields.note,
       eventId: event?.id,
-    }).then((resp) => {
-      if (!resp.success) {
-        Swal.fire({
-          icon: "error",
-          titleText: "Process Failed",
-          text: resp.message,
-          draggable: true,
-        });
-        onError?.(resp.message);
+    })
+      .then((resp) => {
+        if (!resp.success) {
+          Swal.fire({
+            icon: "error",
+            titleText: "Process Failed",
+            text: resp.message,
+            draggable: true,
+          });
+          onError?.(resp.message);
 
-        return;
-      }
-      addToast({
-        title: "Successfully",
-        description: "History telah ditambahkan",
-        color: "success",
-      });
-      onClose();
-      onSuccess?.();
-    });
+          return;
+        }
+        addToast({
+          title: "Successfully",
+          description: "History telah ditambahkan",
+          color: "success",
+        });
+        onClose();
+        onSuccess?.();
+      })
+      .finally(() => setIsLoading(false));
   };
 
   React.useEffect(() => {
@@ -172,7 +176,7 @@ const AddHistoryModal = ({
           </ModalBody>
           <ModalFooter>
             <Button onPress={onClose}>Cancel</Button>
-            <Button color="primary" type="submit">
+            <Button color="primary" isLoading={isLoading} type="submit">
               Simpan
             </Button>
           </ModalFooter>

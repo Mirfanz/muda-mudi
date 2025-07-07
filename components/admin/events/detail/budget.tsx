@@ -112,7 +112,7 @@ const Budget = ({ event, budgetQuery }: Props) => {
         event={event}
         isOpen={addFinanceModal}
         onClose={() => setAddFinanceModal(false)}
-        onSuccess={() => budgetQuery.refetch}
+        onSuccess={() => budgetQuery.refetch()}
       />
       <DetailHistoryModal
         data={shownDetailHistory}

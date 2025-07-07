@@ -17,9 +17,10 @@ import { EventType } from "@/types";
 
 type Props = {
   event: EventType;
+  deleteEvent: (eventId: string) => void;
 };
 
-const EventCard = ({ event }: Props) => {
+const EventCard = ({ event, deleteEvent }: Props) => {
   return (
     <div className="flex gap-2 w-full justify-end">
       <Card fullWidth className="p-4">
@@ -58,10 +59,16 @@ const EventCard = ({ event }: Props) => {
         >
           <EyeIcon className="w-4 h-4" />
         </Button>
-        <Button isIconOnly color="primary" size="sm" variant="flat">
+        <Button isDisabled isIconOnly color="primary" size="sm" variant="flat">
           <PencilSquareIcon className="w-4 h-4" />
         </Button>
-        <Button isIconOnly color="danger" size="sm" variant="flat">
+        <Button
+          isIconOnly
+          color="danger"
+          size="sm"
+          variant="flat"
+          onPress={() => deleteEvent(event.id)}
+        >
           <TrashIcon className="w-4 h-4" />
         </Button>
       </div>
