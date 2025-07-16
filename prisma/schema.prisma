@@ -49,15 +49,15 @@ model User {
 }
 
 model FinancialHistory {
-  id          String    @id @default(cuid())
-  income      Boolean
-  title       String
-  note        String?
-  amount      Int
-  images      String[]
-  date        DateTime  @db.Date
-  createdAt   DateTime  @default(now())
-  deletedAt   DateTime? @db.Timestamptz()
+  id        String    @id @default(cuid())
+  income    Boolean
+  title     String
+  note      String?
+  amount    Int
+  images    String[]
+  date      DateTime  @db.Date
+  createdAt DateTime  @default(now())
+  deletedAt DateTime? @db.Timestamptz()
 
   authorId    String
   deletedById String?

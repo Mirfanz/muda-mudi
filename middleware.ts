@@ -10,6 +10,8 @@ export default async function middleware(req: NextRequest) {
   const authToken = req.cookies.get("_session")?.value;
   const isAuthenticated = await verifyToken(authToken || "");
 
+  if (pathname.startsWith("/donation")) return NextResponse.next();
+
   // Jika user belum login dan akses halaman selain auth/login
   if (!isAuthenticated && !pathname.startsWith("/auth/login")) {
     const redirectUrl = new URL("/auth/login", req.url);

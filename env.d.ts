@@ -4,5 +4,6 @@ declare namespace NodeJS {
     JWT_SECRET: string;
     SALT_ROUNDS: string;
     DEFAULT_PASSWORD: string;
+    TRAKTEER_KEY: string;
   }
 }

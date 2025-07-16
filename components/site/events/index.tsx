@@ -23,7 +23,7 @@ const Events = (props: Props) => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["events"],
+    queryKey: ["find-events"],
     initialPageParam: 1,
     queryFn: async ({ pageParam = 1 }) => {
       const resp = await FindEvents({ page: pageParam });
