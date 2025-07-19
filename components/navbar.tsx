@@ -132,10 +132,9 @@ export const Navbar = ({ hideBrand, startContent, endContent }: Props) => {
                   isIconOnly
                   as={Link}
                   className="text-primary-foreground animate-appearance-in"
-                  href={"/finance/donation"}
+                  href={"/donation"}
                   radius="full"
                   size="sm"
-                  target="_blank"
                   title="Donate"
                   variant="light"
                 >

@@ -4,8 +4,8 @@ import {
   BanknotesIcon,
   CalendarDateRangeIcon,
   UserGroupIcon,
-  HeartIcon,
   RectangleStackIcon,
+  CurrencyDollarIcon,
 } from "@heroicons/react/24/solid";
 
 export type SiteConfig = typeof siteConfig;
@@ -28,10 +28,10 @@ export const siteConfig = {
       isActive: (path: string) => /^\/finance/.test(path),
     },
     {
-      label: "Donation",
-      href: "/donation",
-      icon: HeartIcon,
-      isActive: (path: string) => /^\/donation/.test(path),
+      label: "Iuran",
+      href: "/charge",
+      icon: CurrencyDollarIcon,
+      isActive: (path: string) => /^\/charge/.test(path),
     },
     {
       label: "Acara",

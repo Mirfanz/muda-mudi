@@ -4,6 +4,8 @@ import {
   FinancialHistory,
   Attendance,
   Attendees,
+  Charge,
+  ChargedUser,
 } from "@prisma/client";
 import { JWTPayload } from "jose";
 import { SVGProps } from "react";
@@ -51,4 +53,16 @@ export type EventType = Event & {
 
 export type DetailEventType = EventType & {
   attendances: AttendanceType[];
+};
+
+export type ChargedUserType = ChargedUser & {
+  user: UserType;
+};
+
+export type ChargeType = Charge & {
+  author: UserType;
+  users: {
+    unpaid: ChargedUserType[];
+    paid: ChargedUserType[];
+  };
 };

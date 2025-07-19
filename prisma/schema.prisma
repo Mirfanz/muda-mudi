@@ -25,17 +25,16 @@ enum Role {
 }
 
 model User {
-  id       String   @id @default(cuid())
-  name     String
-  phone    String   @unique
-  password String
-  isMale   Boolean
-  avatar   String?
-  role     Role
-  birth    DateTime @db.Date()
-  active   Boolean  @default(true)
-  inStudy  Boolean  @default(false)
-
+  id        String    @id @default(cuid())
+  name      String
+  phone     String    @unique
+  password  String
+  isMale    Boolean
+  avatar    String?
+  role      Role      @default(Anggota)
+  birth     DateTime  @db.Date()
+  active    Boolean   @default(true)
+  inStudy   Boolean   @default(false)
   deletedAt DateTime? @db.Timestamptz()
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -44,27 +43,29 @@ model User {
   financialHistories        FinancialHistory[] @relation("AuthorFinancialHistory")
   events                    Event[]            @relation("AuthorEvent")
   attendancePresent         Attendees[]        @relation("UserAttendees")
+  charged                   ChargedUser[]      @relation("Charges")
+  charges                   Charge[]           @relation("AuthorCharge")
 
   @@map("users")
 }
 
 model FinancialHistory {
-  id        String    @id @default(cuid())
-  income    Boolean
-  title     String
-  note      String?
-  amount    Int
-  images    String[]
-  date      DateTime  @db.Date
-  createdAt DateTime  @default(now())
-  deletedAt DateTime? @db.Timestamptz()
-
+  id          String    @id @default(cuid())
+  income      Boolean
+  title       String
+  note        String?
+  amount      Int
+  images      String[]
+  date        DateTime  @db.Date
+  createdAt   DateTime  @default(now())
+  deletedAt   DateTime? @db.Timestamptz()
   authorId    String
   deletedById String?
   eventId     String?
-  author      User    @relation("AuthorFinancialHistory", fields: [authorId], references: [id])
-  deletedBy   User?   @relation("DeleterFinancialHistory", fields: [deletedById], references: [id])
-  event       Event?  @relation("EventCost", fields: [eventId], references: [id], onDelete: Restrict)
+
+  author    User   @relation("AuthorFinancialHistory", fields: [authorId], references: [id])
+  deletedBy User?  @relation("DeleterFinancialHistory", fields: [deletedById], references: [id])
+  event     Event? @relation("EventCost", fields: [eventId], references: [id], onDelete: Restrict)
 
   @@map("financial_histories")
 }
@@ -81,8 +82,8 @@ model Event {
   images      String[]
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
-
   authorId    String
+
   author      User               @relation("AuthorEvent", fields: [authorId], references: [id])
   attendances Attendance[]       @relation("EventAttendance")
   costs       FinancialHistory[] @relation("EventCost")
@@ -91,11 +92,12 @@ model Event {
 }
 
 model Attendance {
-  id        String      @id @default(cuid())
+  id        String   @id @default(cuid())
   start     DateTime
   end       DateTime
-  createdAt DateTime    @default(now())
+  createdAt DateTime @default(now())
   eventId   String
+
   event     Event       @relation("EventAttendance", fields: [eventId], references: [id], onDelete: Cascade)
   attendees Attendees[] @relation("Attendees")
 
@@ -103,14 +105,40 @@ model Attendance {
 }
 
 model Attendees {
-  id          String    @id
-  isMandatory Boolean
-  presentAt   DateTime?
-
+  id           String    @id
+  isMandatory  Boolean
+  presentAt    DateTime?
   attendanceId String
   userId       String
-  attendance   Attendance @relation("Attendees", fields: [attendanceId], references: [id], onDelete: Cascade)
-  user         User       @relation("UserAttendees", fields: [userId], references: [id], onDelete: Cascade)
+
+  attendance Attendance @relation("Attendees", fields: [attendanceId], references: [id], onDelete: Cascade)
+  user       User       @relation("UserAttendees", fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("attendees")
+}
+
+model Charge {
+  id        String   @id @default(cuid())
+  title     String
+  note      String?
+  amount    Int
+  createdAt DateTime @default(now())
+  authorId  String
+
+  author User          @relation("AuthorCharge", fields: [authorId], references: [id])
+  users  ChargedUser[]
+
+  @@map("charges")
+}
+
+model ChargedUser {
+  id       String    @id @default(cuid())
+  paidAt   DateTime?
+  chargeId String
+  userId   String
+
+  user   User   @relation("Charges", fields: [userId], references: [id])
+  charge Charge @relation(fields: [chargeId], references: [id])
+
+  @@map("charged_users")
 }
