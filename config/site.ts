@@ -60,16 +60,22 @@ export const siteConfig = {
       isActive: (path: string) => /^\/admin\/users/.test(path),
     },
     {
-      label: "Schedule Acara",
+      label: "Schedule & Acara",
       href: "/admin/events",
       icon: CalendarDateRangeIcon,
       isActive: (path: string) => /^\/admin\/events/.test(path),
     },
     {
-      label: "Kelola Keungan",
+      label: "Laporan Keuangan",
       href: "/admin/finance",
       icon: BanknotesIcon,
       isActive: (path: string) => /^\/admin\/finance/.test(path),
+    },
+    {
+      label: "Kas & Denda",
+      href: "/admin/charge",
+      icon: CurrencyDollarIcon,
+      isActive: (path: string) => /^\/admin\/charge/.test(path),
     },
   ],
   links: {

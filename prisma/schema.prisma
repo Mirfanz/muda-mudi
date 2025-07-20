@@ -138,7 +138,7 @@ model ChargedUser {
   userId   String
 
   user   User   @relation("Charges", fields: [userId], references: [id])
-  charge Charge @relation(fields: [chargeId], references: [id])
+  charge Charge @relation(fields: [chargeId], references: [id], onDelete: Cascade)
 
   @@map("charged_users")
 }

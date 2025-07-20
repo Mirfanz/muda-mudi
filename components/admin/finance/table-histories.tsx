@@ -29,7 +29,6 @@ const TableHistories = ({ data, onShowDetail, onDeleteHistory }: Props) => {
         <TableColumn>TANGGAL</TableColumn>
         <TableColumn>KETERANGAN</TableColumn>
         <TableColumn>AUTHOR</TableColumn>
-        <TableColumn align="center">IMAGE</TableColumn>
         <TableColumn>JENIS</TableColumn>
         <TableColumn>NOMINAL</TableColumn>
         <TableColumn align="center">AKSI</TableColumn>
@@ -38,11 +37,12 @@ const TableHistories = ({ data, onShowDetail, onDeleteHistory }: Props) => {
         {(item) => (
           <TableRow>
             <TableCell>
-              {dayjs(item.date.toISOString().slice(0, 10)).format("DD/MM/YYYY")}
+              {dayjs(item.date.toISOString().slice(0, 10)).format(
+                "DD MMM YYYY",
+              )}
             </TableCell>
             <TableCell>{item.title}</TableCell>
             <TableCell>{item.author.name}</TableCell>
-            <TableCell>{item.images.length}</TableCell>
             <TableCell>
               <Chip
                 color={item.income ? "success" : "danger"}

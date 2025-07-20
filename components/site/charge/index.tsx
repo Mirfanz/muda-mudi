@@ -4,6 +4,7 @@ import { Card, CardBody } from "@heroui/card";
 import { Divider } from "@heroui/divider";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import React from "react";
+import { Button } from "@heroui/button";
 
 import ChargeDetailModal from "./detail";
 
@@ -13,7 +14,7 @@ import { ChargeType } from "@/types";
 type Props = {};
 
 const Charge = (props: Props) => {
-  const { data } = useInfiniteQuery({
+  const { data, hasNextPage, fetchNextPage, isFetching } = useInfiniteQuery({
     queryKey: ["find-charges"],
     queryFn: async ({ pageParam = 1 }) => {
       const resp = await FindCharges({ page: pageParam });
@@ -33,7 +34,7 @@ const Charge = (props: Props) => {
 
   return (
     <main>
-      <div className="flex flex-col m-3">
+      <div className="flex flex-col gap-2 m-3">
         {data?.pages
           .flatMap((page) => page.data)
           .map((charge) => (
@@ -57,6 +58,11 @@ const Charge = (props: Props) => {
               </CardBody>
             </Card>
           ))}
+        {hasNextPage && (
+          <Button isLoading={isFetching} onPress={() => fetchNextPage()}>
+            Show More
+          </Button>
+        )}
       </div>
       <ChargeDetailModal
         charge={shownCharge}

@@ -9,6 +9,7 @@ import {
   ArrowLeftStartOnRectangleIcon,
   Cog6ToothIcon,
 } from "@heroicons/react/24/solid";
+import { User } from "@heroui/user";
 
 import { useAuth } from "../auth-provider";
 
@@ -52,7 +53,7 @@ const Sidebar = () => {
   const auth = useAuth();
 
   return (
-    <div className="flex-grow bg-foreground-100 h-full overflow-y-auto shadow-sm dark:bg-foreground-50 p-3 w-72">
+    <div className="flex-grow flex flex-col bg-foreground-100 h-full overflow-y-auto shadow-sm dark:bg-foreground-50 p-3 w-72">
       <p className="text-sm text-foreground-600 uppercase mb-1 mt-2">
         Menu Utama
       </p>
@@ -75,6 +76,13 @@ const Sidebar = () => {
         <SidebarItem icon={ArrowLeftStartOnRectangleIcon} onPress={auth.logout}>
           Logout
         </SidebarItem>
+      </div>
+      <div className="mt-auto">
+        <User
+          avatarProps={{ src: auth.user?.avatar || undefined }}
+          description={auth.user?.role}
+          name={auth.user?.name}
+        />
       </div>
     </div>
   );

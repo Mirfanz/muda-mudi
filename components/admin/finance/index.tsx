@@ -58,7 +58,7 @@ const Finance = (props: Props) => {
   return (
     <main className="px-8 py-4">
       <Header
-        description="Manusia tempat salah dan dosa."
+        description="Data pemasukan dan pengeluaran organisasi."
         endContent={
           <Button
             color="primary"
@@ -68,7 +68,7 @@ const Finance = (props: Props) => {
             Tambah
           </Button>
         }
-        title="Financial Manager"
+        title="Laporan Keuangan"
       />
 
       <section className="">
